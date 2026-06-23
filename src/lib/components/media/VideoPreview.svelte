@@ -42,7 +42,7 @@
 			class="grid size-full place-items-center bg-[radial-gradient(circle_at_30%_20%,rgb(155_124_255/0.24),transparent_32%),linear-gradient(135deg,#121827,#060913_62%,#101727)]"
 		>
 			<div
-				class="flex items-center gap-3 rounded-full border border-white/15 bg-black/25 px-4 py-2 text-sm text-slate-200"
+				class="mx-5 flex max-w-sm items-center gap-3 rounded-full border border-white/15 bg-black/25 px-4 py-2 text-center text-sm text-slate-200"
 			>
 				<Play size={16} aria-hidden="true" />
 				<span>{title}</span>

@@ -33,6 +33,7 @@
 			type="button"
 			aria-label={menuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
 			aria-expanded={menuOpen}
+			aria-controls="mobile-navigation"
 			onclick={() => (menuOpen = !menuOpen)}
 		>
 			{#if menuOpen}
@@ -44,7 +45,7 @@
 	</div>
 
 	{#if menuOpen}
-		<div class="border-t border-white/10 bg-slate-950 px-5 py-4 md:hidden">
+		<div id="mobile-navigation" class="border-t border-white/10 bg-slate-950 px-5 py-4 md:hidden">
 			<Navigation
 				links={navigationLinks}
 				direction="column"

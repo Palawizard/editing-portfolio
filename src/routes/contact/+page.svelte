@@ -15,7 +15,7 @@
 	/>
 </svelte:head>
 
-<main class="py-16 md:py-20">
+<main id="main-content" class="py-16 md:py-20">
 	<Container>
 		<div class="grid gap-10 lg:grid-cols-[1fr_0.85fr] lg:items-start">
 			<div>

@@ -13,7 +13,7 @@
 	/>
 </svelte:head>
 
-<main class="py-16 md:py-20">
+<main id="main-content" class="py-16 md:py-20">
 	<Container>
 		<SectionHeader
 			eyebrow="Portfolio"

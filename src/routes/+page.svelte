@@ -11,7 +11,7 @@
 	import { heroActions, heroBadges, siteMetadata } from '$lib/content/site';
 </script>
 
-<main>
+<main id="main-content">
 	<section class="relative overflow-hidden py-20 md:py-28">
 		<Container class="grid gap-12 lg:grid-cols-[1fr_0.85fr] lg:items-center">
 			<div>

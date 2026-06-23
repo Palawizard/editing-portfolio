@@ -21,7 +21,7 @@
 		title={project.title}
 		poster={project.previewVideo ? project.poster : undefined}
 		src={project.previewVideo}
-		aspect={project.format === '9:16' ? 'vertical' : 'video'}
+		aspect="video"
 		class={compact ? 'max-h-72 border-0 shadow-none' : 'border-0 shadow-none'}
 	/>
 

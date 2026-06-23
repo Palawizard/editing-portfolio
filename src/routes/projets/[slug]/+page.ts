@@ -5,11 +5,15 @@ import type { PageLoad } from './$types';
 export const entries = () => projects.map((project) => ({ slug: project.slug }));
 
 export const load: PageLoad = ({ params }) => {
-	const project = projects.find((item) => item.slug === params.slug);
+	const projectIndex = projects.findIndex((item) => item.slug === params.slug);
+	const project = projects[projectIndex];
 
 	if (!project) {
 		error(404, 'Projet introuvable');
 	}
 
-	return { project };
+	const previousProject = projects[(projectIndex - 1 + projects.length) % projects.length];
+	const nextProject = projects[(projectIndex + 1) % projects.length];
+
+	return { project, previousProject, nextProject };
 };

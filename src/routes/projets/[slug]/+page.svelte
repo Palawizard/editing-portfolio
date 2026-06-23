@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import VideoPreview from '$lib/components/media/VideoPreview.svelte';
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
@@ -8,6 +9,8 @@
 
 	let { data }: { data: PageData } = $props();
 	const project = $derived(data.project);
+	const previousProject = $derived(data.previousProject);
+	const nextProject = $derived(data.nextProject);
 	const hasMediaBlocks = $derived(
 		Boolean(project.supplementalMedia?.length) || Boolean(project.beforeAfter)
 	);
@@ -143,6 +146,26 @@
 
 	<section class="py-16 md:py-20">
 		<Container>
+			<div class="mb-8 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+				<Button href="/projets" variant="secondary">Retour aux projets</Button>
+				<div class="grid gap-3 sm:grid-cols-2">
+					<a
+						class="rounded-lg border border-white/10 bg-white/[0.035] p-4 transition hover:border-white/30 hover:bg-white/[0.06]"
+						href={resolve('/projets/[slug]', { slug: previousProject.slug })}
+					>
+						<span class="text-sm text-slate-400">Projet précédent</span>
+						<span class="mt-1 block font-semibold text-white">{previousProject.title}</span>
+					</a>
+					<a
+						class="rounded-lg border border-white/10 bg-white/[0.035] p-4 transition hover:border-white/30 hover:bg-white/[0.06]"
+						href={resolve('/projets/[slug]', { slug: nextProject.slug })}
+					>
+						<span class="text-sm text-slate-400">Projet suivant</span>
+						<span class="mt-1 block font-semibold text-white">{nextProject.title}</span>
+					</a>
+				</div>
+			</div>
+
 			<div
 				class="rounded-lg border border-violet-300/20 bg-violet-300/[0.08] p-6 md:flex md:items-center md:justify-between md:gap-8 md:p-8"
 			>

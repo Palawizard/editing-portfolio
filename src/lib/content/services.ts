@@ -1,4 +1,4 @@
-import type { ProcessStep, Service } from '$lib/types/site';
+import type { BeforeAfterSection, ProcessStep, Service } from '$lib/types/site';
 
 export const services: Service[] = [
 	{
@@ -56,3 +56,9 @@ export const skills = [
 ];
 
 export const tools = ['DaVinci Resolve Studio'];
+
+export const beforeAfterSection: BeforeAfterSection = {
+	enabled: false,
+	title: 'Avant / après',
+	description: 'Comparaison disponible quand des extraits bruts et montés propres sont prêts.'
+};

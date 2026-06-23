@@ -31,15 +31,15 @@
 			<span class="text-sm text-slate-400">{project.format}</span>
 		</div>
 
-		<h3 class="mt-5 text-2xl font-semibold text-white">{project.title}</h3>
+		<h3 class="mt-5 text-2xl font-semibold text-balance text-white">{project.title}</h3>
 		<p class="mt-3 text-sm leading-6 text-slate-300">{project.summary}</p>
 
-		<div class="mt-6 flex items-center justify-between gap-4">
+		<div class="mt-6 flex min-w-0 items-center justify-between gap-4">
 			<p class="text-sm text-slate-400">{project.platform.join(' / ')}</p>
 			<a
 				class="inline-flex size-10 items-center justify-center rounded-full border border-white/10 text-white transition hover:border-cyan-200/50 hover:bg-cyan-200/10"
-				href={resolve('/projets')}
-				aria-label="Voir les projets de montage"
+				href={resolve('/projets/[slug]', { slug: project.slug })}
+				aria-label={`Voir le projet ${project.title}`}
 			>
 				<ArrowUpRight size={18} aria-hidden="true" />
 			</a>

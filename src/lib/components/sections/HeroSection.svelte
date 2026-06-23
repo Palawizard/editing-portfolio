@@ -6,7 +6,7 @@
 	import { heroActions, heroBadges, siteMetadata } from '$lib/content/site';
 </script>
 
-<section class="relative overflow-hidden py-18 md:py-24">
+<section class="relative overflow-hidden pb-16 pt-18 md:pb-20 md:pt-24">
 	<Container class="grid gap-12 lg:grid-cols-[1fr_0.82fr] lg:items-center">
 		<div>
 			<p class="mb-5 text-sm font-semibold uppercase tracking-[0.2em] text-violet-200">

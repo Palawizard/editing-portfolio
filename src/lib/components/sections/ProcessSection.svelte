@@ -4,7 +4,7 @@
 	import { processSteps } from '$lib/content/services';
 </script>
 
-<section class="py-14 md:py-20">
+<section class="border-y border-white/10 bg-slate-950/40 py-16 md:py-22">
 	<Container>
 		<SectionHeader
 			eyebrow="Méthode"

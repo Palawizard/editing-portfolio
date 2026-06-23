@@ -6,7 +6,7 @@
 	import { featuredProjects } from '$lib/content/projects';
 </script>
 
-<section class="py-14 md:py-20">
+<section class="py-16 md:py-22">
 	<Container>
 		<div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
 			<SectionHeader

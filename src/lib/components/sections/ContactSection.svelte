@@ -5,7 +5,7 @@
 	import { contactCopy } from '$lib/content/site';
 </script>
 
-<section class="py-14 md:py-20">
+<section class="pb-20 pt-14 md:pb-24 md:pt-18">
 	<Container>
 		<div
 			class="rounded-lg border border-violet-300/20 bg-violet-300/[0.08] p-6 shadow-[var(--shadow-premium)] md:p-10"

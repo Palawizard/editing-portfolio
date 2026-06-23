@@ -5,7 +5,7 @@
 	import { editingFormats } from '$lib/content/formats';
 </script>
 
-<section id="formats" class="scroll-mt-28 py-14 md:py-20">
+<section id="formats" class="scroll-mt-28 border-y border-white/10 bg-white/[0.018] py-16 md:py-22">
 	<Container>
 		<SectionHeader
 			eyebrow="Formats"

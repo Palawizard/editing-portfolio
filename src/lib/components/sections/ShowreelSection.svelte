@@ -3,7 +3,7 @@
 	import Container from '$lib/components/ui/Container.svelte';
 </script>
 
-<section class="py-10 md:py-14" aria-labelledby="showreel-title">
+<section class="py-12 md:py-16" aria-labelledby="showreel-title">
 	<Container>
 		<VideoShowcase
 			title="Sélection de montages récents"

@@ -7,8 +7,8 @@
 			Montage vidéo pour créateurs, streamers et businesses
 		</h1>
 		<p class="mt-6 max-w-2xl text-lg text-slate-300">
-			Je transforme des rushs, idées ou vidéos longues en contenus clairs, rythmés et
-			prêts à publier.
+			Je transforme des rushs, idées ou vidéos longues en contenus clairs, rythmés et prêts à
+			publier.
 		</p>
 	</section>
 </main>

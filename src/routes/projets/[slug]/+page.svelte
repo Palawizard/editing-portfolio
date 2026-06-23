@@ -29,6 +29,9 @@
 						{#each project.platform as platform (platform)}
 							<Badge tone="cyan">{platform}</Badge>
 						{/each}
+						{#if project.duration}
+							<Badge>{project.duration}</Badge>
+						{/if}
 					</div>
 
 					<h1 class="mt-6 max-w-4xl text-4xl font-bold text-balance text-white md:text-6xl">
@@ -70,10 +73,7 @@
 
 				<article class="rounded-lg border border-white/10 bg-white/[0.035] p-6 lg:col-span-1">
 					<p class="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-200">Intention</p>
-					<p class="mt-4 text-base leading-7 text-slate-200">
-						Obtenir un rendu clair, rythmé et adapté au format {project.format}, prêt à être publié
-						sur {project.platform.join(' / ')}.
-					</p>
+					<p class="mt-4 text-base leading-7 text-slate-200">{project.result}</p>
 				</article>
 			</div>
 		</Container>

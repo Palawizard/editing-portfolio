@@ -38,8 +38,8 @@
 			<p class="text-sm text-slate-400">{project.platform.join(' / ')}</p>
 			<a
 				class="inline-flex size-10 items-center justify-center rounded-full border border-white/10 text-white transition hover:border-cyan-200/50 hover:bg-cyan-200/10"
-				href={resolve('/projets')}
-				aria-label="Voir les projets de montage"
+				href={resolve('/projets/[slug]', { slug: project.slug })}
+				aria-label={`Voir le projet ${project.title}`}
 			>
 				<ArrowUpRight size={18} aria-hidden="true" />
 			</a>

@@ -8,6 +8,9 @@
 
 	let { data }: { data: PageData } = $props();
 	const project = $derived(data.project);
+	const hasMediaBlocks = $derived(
+		Boolean(project.supplementalMedia?.length) || Boolean(project.beforeAfter)
+	);
 </script>
 
 <svelte:head>
@@ -75,6 +78,68 @@
 			</div>
 		</Container>
 	</section>
+
+	{#if hasMediaBlocks}
+		<section class="py-16 md:py-20">
+			<Container>
+				<div class="grid gap-6">
+					{#if project.supplementalMedia?.length}
+						<div class="grid gap-5 md:grid-cols-2">
+							{#each project.supplementalMedia as media (media.title)}
+								<article class="rounded-lg border border-white/10 bg-white/[0.035] p-4">
+									<VideoPreview
+										title={media.title}
+										poster={media.previewVideo ? media.poster : undefined}
+										src={media.previewVideo}
+										aspect={media.aspect ?? 'video'}
+									/>
+									<div class="p-2 pt-5">
+										<h2 class="text-xl font-semibold text-white">{media.title}</h2>
+										{#if media.description}
+											<p class="mt-2 text-sm leading-6 text-slate-300">{media.description}</p>
+										{/if}
+									</div>
+								</article>
+							{/each}
+						</div>
+					{/if}
+
+					{#if project.beforeAfter}
+						<article class="rounded-lg border border-white/10 bg-white/[0.035] p-6">
+							<h2 class="text-2xl font-bold text-white">{project.beforeAfter.title}</h2>
+							<p class="mt-3 max-w-2xl text-sm leading-6 text-slate-300">
+								{project.beforeAfter.description}
+							</p>
+							<div class="mt-6 grid gap-4 md:grid-cols-2">
+								<div class="rounded-lg border border-white/10 bg-slate-950/50 p-4">
+									<p class="mb-3 text-sm font-semibold text-slate-300">
+										{project.beforeAfter.beforeLabel}
+									</p>
+									{#if project.beforeAfter.beforeVideo}
+										<VideoPreview
+											title={project.beforeAfter.beforeLabel}
+											src={project.beforeAfter.beforeVideo}
+										/>
+									{/if}
+								</div>
+								<div class="rounded-lg border border-white/10 bg-slate-950/50 p-4">
+									<p class="mb-3 text-sm font-semibold text-slate-300">
+										{project.beforeAfter.afterLabel}
+									</p>
+									{#if project.beforeAfter.afterVideo}
+										<VideoPreview
+											title={project.beforeAfter.afterLabel}
+											src={project.beforeAfter.afterVideo}
+										/>
+									{/if}
+								</div>
+							</div>
+						</article>
+					{/if}
+				</div>
+			</Container>
+		</section>
+	{/if}
 
 	<section class="py-16 md:py-20">
 		<Container>

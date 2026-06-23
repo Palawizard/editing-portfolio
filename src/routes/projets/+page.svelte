@@ -3,7 +3,27 @@
 	import Button from '$lib/components/ui/Button.svelte';
 	import Container from '$lib/components/ui/Container.svelte';
 	import SectionHeader from '$lib/components/ui/SectionHeader.svelte';
+	import { projectCategoryLabels } from '$lib/content/formats';
 	import { projects } from '$lib/content/projects';
+	import type { ProjectCategory } from '$lib/types/project';
+
+	type CategoryFilter = ProjectCategory | 'all';
+
+	let selectedCategory = $state<CategoryFilter>('all');
+
+	const categoryFilters: { id: CategoryFilter; label: string }[] = [
+		{ id: 'all', label: 'Tous' },
+		{ id: 'gaming-long-form', label: projectCategoryLabels['gaming-long-form'] },
+		{ id: 'gaming-short-form', label: projectCategoryLabels['gaming-short-form'] },
+		{ id: 'explainer-short-form', label: projectCategoryLabels['explainer-short-form'] },
+		{ id: 'business-promo', label: projectCategoryLabels['business-promo'] }
+	];
+
+	const filteredProjects = $derived(
+		selectedCategory === 'all'
+			? projects
+			: projects.filter((project) => project.category === selectedCategory)
+	);
 </script>
 
 <svelte:head>
@@ -25,8 +45,26 @@
 			<Button href="/contact" variant="secondary">Discuter d'un montage</Button>
 		</div>
 
+		<div class="mt-10 flex gap-2 overflow-x-auto pb-2" aria-label="Filtrer les projets">
+			{#each categoryFilters as filter (filter.id)}
+				<button
+					class={[
+						'min-h-11 shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition',
+						selectedCategory === filter.id
+							? 'border-cyan-200 bg-cyan-200 text-slate-950'
+							: 'border-white/10 bg-white/[0.04] text-slate-200 hover:border-white/30 hover:bg-white/[0.08]'
+					]}
+					type="button"
+					aria-pressed={selectedCategory === filter.id}
+					onclick={() => (selectedCategory = filter.id)}
+				>
+					{filter.label}
+				</button>
+			{/each}
+		</div>
+
 		<div class="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-			{#each projects as project (project.slug)}
+			{#each filteredProjects as project (project.slug)}
 				<ProjectCard {project} />
 			{/each}
 		</div>

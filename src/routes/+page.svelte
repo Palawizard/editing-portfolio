@@ -4,6 +4,7 @@
 	import ProcessSection from '$lib/components/sections/ProcessSection.svelte';
 	import ProjectsSection from '$lib/components/sections/ProjectsSection.svelte';
 	import ShowreelSection from '$lib/components/sections/ShowreelSection.svelte';
+	import SkillsSection from '$lib/components/sections/SkillsSection.svelte';
 </script>
 
 <main id="main-content">
@@ -12,4 +13,5 @@
 	<FormatsSection />
 	<ProjectsSection />
 	<ProcessSection />
+	<SkillsSection />
 </main>

@@ -45,7 +45,10 @@
 			<Button href="/contact" variant="secondary">Discuter d'un montage</Button>
 		</div>
 
-		<div class="mt-10 flex gap-2 overflow-x-auto pb-2" aria-label="Filtrer les projets">
+		<div
+			class="-mx-5 mt-10 flex gap-2 overflow-x-auto px-5 pb-2 sm:mx-0 sm:px-0 md:flex-wrap md:overflow-visible"
+			aria-label="Filtrer les projets"
+		>
 			{#each categoryFilters as filter (filter.id)}
 				<button
 					class={[
@@ -63,7 +66,7 @@
 			{/each}
 		</div>
 
-		<div class="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+		<div class="mt-8 grid min-w-0 gap-5 md:grid-cols-2 xl:grid-cols-3">
 			{#each filteredProjects as project (project.slug)}
 				<ProjectCard {project} />
 			{/each}

@@ -146,22 +146,26 @@
 
 	<section class="py-16 md:py-20">
 		<Container>
-			<div class="mb-8 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+			<div class="mb-8 grid min-w-0 gap-3 lg:grid-cols-[auto_1fr] lg:items-center">
 				<Button href="/projets" variant="secondary">Retour aux projets</Button>
-				<div class="grid gap-3 sm:grid-cols-2">
+				<div class="grid min-w-0 gap-3 sm:grid-cols-2 lg:justify-self-end">
 					<a
-						class="rounded-lg border border-white/10 bg-white/[0.035] p-4 transition hover:border-white/30 hover:bg-white/[0.06]"
+						class="min-w-0 rounded-lg border border-white/10 bg-white/[0.035] p-4 transition hover:border-white/30 hover:bg-white/[0.06]"
 						href={resolve('/projets/[slug]', { slug: previousProject.slug })}
 					>
 						<span class="text-sm text-slate-400">Projet précédent</span>
-						<span class="mt-1 block font-semibold text-white">{previousProject.title}</span>
+						<span class="mt-1 block text-sm font-semibold text-white sm:text-base">
+							{previousProject.title}
+						</span>
 					</a>
 					<a
-						class="rounded-lg border border-white/10 bg-white/[0.035] p-4 transition hover:border-white/30 hover:bg-white/[0.06]"
+						class="min-w-0 rounded-lg border border-white/10 bg-white/[0.035] p-4 transition hover:border-white/30 hover:bg-white/[0.06]"
 						href={resolve('/projets/[slug]', { slug: nextProject.slug })}
 					>
 						<span class="text-sm text-slate-400">Projet suivant</span>
-						<span class="mt-1 block font-semibold text-white">{nextProject.title}</span>
+						<span class="mt-1 block text-sm font-semibold text-white sm:text-base">
+							{nextProject.title}
+						</span>
 					</a>
 				</div>
 			</div>

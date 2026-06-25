@@ -1,0 +1,8 @@
+services:
+  portfolio:
+    labels:
+      app.public-url: ${APP_PUBLIC_URL:?APP_PUBLIC_URL must be set}
+
+networks:
+  web:
+    external: true

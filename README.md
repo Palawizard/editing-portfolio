@@ -54,7 +54,7 @@ Catégories disponibles :
 - `explainer-short-form`
 - `business-promo`
 
-`featured: true` affiche le projet sur la page d'accueil. Le lien publié est intégré sur la fiche projet et reste accessible avec un bouton externe.
+Le lien publié est intégré sur la fiche projet et reste accessible avec un bouton externe.
 
 ## Développement
 
@@ -71,3 +71,92 @@ pnpm lint
 pnpm check
 pnpm build
 ```
+
+## Docker Compose
+
+La conteneurisation génère le site statique avec Node, puis le sert avec Nginx sur le port `8080`.
+
+### Lancement local
+
+```sh
+docker compose --env-file .env.example -f docker/docker-compose.yml up -d --build
+```
+
+Le site est disponible sur `http://127.0.0.1:8080`.
+
+Vérification :
+
+```sh
+docker compose --env-file .env.example -f docker/docker-compose.yml ps
+curl http://127.0.0.1:8080/healthz
+```
+
+Arrêt :
+
+```sh
+docker compose --env-file .env.example -f docker/docker-compose.yml down
+```
+
+### Production derrière un reverse proxy
+
+La production reprend le modèle du projet EasyForumGo :
+
+- stack clonée dans `/opt/dockpanel/stacks/editing-portfolio` ;
+- réseau Docker externe `web` ;
+- TLS géré par le reverse proxy ;
+- conteneur accessible sur le port interne `8080` ;
+- healthcheck Docker et contrôle HTTP après déploiement.
+
+Créer le réseau une fois sur le serveur :
+
+```sh
+docker network create web
+```
+
+Créer le fichier local `.env.prod` depuis `.env.prod.example` :
+
+```env
+HOST_BIND=127.0.0.1
+HOST_PORT=8080
+APP_PUBLIC_URL=https://portfolio.example.com
+```
+
+Valider la configuration :
+
+```sh
+docker compose --env-file .env.prod \
+  -f docker/docker-compose.yml \
+  -f docker/docker-compose.prod.yml \
+  config
+```
+
+Le reverse proxy doit router le domaine public vers le service `portfolio` sur le réseau `web`, port `8080`.
+
+### Déploiement SSH
+
+Depuis PowerShell :
+
+```powershell
+./scripts/deploy.ps1 `
+  -SshHost "server.example.com" `
+  -SshUser "deploy"
+```
+
+Options utiles :
+
+```powershell
+-SshPort 22
+-RemoteStack "/opt/dockpanel/stacks/editing-portfolio"
+-Branch "dev"
+-EnvFile ".env.prod"
+-SkipPublicCheck
+```
+
+Le script :
+
+1. vérifie SSH, Git, Docker Compose et le réseau `web` ;
+2. clone ou met à jour la branche demandée ;
+3. installe `.env.prod` avec des permissions restrictives ;
+4. reconstruit et redémarre le conteneur ;
+5. vérifie `/healthz` dans le conteneur ;
+6. vérifie ensuite l'URL publique.

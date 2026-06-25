@@ -4,7 +4,7 @@ export const projectCategoryLabels: Record<ProjectCategory, string> = {
 	'gaming-long-form': 'Gaming long format',
 	'gaming-short-form': 'Shorts gaming',
 	'explainer-short-form': 'Rant et explicatif',
-	'business-promo': 'Promo business'
+	'business-promo': 'Promo business et UGC'
 };
 
 export const editingFormats: EditingFormat[] = [
@@ -52,7 +52,7 @@ export const editingFormats: EditingFormat[] = [
 	},
 	{
 		id: 'business-promo',
-		title: 'Promo business',
+		title: 'Promo business et UGC',
 		promise: 'Des vidéos courtes pour présenter une activité ou un service.',
 		description:
 			'Je crée des contenus courts et propres pour aider un commerce, une marque ou un indépendant à présenter son offre.',

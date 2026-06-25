@@ -31,7 +31,7 @@
 
 <main id="main-content">
 	<section
-		class="relative min-h-[calc(100svh-4.5rem)] overflow-hidden pb-16 pt-14 md:pb-20 md:pt-18"
+		class="relative min-h-[calc(100svh-4.5rem)] overflow-x-clip pb-16 pt-14 md:pb-20 md:pt-18"
 	>
 		<div
 			class="pointer-events-none absolute left-1/2 top-0 h-72 w-[50rem] -translate-x-1/2 rounded-full bg-violet-500/10 blur-[100px]"

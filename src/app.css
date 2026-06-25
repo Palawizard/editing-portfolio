@@ -87,7 +87,8 @@ video {
 		system-ui,
 		sans-serif;
 	letter-spacing: -0.055em;
-	line-height: 0.93;
+	line-height: 1;
+	padding-block: 0.04em 0.08em;
 }
 
 .text-gradient {

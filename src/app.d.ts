@@ -3,7 +3,18 @@
 declare global {
 	interface Window {
 		turnstile?: {
-			reset: () => void;
+			render: (
+				container: HTMLElement,
+				options: {
+					sitekey: string;
+					theme?: 'dark' | 'light' | 'auto';
+					language?: string;
+					appearance?: 'always' | 'execute' | 'interaction-only';
+					'error-callback'?: (errorCode: string) => boolean;
+				}
+			) => string;
+			reset: (widgetId?: string) => void;
+			remove: (widgetId: string) => void;
 		};
 	}
 

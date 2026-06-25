@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Clapperboard, FileText, Link2, WandSparkles } from '@lucide/svelte';
+	import { env } from '$env/dynamic/public';
 	import ContactForm from '$lib/components/forms/ContactForm.svelte';
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
@@ -7,9 +8,9 @@
 	import { editingFormats } from '$lib/content/formats';
 	import { contactCopy } from '$lib/content/site';
 
-	const formId = import.meta.env.PUBLIC_FORMSPREE_FORM_ID?.trim() ?? '';
-	const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY?.trim() ?? '';
-	const contactEmail = import.meta.env.PUBLIC_CONTACT_EMAIL?.trim() ?? '';
+	const formId = env.PUBLIC_FORMSPREE_FORM_ID?.trim() ?? '';
+	const turnstileSiteKey = env.PUBLIC_TURNSTILE_SITE_KEY?.trim() ?? '';
+	const contactEmail = env.PUBLIC_CONTACT_EMAIL?.trim() ?? '';
 
 	const briefItems = [
 		{

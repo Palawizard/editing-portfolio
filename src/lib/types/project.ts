@@ -4,6 +4,8 @@ export type ProjectCategory =
 	| 'explainer-short-form'
 	| 'business-promo';
 
+export type ProjectChoice = ProjectCategory | 'custom';
+
 export type Project = {
 	slug: string;
 	title: string;

@@ -71,15 +71,6 @@
 		}
 	};
 
-	const getCardStep = () => {
-		if (!middleGroup) return carousel.clientWidth * 0.7;
-
-		const cards = middleGroup.querySelectorAll<HTMLElement>('[data-choice]');
-		if (cards.length < 2) return cards[0]?.offsetWidth ?? carousel.clientWidth * 0.7;
-
-		return cards[1].offsetLeft - cards[0].offsetLeft;
-	};
-
 	const normalizeToMiddleSegment = () => {
 		const segmentWidth = getSegmentWidth();
 		if (!segmentWidth) return;
@@ -95,12 +86,44 @@
 		}
 	};
 
+	const getCards = () =>
+		Array.from(carousel.querySelectorAll<HTMLElement>('[data-choice][data-group]'));
+
+	const getNearestCardIndex = (cards: HTMLElement[]) => {
+		const carouselCenter = carousel.getBoundingClientRect().left + carousel.clientWidth / 2;
+
+		return cards.reduce(
+			(nearest, card, index) => {
+				const rect = card.getBoundingClientRect();
+				const distance = Math.abs(rect.left + rect.width / 2 - carouselCenter);
+
+				return distance < nearest.distance ? { index, distance } : nearest;
+			},
+			{ index: 0, distance: Number.POSITIVE_INFINITY }
+		).index;
+	};
+
+	const rebaseCardToMiddleGroup = (card: HTMLElement) => {
+		const groupIndex = Number(card.dataset.group);
+		if (groupIndex === 1 || !Number.isFinite(groupIndex)) return;
+
+		const segmentWidth = getSegmentWidth();
+		if (!segmentWidth) return;
+
+		const groupShift = 1 - groupIndex;
+		carousel.scrollLeft += segmentWidth * groupShift;
+
+		if (activeGroupIndex !== undefined) {
+			activeGroupIndex += groupShift;
+		}
+	};
+
 	const animate = (time: number) => {
 		if (!lastFrame) lastFrame = time;
 		const delta = Math.min(time - lastFrame, 32);
 		lastFrame = time;
 
-		if (!locked) {
+		if (!locked && !centering) {
 			pendingDistance += delta * 0.03;
 			const wholePixels = Math.floor(pendingDistance);
 
@@ -117,12 +140,19 @@
 	const scrollCarousel = (direction: -1 | 1) => {
 		pendingDistance = 0;
 		normalizeToMiddleSegment();
-		carousel.scrollBy({
-			left: getCardStep() * direction,
-			behavior: 'smooth'
-		});
+		const cards = getCards();
+		const nearestIndex = getNearestCardIndex(cards);
+		const target = cards[nearestIndex + direction];
+		if (!target) return;
 
-		window.setTimeout(keepInLoop, 500);
+		centering = true;
+		if (centeringTimeout) clearTimeout(centeringTimeout);
+		centerCard(target);
+
+		centeringTimeout = setTimeout(() => {
+			rebaseCardToMiddleGroup(target);
+			centering = false;
+		}, 500);
 	};
 
 	const centerCard = (target: HTMLElement, behavior: ScrollBehavior = 'smooth') => {
@@ -203,7 +233,7 @@
 	<div
 		bind:this={carousel}
 		class={[
-			'carousel-fade scrollbar-hidden -mx-5 flex overflow-x-auto px-5 py-12 sm:mx-0 sm:px-0',
+			'carousel-fade scrollbar-hidden -mx-5 flex overflow-x-auto px-5 pb-32 pt-12 sm:mx-0 sm:px-0',
 			locked ? 'snap-x snap-mandatory' : ''
 		]}
 		aria-label="Choisir un style de montage"
@@ -217,6 +247,7 @@
 				{#each choices as choice (choice.id)}
 					<button
 						data-choice={choice.id}
+						data-group={groupIndex}
 						class={[
 							'group relative shrink-0 snap-center overflow-hidden border text-left transition duration-500',
 							prominent
@@ -299,11 +330,11 @@
 	</div>
 
 	<div
-		class="pointer-events-none absolute bottom-12 left-0 top-[7rem] z-20 w-10 bg-gradient-to-r from-[var(--color-bg-soft)] via-[var(--color-bg-soft)]/65 to-transparent blur-[2px] sm:w-16"
+		class="pointer-events-none absolute bottom-20 left-0 top-[8.5rem] z-20 w-10 bg-gradient-to-r from-[var(--color-bg-soft)] via-[var(--color-bg-soft)]/65 to-transparent blur-[2px] sm:w-16"
 		aria-hidden="true"
 	></div>
 	<div
-		class="pointer-events-none absolute bottom-12 right-0 top-[7rem] z-20 w-10 bg-gradient-to-l from-[var(--color-bg-soft)] via-[var(--color-bg-soft)]/65 to-transparent blur-[2px] sm:w-16"
+		class="pointer-events-none absolute bottom-20 right-0 top-[8.5rem] z-20 w-10 bg-gradient-to-l from-[var(--color-bg-soft)] via-[var(--color-bg-soft)]/65 to-transparent blur-[2px] sm:w-16"
 		aria-hidden="true"
 	></div>
 </div>

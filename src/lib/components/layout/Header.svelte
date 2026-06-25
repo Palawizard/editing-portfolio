@@ -9,22 +9,24 @@
 </script>
 
 <header
-	class="sticky top-0 z-40 border-b border-white/10 bg-slate-950/82 shadow-[0_1px_0_rgb(255_255_255/0.04)] backdrop-blur-xl"
+	class="sticky top-0 z-40 border-b border-white/8 bg-[#05060a]/80 shadow-[0_1px_0_rgb(255_255_255/0.03)] backdrop-blur-xl"
 >
-	<div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-6 lg:px-8">
+	<div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-3.5 sm:px-6 lg:px-8">
 		<a href={resolve('/')} class="group flex items-center gap-3" aria-label="Retour à l'accueil">
 			<span
-				class="grid size-9 place-items-center rounded-lg border border-violet-300/25 bg-violet-300/10 text-sm font-black text-violet-100"
+				class="grid h-10 min-w-10 place-items-center rounded-xl border border-violet-300/25 bg-violet-300/10 px-2 font-mono text-xs font-black text-violet-100"
 			>
-				M
+				CUT
 			</span>
-			<span class="hidden text-sm font-semibold tracking-[0.16em] text-white uppercase sm:block">
+			<span class="hidden text-xs font-semibold tracking-[0.18em] text-white uppercase sm:block">
 				{siteMetadata.name}
 			</span>
 		</a>
 
-		<div class="hidden items-center gap-8 md:flex">
-			<Navigation links={navigationLinks} />
+		<div class="hidden items-center gap-4 md:flex">
+			<div class="rounded-full border border-white/8 bg-white/[0.025] px-3">
+				<Navigation links={navigationLinks} />
+			</div>
 			<Button href="/contact" size="sm">Me contacter</Button>
 		</div>
 

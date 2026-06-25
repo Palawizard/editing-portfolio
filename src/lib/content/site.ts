@@ -10,12 +10,9 @@ export const siteMetadata: SiteMetadata = {
 
 export const navigationLinks: NavigationLink[] = [
 	{ label: 'Accueil', href: '/' },
-	{ label: 'Formats', href: '/#formats' },
 	{ label: 'Projets', href: '/projets' },
 	{ label: 'Contact', href: '/contact' }
 ];
-
-export const heroBadges = ['YouTube', 'TikTok', 'Reels', 'Shorts', 'Gaming', 'Promo', 'Explicatif'];
 
 export const heroActions: CallToAction[] = [
 	{ label: 'Voir mes montages', href: '/projets', variant: 'primary' },

@@ -1,7 +1,40 @@
-import type { Project } from '$lib/types/project';
+import type { Project, ProjectCategory, ProjectInput } from '$lib/types/project';
+import { getPublishedVideo } from '$lib/utils/media';
+
+const categoryDefaults: Record<ProjectCategory, Pick<Project, 'format' | 'platform'>> = {
+	'gaming-long-form': {
+		format: '16:9',
+		platform: ['YouTube']
+	},
+	'gaming-short-form': {
+		format: '9:16',
+		platform: ['TikTok', 'Reels', 'Shorts']
+	},
+	'explainer-short-form': {
+		format: '9:16',
+		platform: ['TikTok', 'Reels', 'Shorts']
+	},
+	'business-promo': {
+		format: '9:16',
+		platform: ['Instagram', 'TikTok']
+	}
+};
+
+const defineProject = (input: ProjectInput): Project => {
+	const publishedVideo = getPublishedVideo(input.externalUrl);
+	const defaults = categoryDefaults[input.category];
+
+	return {
+		...input,
+		format: input.format ?? defaults.format,
+		platform: input.platform ?? defaults.platform,
+		poster: input.poster ?? publishedVideo?.poster ?? '',
+		featured: input.featured ?? false
+	};
+};
 
 export const projects: Project[] = [
-	{
+	defineProject({
 		slug: 'gaming-long-format-session',
 		title: 'Session gaming long format',
 		category: 'gaming-long-form',
@@ -17,13 +50,10 @@ export const projects: Project[] = [
 			'Sous-titres ponctuels',
 			'Sound design léger'
 		],
-		platform: ['YouTube'],
-		format: '16:9',
 		duration: 'Long format',
-		poster: '/images/posters/gaming-long-format-poster.webp',
 		featured: true
-	},
-	{
+	}),
+	defineProject({
 		slug: 'gaming-short-highlight',
 		title: 'Highlight gaming vertical',
 		category: 'gaming-short-form',
@@ -38,13 +68,10 @@ export const projects: Project[] = [
 			'Sous-titres dynamiques',
 			'Impacts sonores légers'
 		],
-		platform: ['TikTok', 'Reels', 'Shorts'],
-		format: '9:16',
 		duration: 'Court vertical',
-		poster: '/images/posters/gaming-short-form-poster.webp',
 		featured: true
-	},
-	{
+	}),
+	defineProject({
 		slug: 'explainer-short-edit',
 		title: 'Vidéo explicative illustrée',
 		category: 'explainer-short-form',
@@ -59,13 +86,10 @@ export const projects: Project[] = [
 			'Transitions discrètes',
 			'Clarification du message'
 		],
-		platform: ['TikTok', 'Reels'],
-		format: '9:16',
 		duration: 'Court vertical',
-		poster: '/images/posters/explainer-rant-thumbnail.webp',
 		featured: true
-	},
-	{
+	}),
+	defineProject({
 		slug: 'business-promo-short',
 		title: 'Présentation business courte',
 		category: 'business-promo',
@@ -79,12 +103,9 @@ export const projects: Project[] = [
 			"Appel à l'action",
 			'Export réseaux sociaux'
 		],
-		platform: ['Instagram', 'TikTok'],
-		format: '9:16',
 		duration: 'Court vertical',
-		poster: '/images/posters/business-promo-restaurant-preview.webp',
 		featured: true
-	}
+	})
 ];
 
 export const featuredProjects = projects.filter((project) => project.featured);

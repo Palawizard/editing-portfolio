@@ -4,6 +4,8 @@ export type ProjectCategory =
 	| 'explainer-short-form'
 	| 'business-promo';
 
+export type ProjectChoice = ProjectCategory | 'custom';
+
 export type Project = {
 	slug: string;
 	title: string;
@@ -22,6 +24,9 @@ export type Project = {
 	beforeAfter?: ProjectBeforeAfter;
 	featured: boolean;
 };
+
+export type ProjectInput = Omit<Project, 'featured' | 'format' | 'platform' | 'poster'> &
+	Partial<Pick<Project, 'featured' | 'format' | 'platform' | 'poster'>>;
 
 export type ProjectMedia = {
 	title: string;

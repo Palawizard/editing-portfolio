@@ -1,75 +1,108 @@
 <script lang="ts">
+	import { ArrowRight, SlidersHorizontal } from '@lucide/svelte';
+	import FormatCarousel from '$lib/components/sections/FormatCarousel.svelte';
 	import ProjectCard from '$lib/components/cards/ProjectCard.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import Container from '$lib/components/ui/Container.svelte';
-	import SectionHeader from '$lib/components/ui/SectionHeader.svelte';
 	import { projectCategoryLabels } from '$lib/content/formats';
 	import { projects } from '$lib/content/projects';
-	import type { ProjectCategory } from '$lib/types/project';
+	import type { ProjectChoice } from '$lib/types/project';
 
-	type CategoryFilter = ProjectCategory | 'all';
-
-	let selectedCategory = $state<CategoryFilter>('all');
-
-	const categoryFilters: { id: CategoryFilter; label: string }[] = [
-		{ id: 'all', label: 'Tous' },
-		{ id: 'gaming-long-form', label: projectCategoryLabels['gaming-long-form'] },
-		{ id: 'gaming-short-form', label: projectCategoryLabels['gaming-short-form'] },
-		{ id: 'explainer-short-form', label: projectCategoryLabels['explainer-short-form'] },
-		{ id: 'business-promo', label: projectCategoryLabels['business-promo'] }
-	];
+	let selectedChoice = $state<ProjectChoice>();
 
 	const filteredProjects = $derived(
-		selectedCategory === 'all'
-			? projects
-			: projects.filter((project) => project.category === selectedCategory)
+		!selectedChoice || selectedChoice === 'custom'
+			? []
+			: projects.filter((project) => project.category === selectedChoice)
+	);
+
+	const selectedLabel = $derived(
+		selectedChoice === 'custom'
+			? 'Commande personnalisée'
+			: selectedChoice
+				? projectCategoryLabels[selectedChoice]
+				: ''
 	);
 </script>
 
 <svelte:head>
-	<title>Projets | Montage vidéo</title>
+	<title>Choisir un style de montage | Portfolio</title>
 	<meta
 		name="description"
-		content="Une sélection de montages vidéo avec leur objectif, leur format et le travail réalisé."
+		content="Choisis un style de montage et découvre les projets réalisés dans ce format."
 	/>
 </svelte:head>
 
-<main id="main-content" class="py-16 md:py-24">
-	<Container>
-		<div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-			<SectionHeader
-				eyebrow="Portfolio"
-				title="Projets de montage"
-				description="Des montages présentés avec leur objectif, leur format et le travail réalisé pour rendre la vidéo plus claire, plus rythmée et prête à publier."
-			/>
-			<Button href="/contact" variant="secondary">Discuter d'un montage</Button>
-		</div>
-
+<main id="main-content">
+	<section class="relative overflow-x-clip pb-10 pt-10 md:pb-14 md:pt-12">
 		<div
-			class="-mx-5 mt-10 flex gap-2 overflow-x-auto px-5 pb-2 sm:mx-0 sm:px-0 md:flex-wrap md:overflow-visible"
-			aria-label="Filtrer les projets"
-		>
-			{#each categoryFilters as filter (filter.id)}
-				<button
-					class={[
-						'min-h-11 shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition',
-						selectedCategory === filter.id
-							? 'border-cyan-200 bg-cyan-200 text-slate-950'
-							: 'border-white/10 bg-white/[0.04] text-slate-200 hover:border-white/30 hover:bg-white/[0.08]'
-					]}
-					type="button"
-					aria-pressed={selectedCategory === filter.id}
-					onclick={() => (selectedCategory = filter.id)}
-				>
-					{filter.label}
-				</button>
-			{/each}
-		</div>
+			class="pointer-events-none absolute left-1/2 top-0 h-72 w-[50rem] -translate-x-1/2 rounded-full bg-violet-500/10 blur-[100px]"
+		></div>
+		<Container size="wide">
+			<div class="mx-auto max-w-4xl text-center">
+				<h1 class="display-title text-5xl text-gradient sm:text-6xl md:text-7xl">
+					Choisis ton style de montage.
+				</h1>
+			</div>
 
-		<div class="mt-8 grid min-w-0 gap-5 md:grid-cols-2 xl:grid-cols-3">
-			{#each filteredProjects as project (project.slug)}
-				<ProjectCard {project} />
-			{/each}
-		</div>
-	</Container>
+			<div class="mt-1 md:mt-2">
+				<FormatCarousel
+					selected={selectedChoice}
+					onSelect={(choice) => (selectedChoice = choice)}
+					prominent
+				/>
+			</div>
+		</Container>
+	</section>
+
+	{#if selectedChoice}
+		<section
+			id="project-results"
+			class="scroll-mt-28 border-t border-white/10 py-16 md:py-24"
+			aria-live="polite"
+		>
+			<Container size="wide">
+				{#if selectedChoice === 'custom'}
+					<div
+						class="relative overflow-hidden rounded-[1.75rem] border border-cyan-200/20 bg-[linear-gradient(135deg,rgb(101_216_255/0.1),rgb(155_124_255/0.08)_50%,rgb(255_255_255/0.025))] p-7 shadow-[var(--shadow-premium)] md:p-12"
+					>
+						<div
+							class="absolute -right-24 -top-24 size-72 rounded-full bg-cyan-300/10 blur-3xl"
+						></div>
+						<div class="relative grid gap-10 lg:grid-cols-[1fr_0.7fr] lg:items-end">
+							<div>
+								<SlidersHorizontal class="text-cyan-100" size={25} aria-hidden="true" />
+								<h2 class="display-title mt-6 max-w-3xl text-4xl text-white md:text-6xl">
+									Ton projet ne rentre pas dans une case ?
+								</h2>
+								<p class="mt-6 max-w-2xl text-base leading-7 text-slate-300 md:text-lg">
+									Envoie une référence, ton idée et la plateforme visée. Je te propose une direction
+									de montage cohérente avec ton contenu, sans forcer un format prédéfini.
+								</p>
+							</div>
+							<div class="lg:justify-self-end">
+								<Button href="/contact" class="w-full sm:w-auto">
+									Parler de mon projet
+									<ArrowRight size={18} aria-hidden="true" />
+								</Button>
+							</div>
+						</div>
+					</div>
+				{:else}
+					<div class="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+						<div>
+							<h2 class="display-title text-4xl text-white md:text-6xl">{selectedLabel}</h2>
+						</div>
+						<Button href="/contact" variant="secondary">Commander ce style</Button>
+					</div>
+
+					<div class="mt-10 grid min-w-0 gap-6 md:grid-cols-2 xl:grid-cols-3">
+						{#each filteredProjects as project, index (project.slug)}
+							<ProjectCard {project} {index} minimal />
+						{/each}
+					</div>
+				{/if}
+			</Container>
+		</section>
+	{/if}
 </main>

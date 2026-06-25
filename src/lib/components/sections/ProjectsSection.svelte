@@ -6,20 +6,20 @@
 	import { featuredProjects } from '$lib/content/projects';
 </script>
 
-<section class="py-16 md:py-22">
-	<Container>
+<section class="py-20 md:py-28">
+	<Container size="wide">
 		<div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
 			<SectionHeader
 				eyebrow="Projets"
-				title="Des exemples avec contexte"
-				description="Chaque montage est présenté avec son objectif, son format et la plateforme visée."
+				title="Le montage se juge à l’écran"
+				description="Des exemples concrets, avec le format, l’objectif et le travail réalisé derrière chaque vidéo."
 			/>
 			<Button href="/projets" variant="secondary">Voir tous les projets</Button>
 		</div>
 
-		<div class="mt-10 grid gap-5 md:grid-cols-2">
-			{#each featuredProjects.slice(0, 4) as project (project.slug)}
-				<ProjectCard {project} />
+		<div class="mt-10 grid gap-6 md:grid-cols-2">
+			{#each featuredProjects.slice(0, 4) as project, index (project.slug)}
+				<ProjectCard {project} {index} />
 			{/each}
 		</div>
 	</Container>

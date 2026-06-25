@@ -10,7 +10,6 @@ export const siteMetadata: SiteMetadata = {
 
 export const navigationLinks: NavigationLink[] = [
 	{ label: 'Accueil', href: '/' },
-	{ label: 'Formats', href: '/#formats' },
 	{ label: 'Projets', href: '/projets' },
 	{ label: 'Contact', href: '/contact' }
 ];

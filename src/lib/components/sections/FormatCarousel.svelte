@@ -330,11 +330,11 @@
 	</div>
 
 	<div
-		class="pointer-events-none absolute bottom-20 left-0 top-[8.5rem] z-20 w-10 bg-gradient-to-r from-[var(--color-bg-soft)] via-[var(--color-bg-soft)]/65 to-transparent blur-[2px] sm:w-16"
+		class="pointer-events-none absolute bottom-32 left-0 top-[6.5rem] z-20 w-10 bg-gradient-to-r from-[var(--color-bg-soft)] via-[var(--color-bg-soft)]/65 to-transparent blur-[2px] sm:w-16"
 		aria-hidden="true"
 	></div>
 	<div
-		class="pointer-events-none absolute bottom-20 right-0 top-[8.5rem] z-20 w-10 bg-gradient-to-l from-[var(--color-bg-soft)] via-[var(--color-bg-soft)]/65 to-transparent blur-[2px] sm:w-16"
+		class="pointer-events-none absolute bottom-32 right-0 top-[6.5rem] z-20 w-10 bg-gradient-to-l from-[var(--color-bg-soft)] via-[var(--color-bg-soft)]/65 to-transparent blur-[2px] sm:w-16"
 		aria-hidden="true"
 	></div>
 </div>

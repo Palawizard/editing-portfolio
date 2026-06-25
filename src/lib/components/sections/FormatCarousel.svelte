@@ -209,31 +209,29 @@
 </script>
 
 <div class="relative" role="region" aria-label="Carrousel des styles de montage">
-	<div class={['mb-2 flex justify-end gap-2', prominent ? 'md:mb-3' : '']}>
-		<div class="hidden gap-2 sm:flex">
-			<button
-				class="grid size-11 place-items-center rounded-full border border-white/12 bg-white/[0.04] text-white transition hover:border-cyan-200/40 hover:bg-white/[0.08]"
-				type="button"
-				aria-label="Voir les formats précédents"
-				onclick={() => scrollCarousel(-1)}
-			>
-				<ChevronLeft size={19} aria-hidden="true" />
-			</button>
-			<button
-				class="grid size-11 place-items-center rounded-full border border-white/12 bg-white/[0.04] text-white transition hover:border-cyan-200/40 hover:bg-white/[0.08]"
-				type="button"
-				aria-label="Voir les formats suivants"
-				onclick={() => scrollCarousel(1)}
-			>
-				<ChevronRight size={19} aria-hidden="true" />
-			</button>
-		</div>
+	<div class="absolute right-0 top-1 z-30 hidden gap-2 sm:flex">
+		<button
+			class="grid size-11 place-items-center rounded-full border border-white/12 bg-slate-950/75 text-white shadow-lg backdrop-blur transition hover:border-cyan-200/40 hover:bg-slate-900"
+			type="button"
+			aria-label="Voir les formats précédents"
+			onclick={() => scrollCarousel(-1)}
+		>
+			<ChevronLeft size={19} aria-hidden="true" />
+		</button>
+		<button
+			class="grid size-11 place-items-center rounded-full border border-white/12 bg-slate-950/75 text-white shadow-lg backdrop-blur transition hover:border-cyan-200/40 hover:bg-slate-900"
+			type="button"
+			aria-label="Voir les formats suivants"
+			onclick={() => scrollCarousel(1)}
+		>
+			<ChevronRight size={19} aria-hidden="true" />
+		</button>
 	</div>
 
 	<div
 		bind:this={carousel}
 		class={[
-			'carousel-fade scrollbar-hidden -mx-5 flex overflow-x-auto px-5 pb-32 pt-12 sm:mx-0 sm:px-0',
+			'carousel-fade scrollbar-hidden -mx-5 flex overflow-x-auto px-5 pb-32 pt-8 sm:mx-0 sm:px-0',
 			locked ? 'snap-x snap-mandatory' : ''
 		]}
 		aria-label="Choisir un style de montage"

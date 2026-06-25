@@ -45,7 +45,7 @@
 				</h1>
 			</div>
 
-			<div class="mt-4 md:mt-6">
+			<div class="mt-1 md:mt-2">
 				<FormatCarousel
 					selected={selectedChoice}
 					onSelect={(choice) => (selectedChoice = choice)}

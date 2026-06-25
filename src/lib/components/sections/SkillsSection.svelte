@@ -5,8 +5,8 @@
 	import { skills, tools } from '$lib/content/services';
 </script>
 
-<section class="py-16 md:py-22">
-	<Container class="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+<section class="py-20 md:py-28">
+	<Container size="wide" class="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
 		<SectionHeader
 			eyebrow="Compétences"
 			title="Des vidéos prêtes à publier"
@@ -14,7 +14,7 @@
 		/>
 
 		<div class="grid gap-5">
-			<div class="rounded-lg border border-white/10 bg-white/[0.035] p-6">
+			<div class="rounded-[1.25rem] border border-white/10 bg-white/[0.035] p-6">
 				<h3 class="text-xl font-semibold text-white">Travail réalisé</h3>
 				<div class="mt-5 flex flex-wrap gap-2">
 					{#each skills as skill (skill)}
@@ -23,7 +23,7 @@
 				</div>
 			</div>
 
-			<div class="rounded-lg border border-white/10 bg-white/[0.035] p-6">
+			<div class="rounded-[1.25rem] border border-white/10 bg-white/[0.035] p-6">
 				<h3 class="text-xl font-semibold text-white">Outils</h3>
 				<div class="mt-5 flex flex-wrap gap-2">
 					{#each tools as tool (tool)}

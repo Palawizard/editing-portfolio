@@ -21,8 +21,8 @@
 	{#each links as link (link.href)}
 		<a
 			class={[
-				'rounded-full transition hover:text-white focus-visible:outline-cyan-300',
-				direction === 'row' ? 'px-1 py-2' : 'px-4 py-3 hover:bg-white/[0.06]'
+				'rounded-full transition hover:bg-white/[0.06] hover:text-white focus-visible:outline-cyan-300',
+				direction === 'row' ? 'px-3 py-2' : 'px-4 py-3'
 			]}
 			href={resolve(link.href)}
 			onclick={onNavigate}

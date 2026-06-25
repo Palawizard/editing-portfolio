@@ -25,7 +25,7 @@
 
 <section
 	class={[
-		'grid gap-8 rounded-lg border border-white/10 bg-white/[0.035] p-4 shadow-[var(--shadow-premium)] md:grid-cols-[1.15fr_0.85fr] md:items-center md:p-6',
+		'grid gap-8 rounded-[1.5rem] border border-white/10 bg-white/[0.035] p-4 shadow-[var(--shadow-premium)] md:grid-cols-[1.25fr_0.75fr] md:items-center md:p-6',
 		className
 	]}
 >
@@ -33,7 +33,7 @@
 
 	<div class="px-1 pb-2 md:px-2 md:pb-0">
 		<Badge tone="accent">{label}</Badge>
-		<h2 class="mt-5 text-3xl font-bold text-balance text-white md:text-4xl">{title}</h2>
+		<h2 class="display-title mt-5 text-4xl text-balance text-white md:text-5xl">{title}</h2>
 		<p class="mt-4 text-base leading-7 text-slate-300">{description}</p>
 	</div>
 </section>

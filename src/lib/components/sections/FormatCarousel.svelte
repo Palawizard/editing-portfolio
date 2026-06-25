@@ -24,7 +24,7 @@
 	let middleGroup: HTMLDivElement | undefined;
 	let animationFrame = 0;
 	let lastFrame = 0;
-	let paused = $state(false);
+	let pendingDistance = 0;
 	let locked = $state(false);
 	let activeGroupIndex = $state<number | undefined>();
 
@@ -60,8 +60,10 @@
 
 		if (carousel.scrollLeft >= segmentWidth * 2) {
 			carousel.scrollLeft -= segmentWidth;
+			pendingDistance = 0;
 		} else if (carousel.scrollLeft < segmentWidth * 0.15) {
 			carousel.scrollLeft += segmentWidth;
+			pendingDistance = 0;
 		}
 	};
 
@@ -70,15 +72,22 @@
 		const delta = Math.min(time - lastFrame, 32);
 		lastFrame = time;
 
-		if (!paused && !locked) {
-			carousel.scrollLeft += delta * 0.025;
-			keepInLoop();
+		if (!locked) {
+			pendingDistance += delta * 0.03;
+			const wholePixels = Math.floor(pendingDistance);
+
+			if (wholePixels > 0) {
+				carousel.scrollLeft += wholePixels;
+				pendingDistance -= wholePixels;
+				keepInLoop();
+			}
 		}
 
 		animationFrame = requestAnimationFrame(animate);
 	};
 
 	const scrollCarousel = (direction: -1 | 1) => {
+		pendingDistance = 0;
 		carousel.scrollBy({
 			left: carousel.clientWidth * 0.7 * direction,
 			behavior: 'smooth'
@@ -130,13 +139,7 @@
 	});
 </script>
 
-<div
-	class="relative"
-	role="region"
-	aria-label="Carrousel des styles de montage"
-	onfocusin={() => (paused = true)}
-	onfocusout={() => (paused = false)}
->
+<div class="relative" role="region" aria-label="Carrousel des styles de montage">
 	<div class={['mb-2 flex justify-end gap-2', prominent ? 'md:mb-3' : '']}>
 		<div class="hidden gap-2 sm:flex">
 			<button

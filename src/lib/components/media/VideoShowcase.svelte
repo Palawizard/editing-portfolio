@@ -1,11 +1,9 @@
 <script lang="ts">
-	import Badge from '$lib/components/ui/Badge.svelte';
 	import VideoPreview from './VideoPreview.svelte';
 
 	type Props = {
 		title: string;
 		description: string;
-		label?: string;
 		poster?: string;
 		src?: string;
 		aspect?: 'video' | 'vertical';
@@ -15,7 +13,6 @@
 	let {
 		title,
 		description,
-		label = 'Sélection de montages récents',
 		poster,
 		src,
 		aspect = 'video',
@@ -32,8 +29,7 @@
 	<VideoPreview {title} {poster} {src} {aspect} />
 
 	<div class="px-1 pb-2 md:px-2 md:pb-0">
-		<Badge tone="accent">{label}</Badge>
-		<h2 class="display-title mt-5 text-4xl text-balance text-white md:text-5xl">{title}</h2>
+		<h2 class="display-title text-4xl text-balance text-white md:text-5xl">{title}</h2>
 		<p class="mt-4 text-base leading-7 text-slate-300">{description}</p>
 	</div>
 </section>

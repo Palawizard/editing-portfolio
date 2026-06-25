@@ -8,7 +8,6 @@
 		<VideoShowcase
 			title="Sélection de montages récents"
 			description="Un aperçu court pour montrer le rythme, les formats et le niveau de finition des montages."
-			label="Showreel"
 			class="scroll-mt-28"
 		/>
 	</Container>

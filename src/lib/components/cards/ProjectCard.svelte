@@ -10,9 +10,10 @@
 		project: Project;
 		compact?: boolean;
 		index?: number;
+		minimal?: boolean;
 	};
 
-	let { project, compact = false, index = 0 }: Props = $props();
+	let { project, compact = false, index = 0, minimal = false }: Props = $props();
 </script>
 
 <article
@@ -31,24 +32,34 @@
 		<div
 			class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent"
 		></div>
-		<span
-			class="absolute left-4 top-4 rounded-full border border-white/15 bg-black/45 px-3 py-1 font-mono text-xs text-white backdrop-blur"
-		>
-			{String(index + 1).padStart(2, '0')}
-		</span>
+		{#if !minimal}
+			<span
+				class="absolute left-4 top-4 rounded-full border border-white/15 bg-black/45 px-3 py-1 font-mono text-xs text-white backdrop-blur"
+			>
+				{String(index + 1).padStart(2, '0')}
+			</span>
+		{/if}
 	</div>
 
 	<div class="p-6">
-		<div class="flex flex-wrap items-center gap-2">
-			<Badge tone="accent">{projectCategoryLabels[project.category]}</Badge>
-			<span class="text-sm text-slate-400">{project.format}</span>
-		</div>
+		{#if !minimal}
+			<div class="flex flex-wrap items-center gap-2">
+				<Badge tone="accent">{projectCategoryLabels[project.category]}</Badge>
+				<span class="text-sm text-slate-400">{project.format}</span>
+			</div>
+		{/if}
 
-		<h3 class="mt-5 text-2xl font-bold text-balance text-white">{project.title}</h3>
+		<h3 class={[minimal ? '' : 'mt-5', 'text-2xl font-bold text-balance text-white']}>
+			{project.title}
+		</h3>
 		<p class="mt-3 text-sm leading-6 text-slate-300">{project.summary}</p>
 
-		<div class="mt-6 flex min-w-0 items-center justify-between gap-4">
-			<p class="text-sm text-slate-400">{project.platform.join(' / ')}</p>
+		<div
+			class={['mt-6 flex min-w-0 items-center gap-4', minimal ? 'justify-end' : 'justify-between']}
+		>
+			{#if !minimal}
+				<p class="text-sm text-slate-400">{project.platform.join(' / ')}</p>
+			{/if}
 			<a
 				class="inline-flex size-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-white transition group-hover:border-cyan-200/50 group-hover:bg-cyan-200/10"
 				href={resolve('/projets/[slug]', { slug: project.slug })}

@@ -30,29 +30,27 @@
 </svelte:head>
 
 <main id="main-content">
-	<section class="relative overflow-hidden pb-14 pt-16 md:pb-20 md:pt-24">
+	<section
+		class="relative min-h-[calc(100svh-4.5rem)] overflow-hidden pb-16 pt-14 md:pb-20 md:pt-18"
+	>
 		<div
 			class="pointer-events-none absolute left-1/2 top-0 h-72 w-[50rem] -translate-x-1/2 rounded-full bg-violet-500/10 blur-[100px]"
 		></div>
 		<Container size="wide">
-			<div class="mx-auto max-w-4xl text-center">
-				<p class="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-200">
-					Portfolio interactif
-				</p>
-				<h1 class="display-title mt-6 text-5xl text-gradient sm:text-6xl md:text-8xl">
-					Choisis ton style.
-					<span class="block text-white">Regarde le résultat.</span>
+			<div class="mx-auto max-w-5xl text-center">
+				<h1 class="display-title text-6xl text-gradient sm:text-7xl md:text-9xl">
+					Choisis ton style de montage.
 				</h1>
-				<p class="mx-auto mt-7 max-w-2xl text-base leading-7 text-slate-300 md:text-lg">
-					Sélectionne un type de montage pour afficher les exemples correspondants, comprendre le
-					travail réalisé et trouver la direction adaptée à ton projet.
+				<p class="mx-auto mt-7 max-w-xl text-base leading-7 text-slate-300 md:text-lg">
+					Clique sur un style pour voir les montages correspondants.
 				</p>
 			</div>
 
-			<div class="mt-14 md:mt-18">
+			<div class="mt-10 md:mt-12">
 				<FormatCarousel
 					selected={selectedChoice}
 					onSelect={(choice) => (selectedChoice = choice)}
+					prominent
 				/>
 			</div>
 		</Container>
@@ -73,13 +71,8 @@
 					></div>
 					<div class="relative grid gap-10 lg:grid-cols-[1fr_0.7fr] lg:items-end">
 						<div>
-							<div
-								class="inline-flex items-center gap-2 rounded-full border border-cyan-200/20 bg-cyan-200/10 px-4 py-2 text-sm font-semibold text-cyan-100"
-							>
-								<SlidersHorizontal size={17} aria-hidden="true" />
-								Format libre
-							</div>
-							<h2 class="display-title mt-7 max-w-3xl text-4xl text-white md:text-6xl">
+							<SlidersHorizontal class="text-cyan-100" size={25} aria-hidden="true" />
+							<h2 class="display-title mt-6 max-w-3xl text-4xl text-white md:text-6xl">
 								Ton projet ne rentre pas dans une case ?
 							</h2>
 							<p class="mt-6 max-w-2xl text-base leading-7 text-slate-300 md:text-lg">
@@ -92,33 +85,20 @@
 								Parler de mon projet
 								<ArrowRight size={18} aria-hidden="true" />
 							</Button>
-							<p class="mt-4 max-w-xs text-sm leading-6 text-slate-400">
-								Brief, références, durée et destination suffisent pour commencer.
-							</p>
 						</div>
 					</div>
 				</div>
 			{:else}
 				<div class="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
 					<div>
-						<p class="text-xs font-semibold uppercase tracking-[0.24em] text-violet-200">
-							Sélection active
-						</p>
-						<h2 class="mt-3 text-3xl font-bold text-white md:text-5xl">{selectedLabel}</h2>
-						<p class="mt-4 max-w-2xl text-base leading-7 text-slate-400">
-							{filteredProjects.length} exemple{filteredProjects.length > 1 ? 's' : ''} disponible{filteredProjects.length >
-							1
-								? 's'
-								: ''}
-							dans ce style.
-						</p>
+						<h2 class="display-title text-4xl text-white md:text-6xl">{selectedLabel}</h2>
 					</div>
 					<Button href="/contact" variant="secondary">Commander ce style</Button>
 				</div>
 
 				<div class="mt-10 grid min-w-0 gap-6 md:grid-cols-2 xl:grid-cols-3">
 					{#each filteredProjects as project, index (project.slug)}
-						<ProjectCard {project} {index} />
+						<ProjectCard {project} {index} minimal />
 					{/each}
 				</div>
 			{/if}

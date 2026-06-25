@@ -15,8 +15,6 @@ export const navigationLinks: NavigationLink[] = [
 	{ label: 'Contact', href: '/contact' }
 ];
 
-export const heroBadges = ['YouTube', 'TikTok', 'Reels', 'Shorts', 'Gaming', 'Promo', 'Explicatif'];
-
 export const heroActions: CallToAction[] = [
 	{ label: 'Voir mes montages', href: '/projets', variant: 'primary' },
 	{ label: 'Me contacter', href: '/contact', variant: 'secondary' }

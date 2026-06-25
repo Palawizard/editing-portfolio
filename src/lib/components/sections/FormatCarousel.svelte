@@ -26,6 +26,8 @@
 	let lastFrame = 0;
 	let pendingDistance = 0;
 	let locked = $state(false);
+	let centering = false;
+	let centeringTimeout: ReturnType<typeof setTimeout> | undefined;
 	let activeGroupIndex = $state<number | undefined>();
 
 	const choices = [
@@ -53,7 +55,7 @@
 	};
 
 	const keepInLoop = () => {
-		if (locked) return;
+		if (centering) return;
 
 		const segmentWidth = getSegmentWidth();
 		if (!segmentWidth) return;
@@ -61,9 +63,35 @@
 		if (carousel.scrollLeft >= segmentWidth * 2) {
 			carousel.scrollLeft -= segmentWidth;
 			pendingDistance = 0;
+			if (activeGroupIndex !== undefined) activeGroupIndex -= 1;
 		} else if (carousel.scrollLeft < segmentWidth * 0.15) {
 			carousel.scrollLeft += segmentWidth;
 			pendingDistance = 0;
+			if (activeGroupIndex !== undefined) activeGroupIndex += 1;
+		}
+	};
+
+	const getCardStep = () => {
+		if (!middleGroup) return carousel.clientWidth * 0.7;
+
+		const cards = middleGroup.querySelectorAll<HTMLElement>('[data-choice]');
+		if (cards.length < 2) return cards[0]?.offsetWidth ?? carousel.clientWidth * 0.7;
+
+		return cards[1].offsetLeft - cards[0].offsetLeft;
+	};
+
+	const normalizeToMiddleSegment = () => {
+		const segmentWidth = getSegmentWidth();
+		if (!segmentWidth) return;
+
+		while (carousel.scrollLeft >= segmentWidth * 2) {
+			carousel.scrollLeft -= segmentWidth;
+			if (activeGroupIndex !== undefined) activeGroupIndex -= 1;
+		}
+
+		while (carousel.scrollLeft < segmentWidth * 0.5) {
+			carousel.scrollLeft += segmentWidth;
+			if (activeGroupIndex !== undefined) activeGroupIndex += 1;
 		}
 	};
 
@@ -88,10 +116,13 @@
 
 	const scrollCarousel = (direction: -1 | 1) => {
 		pendingDistance = 0;
+		normalizeToMiddleSegment();
 		carousel.scrollBy({
-			left: carousel.clientWidth * 0.7 * direction,
+			left: getCardStep() * direction,
 			behavior: 'smooth'
 		});
+
+		window.setTimeout(keepInLoop, 500);
 	};
 
 	const centerCard = (target: HTMLElement, behavior: ScrollBehavior = 'smooth') => {
@@ -110,10 +141,17 @@
 		locked = true;
 		activeGroupIndex = groupIndex;
 		onSelect(choice);
+		centering = true;
+		if (centeringTimeout) clearTimeout(centeringTimeout);
 
 		requestAnimationFrame(() => {
 			requestAnimationFrame(() => centerCard(target));
 		});
+
+		centeringTimeout = setTimeout(() => {
+			centering = false;
+			keepInLoop();
+		}, 650);
 	};
 
 	onMount(() => {
@@ -134,6 +172,7 @@
 
 		return () => {
 			cancelAnimationFrame(animationFrame);
+			if (centeringTimeout) clearTimeout(centeringTimeout);
 			window.removeEventListener('resize', handleResize);
 		};
 	});
@@ -260,11 +299,11 @@
 	</div>
 
 	<div
-		class="pointer-events-none absolute bottom-12 left-0 top-[4.25rem] z-20 w-10 bg-gradient-to-r from-[var(--color-bg-soft)] via-[var(--color-bg-soft)]/65 to-transparent blur-[2px] sm:w-16"
+		class="pointer-events-none absolute bottom-12 left-0 top-[7rem] z-20 w-10 bg-gradient-to-r from-[var(--color-bg-soft)] via-[var(--color-bg-soft)]/65 to-transparent blur-[2px] sm:w-16"
 		aria-hidden="true"
 	></div>
 	<div
-		class="pointer-events-none absolute bottom-12 right-0 top-[4.25rem] z-20 w-10 bg-gradient-to-l from-[var(--color-bg-soft)] via-[var(--color-bg-soft)]/65 to-transparent blur-[2px] sm:w-16"
+		class="pointer-events-none absolute bottom-12 right-0 top-[7rem] z-20 w-10 bg-gradient-to-l from-[var(--color-bg-soft)] via-[var(--color-bg-soft)]/65 to-transparent blur-[2px] sm:w-16"
 		aria-hidden="true"
 	></div>
 </div>

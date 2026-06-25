@@ -209,9 +209,9 @@
 </script>
 
 <div class="relative" role="region" aria-label="Carrousel des styles de montage">
-	<div class="absolute right-0 top-1 z-30 hidden gap-2 sm:flex">
+	<div class="absolute right-4 top-12 z-30 hidden gap-2 sm:flex">
 		<button
-			class="grid size-11 place-items-center rounded-full border border-white/12 bg-slate-950/75 text-white shadow-lg backdrop-blur transition hover:border-cyan-200/40 hover:bg-slate-900"
+			class="grid size-11 place-items-center rounded-full border border-white/15 bg-slate-950/80 text-white shadow-xl backdrop-blur-md transition hover:border-cyan-200/50 hover:bg-slate-900"
 			type="button"
 			aria-label="Voir les formats précédents"
 			onclick={() => scrollCarousel(-1)}
@@ -219,7 +219,7 @@
 			<ChevronLeft size={19} aria-hidden="true" />
 		</button>
 		<button
-			class="grid size-11 place-items-center rounded-full border border-white/12 bg-slate-950/75 text-white shadow-lg backdrop-blur transition hover:border-cyan-200/40 hover:bg-slate-900"
+			class="grid size-11 place-items-center rounded-full border border-white/15 bg-slate-950/80 text-white shadow-xl backdrop-blur-md transition hover:border-cyan-200/50 hover:bg-slate-900"
 			type="button"
 			aria-label="Voir les formats suivants"
 			onclick={() => scrollCarousel(1)}
@@ -326,13 +326,4 @@
 			</div>
 		{/each}
 	</div>
-
-	<div
-		class="pointer-events-none absolute bottom-32 left-0 top-[6.5rem] z-20 w-10 bg-gradient-to-r from-[var(--color-bg-soft)] via-[var(--color-bg-soft)]/65 to-transparent blur-[2px] sm:w-16"
-		aria-hidden="true"
-	></div>
-	<div
-		class="pointer-events-none absolute bottom-32 right-0 top-[6.5rem] z-20 w-10 bg-gradient-to-l from-[var(--color-bg-soft)] via-[var(--color-bg-soft)]/65 to-transparent blur-[2px] sm:w-16"
-		aria-hidden="true"
-	></div>
 </div>

@@ -110,8 +110,8 @@ video {
 	mask-image: linear-gradient(
 		to right,
 		transparent,
-		black clamp(2.5rem, 7vw, 6rem),
-		black calc(100% - clamp(2.5rem, 7vw, 6rem)),
+		black clamp(3rem, 8vw, 7rem),
+		black calc(100% - clamp(3rem, 8vw, 7rem)),
 		transparent
 	);
 }

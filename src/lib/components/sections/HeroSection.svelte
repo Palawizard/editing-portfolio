@@ -17,9 +17,9 @@
 		<div class="grid gap-14 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
 			<div class="relative z-10">
 				<h1 class="display-title max-w-5xl text-6xl text-white sm:text-7xl md:text-[6.5rem]">
-					Tes rushs.
-					<span class="block text-gradient">Le bon rythme.</span>
-					<span class="block">Prêt à publier.</span>
+					<span class="block pb-[0.08em]">Tes rushs.</span>
+					<span class="block pb-[0.08em] text-gradient">Le bon rythme.</span>
+					<span class="block pb-[0.08em]">Prêt à publier.</span>
 				</h1>
 
 				<p class="mt-7 max-w-2xl text-base leading-7 text-slate-300 md:text-lg">

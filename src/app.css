@@ -87,15 +87,18 @@ video {
 		system-ui,
 		sans-serif;
 	letter-spacing: -0.055em;
-	line-height: 1;
-	padding-block: 0.08em 0.14em;
+	line-height: 1.08;
+	padding-block: 0.1em 0.18em;
 	overflow: visible;
 }
 
 .text-gradient {
+	display: inline-block;
 	background: linear-gradient(110deg, #ffffff 8%, #cdbfff 48%, #78dcff 92%);
 	background-clip: text;
 	color: transparent;
+	padding-block: 0.08em 0.16em;
+	margin-block: -0.08em -0.16em;
 }
 
 .scrollbar-hidden {

@@ -23,6 +23,9 @@ export type Project = {
 	featured: boolean;
 };
 
+export type ProjectInput = Omit<Project, 'featured' | 'format' | 'platform' | 'poster'> &
+	Partial<Pick<Project, 'featured' | 'format' | 'platform' | 'poster'>>;
+
 export type ProjectMedia = {
 	title: string;
 	description?: string;

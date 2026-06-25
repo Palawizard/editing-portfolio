@@ -19,7 +19,7 @@
 >
 	<VideoPreview
 		title={project.title}
-		poster={project.previewVideo ? project.poster : undefined}
+		poster={project.poster || undefined}
 		src={project.previewVideo}
 		aspect="video"
 		class={compact ? 'max-h-72 border-0 shadow-none' : 'border-0 shadow-none'}

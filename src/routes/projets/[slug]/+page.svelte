@@ -1,16 +1,21 @@
 <script lang="ts">
+	import { ExternalLink } from '@lucide/svelte';
 	import { resolve } from '$app/paths';
+	import VideoEmbed from '$lib/components/media/VideoEmbed.svelte';
 	import VideoPreview from '$lib/components/media/VideoPreview.svelte';
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import Container from '$lib/components/ui/Container.svelte';
 	import { projectCategoryLabels } from '$lib/content/formats';
+	import { getPublishedVideo } from '$lib/utils/media';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 	const project = $derived(data.project);
 	const previousProject = $derived(data.previousProject);
 	const nextProject = $derived(data.nextProject);
+	const publishedVideo = $derived(getPublishedVideo(project.externalUrl));
+	const mediaAspect = $derived(project.format === '9:16' ? 'vertical' : 'video');
 	const hasMediaBlocks = $derived(
 		Boolean(project.supplementalMedia?.length) || Boolean(project.beforeAfter)
 	);
@@ -43,11 +48,38 @@
 					<p class="mt-5 max-w-2xl text-lg leading-8 text-slate-300">{project.summary}</p>
 				</div>
 
-				<VideoPreview
-					title={project.title}
-					poster={project.previewVideo ? project.poster : undefined}
-					src={project.previewVideo}
-				/>
+				<div>
+					{#if project.previewVideo}
+						<VideoPreview
+							title={project.title}
+							poster={project.poster || undefined}
+							src={project.previewVideo}
+							aspect={mediaAspect}
+						/>
+					{:else if publishedVideo?.embedUrl}
+						<VideoEmbed title={project.title} src={publishedVideo.embedUrl} aspect={mediaAspect} />
+					{:else}
+						<VideoPreview
+							title={project.title}
+							poster={project.poster || undefined}
+							aspect={mediaAspect}
+						/>
+					{/if}
+
+					{#if publishedVideo}
+						<!-- eslint-disable svelte/no-navigation-without-resolve -- This URL points to an external publishing platform. -->
+						<a
+							class="mt-4 inline-flex min-h-11 items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-white transition hover:border-white/35 hover:bg-white/[0.08]"
+							href={publishedVideo.url}
+							target="_blank"
+							rel="noreferrer"
+						>
+							Voir la vidéo publiée
+							<ExternalLink size={16} aria-hidden="true" />
+						</a>
+						<!-- eslint-enable svelte/no-navigation-without-resolve -->
+					{/if}
+				</div>
 			</div>
 		</Container>
 	</section>

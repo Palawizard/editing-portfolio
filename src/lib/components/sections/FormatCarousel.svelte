@@ -14,7 +14,7 @@
 	import type { ProjectChoice } from '$lib/types/project';
 
 	type Props = {
-		selected: ProjectChoice;
+		selected?: ProjectChoice;
 		onSelect: (choice: ProjectChoice) => void;
 		prominent?: boolean;
 	};
@@ -26,6 +26,7 @@
 	let lastFrame = 0;
 	let paused = $state(false);
 	let locked = $state(false);
+	let activeGroupIndex = $state<number | undefined>();
 
 	const choices = [
 		...editingFormats,
@@ -52,6 +53,8 @@
 	};
 
 	const keepInLoop = () => {
+		if (locked) return;
+
 		const segmentWidth = getSegmentWidth();
 		if (!segmentWidth) return;
 
@@ -82,22 +85,25 @@
 		});
 	};
 
-	const centerSelected = (choice: ProjectChoice) => {
-		if (!middleGroup) return;
-		const target = middleGroup.querySelector<HTMLElement>(`[data-choice="${choice}"]`);
-		if (!target) return;
+	const centerCard = (target: HTMLElement, behavior: ScrollBehavior = 'smooth') => {
+		const carouselRect = carousel.getBoundingClientRect();
+		const targetRect = target.getBoundingClientRect();
+		const distance =
+			targetRect.left + targetRect.width / 2 - (carouselRect.left + carouselRect.width / 2);
 
-		const left =
-			middleGroup.offsetLeft + target.offsetLeft - (carousel.clientWidth - target.offsetWidth) / 2;
-		carousel.scrollTo({ left, behavior: 'smooth' });
+		carousel.scrollTo({
+			left: carousel.scrollLeft + distance,
+			behavior
+		});
 	};
 
-	const selectChoice = (choice: ProjectChoice) => {
+	const selectChoice = (choice: ProjectChoice, target: HTMLElement, groupIndex: number) => {
 		locked = true;
+		activeGroupIndex = groupIndex;
 		onSelect(choice);
 
 		requestAnimationFrame(() => {
-			requestAnimationFrame(() => centerSelected(choice));
+			requestAnimationFrame(() => centerCard(target));
 		});
 	};
 
@@ -110,9 +116,7 @@
 		}
 
 		const handleResize = () => {
-			if (locked) {
-				centerSelected(selected);
-			} else {
+			if (!locked) {
 				carousel.scrollLeft = getSegmentWidth();
 			}
 		};
@@ -130,8 +134,6 @@
 	class="relative"
 	role="region"
 	aria-label="Carrousel des styles de montage"
-	onpointerenter={() => (paused = true)}
-	onpointerleave={() => (paused = false)}
 	onfocusin={() => (paused = true)}
 	onfocusout={() => (paused = false)}
 >
@@ -178,22 +180,22 @@
 							prominent
 								? 'min-h-[29rem] w-[82vw] max-w-[27rem] rounded-[1.75rem] p-8 sm:w-[26rem]'
 								: 'min-h-[22rem] w-[82vw] max-w-[22rem] rounded-[1.4rem] p-6 sm:w-[21rem]',
-							locked && selected === choice.id
+							locked && activeGroupIndex === groupIndex && selected === choice.id
 								? 'z-10 scale-[1.08] border-violet-200 bg-violet-300/[0.14] shadow-[0_28px_100px_rgb(81_49_150/0.42)]'
-								: selected === choice.id
-									? 'border-violet-300/60 bg-violet-300/[0.1]'
-									: 'border-white/10 bg-white/[0.035] hover:-translate-y-1 hover:border-white/25 hover:bg-white/[0.065]'
+								: 'border-white/10 bg-white/[0.035] hover:-translate-y-1 hover:border-white/25 hover:bg-white/[0.065]'
 						]}
 						type="button"
-						aria-pressed={locked && selected === choice.id}
+						aria-pressed={locked && activeGroupIndex === groupIndex && selected === choice.id}
 						tabindex={groupIndex === 1 ? 0 : -1}
-						onclick={() => selectChoice(choice.id)}
+						onclick={(event) => selectChoice(choice.id, event.currentTarget, groupIndex)}
 					>
 						<span
 							class={[
 								'absolute -right-16 -top-16 size-48 rounded-full blur-3xl transition',
 								choice.id === 'custom' ? 'bg-cyan-300/14' : 'bg-violet-400/16',
-								selected === choice.id ? 'opacity-100' : 'opacity-40 group-hover:opacity-80'
+								locked && activeGroupIndex === groupIndex && selected === choice.id
+									? 'opacity-100'
+									: 'opacity-40 group-hover:opacity-80'
 							]}
 						></span>
 
@@ -202,7 +204,7 @@
 								class={[
 									'grid place-items-center rounded-2xl border',
 									prominent ? 'size-16' : 'size-12',
-									selected === choice.id
+									locked && activeGroupIndex === groupIndex && selected === choice.id
 										? 'border-violet-200/40 bg-violet-200/15 text-violet-100'
 										: 'border-white/10 bg-black/20 text-slate-200'
 								]}

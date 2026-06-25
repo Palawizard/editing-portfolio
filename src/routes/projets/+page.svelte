@@ -4,6 +4,7 @@
 	import ProjectCard from '$lib/components/cards/ProjectCard.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import Container from '$lib/components/ui/Container.svelte';
+	import { getContactStyleHref } from '$lib/content/contact';
 	import { projectCategoryLabels } from '$lib/content/formats';
 	import { projects } from '$lib/content/projects';
 	import type { ProjectChoice } from '$lib/types/project';
@@ -81,7 +82,7 @@
 								</p>
 							</div>
 							<div class="lg:justify-self-end">
-								<Button href="/contact" class="w-full sm:w-auto">
+								<Button href={getContactStyleHref('custom')} class="w-full sm:w-auto">
 									Parler de mon projet
 									<ArrowRight size={18} aria-hidden="true" />
 								</Button>
@@ -93,7 +94,9 @@
 						<div>
 							<h2 class="display-title text-4xl text-white md:text-6xl">{selectedLabel}</h2>
 						</div>
-						<Button href="/contact" variant="secondary">Commander ce style</Button>
+						<Button href={getContactStyleHref(selectedChoice)} variant="secondary">
+							Commander ce style
+						</Button>
 					</div>
 
 					<div class="mt-10 grid min-w-0 gap-6 md:grid-cols-2 xl:grid-cols-3">

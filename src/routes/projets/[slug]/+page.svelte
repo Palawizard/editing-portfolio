@@ -6,6 +6,7 @@
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import Container from '$lib/components/ui/Container.svelte';
+	import { getContactProjectHref } from '$lib/content/contact';
 	import { projectCategoryLabels } from '$lib/content/formats';
 	import { getPublishedVideo } from '$lib/utils/media';
 	import type { PageData } from './$types';
@@ -221,7 +222,9 @@
 						direction claire.
 					</p>
 				</div>
-				<Button href="/contact" class="mt-6 w-full md:mt-0 md:w-auto">Me contacter</Button>
+				<Button href={getContactProjectHref(project.slug)} class="mt-6 w-full md:mt-0 md:w-auto">
+					Me contacter
+				</Button>
 			</div>
 		</Container>
 	</section>

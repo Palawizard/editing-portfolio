@@ -2,6 +2,8 @@
 
 Portfolio statique construit avec SvelteKit, TypeScript et Tailwind CSS.
 
+La stratégie recommandée pour les demandes de montage est documentée dans [`docs/CONTACT_STRATEGY.md`](docs/CONTACT_STRATEGY.md).
+
 ## Ajouter un montage déjà publié
 
 L'ajout se fait uniquement dans `src/lib/content/projects.ts`.

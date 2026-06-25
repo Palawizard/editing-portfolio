@@ -15,7 +15,7 @@
 	);
 </script>
 
-<section id="formats" class="scroll-mt-28 border-y border-white/10 bg-white/[0.018] py-20 md:py-28">
+<section id="formats" class="scroll-mt-28 border-y border-white/10 bg-white/[0.018] py-14 md:py-18">
 	<Container size="wide">
 		<SectionHeader
 			eyebrow="Trouve ton format"

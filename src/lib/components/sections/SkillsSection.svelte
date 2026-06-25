@@ -5,7 +5,7 @@
 	import { skills, tools } from '$lib/content/services';
 </script>
 
-<section class="py-20 md:py-28">
+<section class="py-14 md:py-18">
 	<Container size="wide" class="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
 		<SectionHeader
 			eyebrow="Compétences"

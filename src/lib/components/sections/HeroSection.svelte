@@ -5,7 +5,7 @@
 	import { heroActions } from '$lib/content/site';
 </script>
 
-<section class="relative overflow-hidden pb-20 pt-16 md:pb-28 md:pt-24">
+<section class="relative overflow-hidden pb-14 pt-14 md:pb-18 md:pt-20">
 	<div
 		class="pointer-events-none absolute -left-36 top-16 size-[32rem] rounded-full bg-violet-600/12 blur-[110px]"
 	></div>

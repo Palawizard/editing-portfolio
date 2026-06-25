@@ -164,7 +164,7 @@
 	<div
 		bind:this={carousel}
 		class={[
-			'scrollbar-hidden -mx-5 flex overflow-x-auto px-5 py-12 sm:mx-0 sm:px-0',
+			'carousel-fade scrollbar-hidden -mx-5 flex overflow-x-auto px-5 py-12 sm:mx-0 sm:px-0',
 			locked ? 'snap-x snap-mandatory' : ''
 		]}
 		aria-label="Choisir un style de montage"
@@ -258,4 +258,13 @@
 			</div>
 		{/each}
 	</div>
+
+	<div
+		class="pointer-events-none absolute bottom-12 left-0 top-[4.25rem] z-20 w-10 bg-gradient-to-r from-[var(--color-bg-soft)] via-[var(--color-bg-soft)]/65 to-transparent blur-[2px] sm:w-16"
+		aria-hidden="true"
+	></div>
+	<div
+		class="pointer-events-none absolute bottom-12 right-0 top-[4.25rem] z-20 w-10 bg-gradient-to-l from-[var(--color-bg-soft)] via-[var(--color-bg-soft)]/65 to-transparent blur-[2px] sm:w-16"
+		aria-hidden="true"
+	></div>
 </div>

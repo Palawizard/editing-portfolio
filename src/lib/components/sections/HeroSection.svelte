@@ -130,7 +130,7 @@
 								<span class="w-[22%] rounded bg-cyan-200/25"></span>
 								<span class="flex-1 rounded bg-white/8"></span>
 							</div>
-						<span class="timeline-cursor absolute -top-1 h-14 w-px bg-white shadow-[0_0_8px_white]"
+						<span class="timeline-cursor absolute top-1 h-14 w-px bg-white shadow-[0_0_8px_white]"
 						></span>
 						</div>
 					</div>

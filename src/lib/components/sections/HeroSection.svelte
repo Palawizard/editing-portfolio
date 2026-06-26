@@ -25,8 +25,8 @@
 
 <style>
 	@keyframes timeline-scrub {
-		0% { left: 92%; }
-		100% { left: 6%; }
+		0% { left: 6%; }
+		100% { left: 92%; }
 	}
 	.timeline-cursor {
 		animation: timeline-scrub 9s linear infinite;

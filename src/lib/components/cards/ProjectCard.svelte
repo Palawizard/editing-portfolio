@@ -14,6 +14,7 @@
 	};
 
 	let { project, compact = false, index = 0, minimal = false }: Props = $props();
+	const mediaAspect = $derived(project.format === '9:16' ? 'vertical' : 'video');
 </script>
 
 <article
@@ -24,7 +25,7 @@
 			title={project.title}
 			poster={project.poster || undefined}
 			src={project.previewVideo}
-			aspect="video"
+			aspect={mediaAspect}
 			class={compact
 				? 'max-h-72 rounded-none border-0 shadow-none'
 				: 'rounded-none border-0 shadow-none'}

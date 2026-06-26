@@ -2,12 +2,14 @@ export type ProjectCategory =
 	| 'gaming-long-form'
 	| 'gaming-short-form'
 	| 'explainer-short-form'
-	| 'business-promo';
+	| 'business-promo'
+	| 'other-format';
 
 export type ProjectChoice = ProjectCategory | 'custom';
 
 export type Project = {
 	slug: string;
+	referenceId: string;
 	title: string;
 	category: ProjectCategory;
 	summary: string;
@@ -22,11 +24,15 @@ export type Project = {
 	externalUrl?: string;
 	supplementalMedia?: ProjectMedia[];
 	beforeAfter?: ProjectBeforeAfter;
+	pricing?: ProjectPricing;
 	featured: boolean;
 };
 
-export type ProjectInput = Omit<Project, 'featured' | 'format' | 'platform' | 'poster'> &
-	Partial<Pick<Project, 'featured' | 'format' | 'platform' | 'poster'>>;
+export type ProjectInput = Omit<
+	Project,
+	'featured' | 'format' | 'platform' | 'poster' | 'referenceId'
+> &
+	Partial<Pick<Project, 'featured' | 'format' | 'platform' | 'poster' | 'referenceId'>>;
 
 export type ProjectMedia = {
 	title: string;
@@ -43,6 +49,12 @@ export type ProjectBeforeAfter = {
 	afterLabel: string;
 	beforeVideo?: string;
 	afterVideo?: string;
+};
+
+export type ProjectPricing = {
+	qualityTier?: 'simple' | 'standard' | 'premium';
+	price?: string;
+	notes?: string;
 };
 
 export type EditingFormat = {

@@ -4,7 +4,8 @@ export const projectCategoryLabels: Record<ProjectCategory, string> = {
 	'gaming-long-form': 'Gaming long format',
 	'gaming-short-form': 'Shorts gaming',
 	'explainer-short-form': 'Rant et explicatif',
-	'business-promo': 'Promo business et UGC'
+	'business-promo': 'Promo business et UGC',
+	'other-format': 'Autres formats'
 };
 
 export const editingFormats: EditingFormat[] = [
@@ -62,6 +63,20 @@ export const editingFormats: EditingFormat[] = [
 			"Texte à l'écran",
 			"Appel à l'action",
 			'Format réseaux sociaux'
+		]
+	},
+	{
+		id: 'other-format',
+		title: 'Autres formats',
+		promise: 'Des montages adaptés à des contenus moins classiques.',
+		description:
+			'Lives, concepts ponctuels ou formats hybrides peuvent être travaillés avec une direction adaptée au contenu.',
+		highlights: [
+			'Format sur mesure',
+			'Structure claire',
+			'Rythme adapté',
+			'Nettoyage des longueurs',
+			'Export prêt à publier'
 		]
 	}
 ];

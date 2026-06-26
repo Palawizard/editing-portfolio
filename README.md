@@ -55,6 +55,7 @@ Catégories disponibles :
 - `gaming-short-form`
 - `explainer-short-form`
 - `business-promo`
+- `other-format`
 
 Le lien publié est intégré sur la fiche projet et reste accessible avec un bouton externe.
 

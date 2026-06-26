@@ -1,6 +1,11 @@
-import type { ProjectCategory } from './project';
+import type { ProjectCategory, ProjectChoice } from './project';
 
-export type InternalHref = '/' | '/#formats' | '/projets' | '/contact';
+export type ContactHref =
+	| '/contact'
+	| `/contact?style=${ProjectChoice}`
+	| `/contact?project=${string}`;
+
+export type InternalHref = '/' | '/#formats' | '/projets' | ContactHref;
 
 export type NavigationLink = {
 	label: string;
@@ -17,6 +22,7 @@ export type SiteMetadata = {
 	name: string;
 	title: string;
 	description: string;
+	image: string;
 	locale: 'fr-FR';
 };
 

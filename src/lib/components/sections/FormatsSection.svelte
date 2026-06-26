@@ -4,6 +4,7 @@
 	import Button from '$lib/components/ui/Button.svelte';
 	import Container from '$lib/components/ui/Container.svelte';
 	import SectionHeader from '$lib/components/ui/SectionHeader.svelte';
+	import { getContactStyleHref } from '$lib/content/contact';
 	import { editingFormats } from '$lib/content/formats';
 	import type { ProjectChoice } from '$lib/types/project';
 
@@ -45,10 +46,13 @@
 						{/each}
 					</div>
 				</div>
-				<Button href="/projets" variant="secondary">
-					Voir les exemples
-					<ArrowRight size={18} aria-hidden="true" />
-				</Button>
+				<div class="grid gap-3 sm:grid-cols-2 md:grid-cols-1">
+					<Button href={getContactStyleHref(selectedFormat.id)}>
+						Demander ce format
+						<ArrowRight size={18} aria-hidden="true" />
+					</Button>
+					<Button href="/projets" variant="secondary">Voir les exemples</Button>
+				</div>
 			{:else}
 				<div>
 					<p class="text-sm font-semibold text-cyan-200">Commande personnalisée</p>
@@ -59,7 +63,7 @@
 						Partage tes références et ton objectif, puis définissons le format ensemble.
 					</p>
 				</div>
-				<Button href="/contact">
+				<Button href={getContactStyleHref('custom')}>
 					Présenter mon idée
 					<ArrowRight size={18} aria-hidden="true" />
 				</Button>

@@ -65,6 +65,28 @@ pnpm install
 pnpm dev
 ```
 
+## Configurer le formulaire de contact
+
+Créer un fichier `.env` à partir de `.env.example`, puis renseigner :
+
+```env
+PUBLIC_FORMSPREE_FORM_ID=form_id
+PUBLIC_TURNSTILE_SITE_KEY=turnstile_site_key
+PUBLIC_CONTACT_EMAIL=contact@example.com
+```
+
+Configuration externe nécessaire :
+
+1. Créer un formulaire Formspree et récupérer son identifiant.
+2. Créer un widget Cloudflare Turnstile avec le domaine public et `localhost` autorisés.
+3. Dans Formspree, activer la protection CAPTCHA, choisir Cloudflare Turnstile et renseigner la clé secrète.
+4. Restreindre le formulaire Formspree au domaine public du portfolio.
+5. Faire une soumission réelle et vérifier la notification email ainsi que le dossier spam.
+
+La clé secrète Turnstile reste uniquement dans Formspree. Elle ne doit jamais être ajoutée aux fichiers `.env` du portfolio.
+
+Les variables publiques sont intégrées pendant le build statique. Après une modification, reconstruire le site ou l’image Docker.
+
 ## Vérifications
 
 ```sh
@@ -121,6 +143,9 @@ Créer le fichier local `.env.prod` depuis `.env.prod.example` :
 HOST_BIND=127.0.0.1
 HOST_PORT=8080
 APP_PUBLIC_URL=https://portfolio.example.com
+PUBLIC_FORMSPREE_FORM_ID=form_id
+PUBLIC_TURNSTILE_SITE_KEY=turnstile_site_key
+PUBLIC_CONTACT_EMAIL=contact@example.com
 ```
 
 Valider la configuration :

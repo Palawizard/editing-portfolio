@@ -65,7 +65,7 @@ Champs recommandés :
 4. `Décris ton projet` — obligatoire.
 5. `Durée et volume des rushs` — facultatif mais visible.
 6. `Date souhaitée` — facultative.
-7. `Budget prévu` — choix facultatif avec une option `Je ne sais pas encore`.
+7. `Budget` — champ libre facultatif pour indiquer un montant ou une fourchette.
 8. `Liens utiles` — références, rushs cloud, chaîne ou publication existante.
 
 Le champ `Type de montage` contient :
@@ -76,15 +76,7 @@ Le champ `Type de montage` contient :
 - Promo business et UGC.
 - Commande personnalisée.
 
-Valeurs de budget proposées :
-
-- Moins de 100 €.
-- 100 à 250 €.
-- 250 à 500 €.
-- Plus de 500 €.
-- Je ne sais pas encore.
-
-Ces fourchettes doivent être ajustées aux prestations réellement acceptées. Le budget ne doit pas être un champ libre : les fourchettes sont plus rapides à remplir et plus simples à comparer.
+Le champ `Budget` reste libre pour permettre au visiteur d'indiquer directement le montant, la fourchette ou le niveau d'incertitude qu'il a en tête.
 
 ### 3. Envoi
 

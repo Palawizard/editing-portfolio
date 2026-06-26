@@ -11,7 +11,9 @@
 		WandSparkles
 	} from '@lucide/svelte';
 	import { editingFormats } from '$lib/content/formats';
-	import type { ProjectChoice } from '$lib/types/project';
+	import { projects } from '$lib/content/projects';
+	import { getPublishedVideo } from '$lib/utils/media';
+	import type { ProjectCategory, ProjectChoice } from '$lib/types/project';
 
 	type Props = {
 		selected?: ProjectChoice;
@@ -29,6 +31,13 @@
 	let centering = false;
 	let centeringTimeout: ReturnType<typeof setTimeout> | undefined;
 	let activeGroupIndex = $state<number | undefined>();
+	let categoryPreviews = $state<Partial<Record<ProjectCategory, CarouselPreview>>>({});
+
+	type CarouselPreview = {
+		src: string;
+		title: string;
+		poster?: string;
+	};
 
 	const choices = [
 		...editingFormats,
@@ -43,6 +52,55 @@
 	];
 
 	const getSegmentWidth = () => middleGroup?.offsetWidth ?? 0;
+
+	const randomItem = <T,>(items: T[]) => items[Math.floor(Math.random() * items.length)];
+
+	const getRandomStart = (category: ProjectCategory) => {
+		const maxStartByCategory: Record<ProjectCategory, number> = {
+			'gaming-long-form': 420,
+			'gaming-short-form': 24,
+			'explainer-short-form': 24,
+			'business-promo': 18,
+			'other-format': 300
+		};
+
+		return Math.floor(Math.random() * maxStartByCategory[category]);
+	};
+
+	const getCategoryPreview = (category: ProjectCategory): CarouselPreview | undefined => {
+		const candidates = projects
+			.filter((project) => project.category === category)
+			.flatMap((project) => {
+				const video = getPublishedVideo(project.externalUrl);
+				const src = project.previewVideo ?? video?.directUrl;
+				if (!src) return [];
+
+				return [
+					{
+						project,
+						poster: project.poster || video?.poster,
+						src
+					}
+				];
+			});
+
+		const candidate = randomItem(candidates);
+		if (!candidate) return undefined;
+
+		const start = getRandomStart(category);
+
+		return {
+			title: candidate.project.title,
+			poster: candidate.poster,
+			src: `${candidate.src}#t=${start}`
+		};
+	};
+
+	const buildCategoryPreviews = () => {
+		categoryPreviews = Object.fromEntries(
+			editingFormats.map((format) => [format.id, getCategoryPreview(format.id)])
+		);
+	};
 
 	const captureMiddleGroup = (node: HTMLDivElement, groupIndex: number) => {
 		if (groupIndex === 1) middleGroup = node;
@@ -186,6 +244,7 @@
 
 	onMount(() => {
 		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		buildCategoryPreviews();
 		carousel.scrollLeft = getSegmentWidth();
 
 		if (!reduceMotion) {
@@ -243,6 +302,7 @@
 				class={['flex shrink-0 pr-6', prominent ? 'gap-6' : 'gap-4']}
 			>
 				{#each choices as choice (choice.id)}
+					{@const preview = choice.id === 'custom' ? undefined : categoryPreviews[choice.id]}
 					<button
 						data-choice={choice.id}
 						data-group={groupIndex}
@@ -260,6 +320,28 @@
 						tabindex={groupIndex === 1 ? 0 : -1}
 						onclick={(event) => selectChoice(choice.id, event.currentTarget, groupIndex)}
 					>
+						{#if preview}
+							<span class="pointer-events-none absolute inset-0 block overflow-hidden">
+								<video
+									class="size-full object-cover opacity-45 saturate-[0.85] transition duration-500 group-hover:opacity-65"
+									src={preview.src}
+									poster={preview.poster}
+									aria-label={preview.title}
+									autoplay
+									muted
+									loop
+									playsinline
+									preload="metadata"
+								></video>
+							</span>
+							<span
+								class="pointer-events-none absolute inset-0 block bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/20"
+							></span>
+							<span
+								class="pointer-events-none absolute inset-0 block bg-[radial-gradient(circle_at_30%_20%,rgb(155_124_255/0.22),transparent_34%)]"
+							></span>
+						{/if}
+
 						<span
 							class={[
 								'absolute -right-16 -top-16 size-48 rounded-full blur-3xl transition',

@@ -10,7 +10,7 @@ declare global {
 					theme?: 'dark' | 'light' | 'auto';
 					language?: string;
 					appearance?: 'always' | 'execute' | 'interaction-only';
-					'error-callback'?: (errorCode: string) => boolean;
+					'error-callback'?: (errorCode?: string) => boolean;
 				}
 			) => string;
 			reset: (widgetId?: string) => void;

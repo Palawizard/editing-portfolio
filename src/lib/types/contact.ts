@@ -1,7 +1,5 @@
 import type { ProjectChoice } from './project';
 
-export type ContactBudget = 'under-100' | '100-250' | '250-500' | 'over-500' | 'unknown';
-
 export type ContactFormValues = {
 	name: string;
 	email: string;
@@ -9,7 +7,7 @@ export type ContactFormValues = {
 	projectDescription: string;
 	footageDetails: string;
 	desiredDate: string;
-	budget: ContactBudget | '';
+	budget: string;
 	usefulLinks: string;
 	projectSlug: string;
 };

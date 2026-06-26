@@ -1,6 +1,5 @@
 <script lang="ts">
 	import '../app.css';
-	import favicon from '$lib/assets/favicon.svg';
 	import PageShell from '$lib/components/layout/PageShell.svelte';
 	import { siteMetadata } from '$lib/content/site';
 
@@ -8,9 +7,20 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} />
+	<link rel="icon" type="image/jpeg" href={siteMetadata.image} />
+	<link rel="apple-touch-icon" href={siteMetadata.image} />
 	<title>{siteMetadata.title}</title>
 	<meta name="description" content={siteMetadata.description} />
+	<meta property="og:site_name" content={siteMetadata.name} />
+	<meta property="og:title" content={siteMetadata.title} />
+	<meta property="og:description" content={siteMetadata.description} />
+	<meta property="og:image" content={siteMetadata.image} />
+	<meta property="og:locale" content={siteMetadata.locale} />
+	<meta property="og:type" content="website" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content={siteMetadata.title} />
+	<meta name="twitter:description" content={siteMetadata.description} />
+	<meta name="twitter:image" content={siteMetadata.image} />
 </svelte:head>
 
 <PageShell>

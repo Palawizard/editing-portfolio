@@ -23,7 +23,7 @@ export type SiteMetadata = {
 	title: string;
 	description: string;
 	image: string;
-	locale: 'fr-FR';
+	locale: 'fr-FR' | 'en-US';
 };
 
 export type ProcessStep = {

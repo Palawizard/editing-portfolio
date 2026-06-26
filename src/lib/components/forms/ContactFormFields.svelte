@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { contactFormCopy, contactStyleOptions } from '$lib/content/contact';
 	import type { ContactFormErrors, ContactFormValues } from '$lib/types/contact';
+	import { getLocaleContext } from '$lib/i18n/context';
 
 	type Props = {
 		values: ContactFormValues;
@@ -9,6 +9,9 @@
 	};
 
 	let { values = $bindable(), errors, minimumDate = '' }: Props = $props();
+	const i18n = getLocaleContext();
+	const copy = $derived(i18n.content.contactFormCopy);
+	const styleOptions = $derived(i18n.content.contactStyleOptions);
 
 	const fieldClasses =
 		'mt-2 min-h-12 w-full rounded-xl border border-white/12 bg-black/25 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 hover:border-white/20 focus:border-cyan-200/60 focus:ring-2 focus:ring-cyan-200/15 aria-invalid:border-rose-300/70 aria-invalid:ring-2 aria-invalid:ring-rose-300/10';
@@ -17,7 +20,9 @@
 
 <div class="mt-8 grid gap-6 sm:grid-cols-2">
 	<div>
-		<label class={labelClasses} for="name">Nom ou pseudo <span aria-hidden="true">*</span></label>
+		<label class={labelClasses} for="name">
+			{copy.fields.name} <span aria-hidden="true">*</span>
+		</label>
 		<input
 			class={fieldClasses}
 			id="name"
@@ -37,7 +42,9 @@
 	</div>
 
 	<div>
-		<label class={labelClasses} for="email">Email <span aria-hidden="true">*</span></label>
+		<label class={labelClasses} for="email">
+			{copy.fields.email} <span aria-hidden="true">*</span>
+		</label>
 		<input
 			class={fieldClasses}
 			id="email"
@@ -57,7 +64,7 @@
 
 	<div class="sm:col-span-2">
 		<label class={labelClasses} for="style">
-			Type de montage <span aria-hidden="true">*</span>
+			{copy.fields.style} <span aria-hidden="true">*</span>
 		</label>
 		<select
 			class={fieldClasses}
@@ -68,8 +75,8 @@
 			aria-invalid={errors.style ? 'true' : undefined}
 			aria-describedby={errors.style ? 'style-error' : undefined}
 		>
-			<option value="" disabled>Choisis un type de montage</option>
-			{#each contactStyleOptions as option (option.value)}
+			<option value="" disabled>{copy.fields.stylePlaceholder}</option>
+			{#each styleOptions as option (option.value)}
 				<option value={option.value}>{option.label}</option>
 			{/each}
 		</select>
@@ -80,10 +87,10 @@
 
 	<div class="sm:col-span-2">
 		<label class={labelClasses} for="projectDescription">
-			Décris ton projet <span aria-hidden="true">*</span>
+			{copy.fields.projectDescription} <span aria-hidden="true">*</span>
 		</label>
 		<p id="project-description-help" class="mt-1 text-xs leading-5 text-slate-400">
-			Indique le contenu, la plateforme visée et le résultat recherché.
+			{copy.fields.projectDescriptionHelp}
 		</p>
 		<textarea
 			class={[fieldClasses, 'min-h-36 resize-y']}
@@ -108,9 +115,9 @@
 	</div>
 
 	<div class="sm:col-span-2">
-		<label class={labelClasses} for="footageDetails">Durée et volume des rushs</label>
+		<label class={labelClasses} for="footageDetails">{copy.fields.footageDetails}</label>
 		<p id="footage-help" class="mt-1 text-xs leading-5 text-slate-400">
-			Par exemple : 2 heures de rushs pour une vidéo finale de 10 minutes.
+			{copy.fields.footageDetailsHelp}
 		</p>
 		<textarea
 			class={[fieldClasses, 'min-h-24 resize-y']}
@@ -122,7 +129,7 @@
 	</div>
 
 	<div>
-		<label class={labelClasses} for="desiredDate">Date souhaitée</label>
+		<label class={labelClasses} for="desiredDate">{copy.fields.desiredDate}</label>
 		<input
 			class={fieldClasses}
 			id="desiredDate"
@@ -134,10 +141,8 @@
 	</div>
 
 	<div>
-		<label class={labelClasses} for="budget">Budget</label>
-		<p id="budget-help" class="mt-1 text-xs leading-5 text-slate-400">
-			Indique le montant ou la fourchette que tu as en tête.
-		</p>
+		<label class={labelClasses} for="budget">{copy.fields.budget}</label>
+		<p id="budget-help" class="mt-1 text-xs leading-5 text-slate-400">{copy.fields.budgetHelp}</p>
 		<input
 			class={fieldClasses}
 			id="budget"
@@ -145,17 +150,15 @@
 			type="text"
 			inputmode="text"
 			maxlength="80"
-			placeholder="Ex. 150 €, 300 à 500 €, à définir"
+			placeholder={copy.fields.budgetPlaceholder}
 			bind:value={values.budget}
 			aria-describedby="budget-help"
 		/>
 	</div>
 
 	<div class="sm:col-span-2">
-		<label class={labelClasses} for="usefulLinks">Liens utiles</label>
-		<p id="links-help" class="mt-1 text-xs leading-5 text-slate-400">
-			{contactFormCopy.linksHelp}
-		</p>
+		<label class={labelClasses} for="usefulLinks">{copy.fields.usefulLinks}</label>
+		<p id="links-help" class="mt-1 text-xs leading-5 text-slate-400">{copy.linksHelp}</p>
 		<textarea
 			class={[fieldClasses, 'min-h-24 resize-y']}
 			id="usefulLinks"

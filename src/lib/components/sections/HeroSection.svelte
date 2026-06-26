@@ -1,19 +1,19 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { ArrowDownRight, Play } from '@lucide/svelte';
+	import { ArrowDownRight } from '@lucide/svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import Container from '$lib/components/ui/Container.svelte';
-	import { heroActions } from '$lib/content/site';
-	import { projects } from '$lib/content/projects';
+	import { getLocaleContext } from '$lib/i18n/context';
 	import { getPublishedVideo } from '$lib/utils/media';
 
 	let previewSrc = $state<string | undefined>();
 	let previewPoster = $state<string | undefined>();
+	const i18n = getLocaleContext();
 
 	onMount(() => {
-		const candidates = projects.filter((p) => {
-			const src = p.previewVideo ?? getPublishedVideo(p.externalUrl)?.directUrl;
-			return Boolean(src) && p.format === '16:9';
+		const candidates = i18n.content.projects.filter((project) => {
+			const src = project.previewVideo ?? getPublishedVideo(project.externalUrl)?.directUrl;
+			return Boolean(src) && project.format === '16:9';
 		});
 		if (!candidates.length) return;
 		const pick = candidates[Math.floor(Math.random() * candidates.length)];
@@ -22,19 +22,6 @@
 		previewPoster = pick.poster || published?.poster || undefined;
 	});
 </script>
-
-<style>
-	@keyframes timeline-scrub {
-		0% { left: 6%; }
-		100% { left: 92%; }
-	}
-	.timeline-cursor {
-		animation: timeline-scrub 20s linear infinite;
-	}
-	@media (prefers-reduced-motion: reduce) {
-		.timeline-cursor { animation: none; left: 58%; }
-	}
-</style>
 
 <section class="relative overflow-hidden pb-14 pt-14 md:pb-18 md:pt-20">
 	<div
@@ -48,18 +35,17 @@
 		<div class="grid gap-14 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
 			<div class="relative z-10">
 				<h1 class="display-title max-w-5xl text-6xl text-white sm:text-7xl md:text-[6.5rem]">
-					<span class="block pb-[0.08em]">Tes rushs.</span>
-					<span class="block pb-[0.08em] text-gradient">Le bon rythme.</span>
-					<span class="block pb-[0.08em]">Prêt à publier.</span>
+					{#each i18n.content.ui.hero.titleLines as line, index (line)}
+						<span class={['block pb-[0.08em]', index === 1 ? 'text-gradient' : '']}>{line}</span>
+					{/each}
 				</h1>
 
 				<p class="mt-7 max-w-2xl text-base leading-7 text-slate-300 md:text-lg">
-					Portfolio de Palawi, monteur vidéo pour créateurs, streamers et businesses. Du contenu
-					brut à une vidéo claire, rythmée et pensée pour sa plateforme.
+					{i18n.content.ui.hero.description}
 				</p>
 
 				<div class="mt-9 flex flex-wrap gap-3">
-					{#each heroActions as action (action.href)}
+					{#each i18n.content.heroActions as action (action.href)}
 						<Button href={action.href} variant={action.variant}>
 							{action.label}
 							{#if action.href === '/projets'}
@@ -86,42 +72,37 @@
 						</div>
 					</div>
 
-				<div
-					class="relative grid aspect-[4/3] place-items-center overflow-hidden rounded-[1.1rem] border border-white/8 bg-[radial-gradient(circle_at_30%_20%,rgb(155_124_255/0.34),transparent_28%),linear-gradient(145deg,#15172a,#07080d_65%)]"
-				>
-					{#if previewSrc}
-						<video
-							class="absolute inset-0 size-full object-cover"
-							src={previewSrc}
-							poster={previewPoster}
-							autoplay
-							muted
-							loop
-							playsinline
-							preload="metadata"
-							aria-hidden="true"
-						></video>
-						<div
-							class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"
-						></div>
-						<span
-							class="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full border border-white/15 bg-black/40 px-2.5 py-1 text-xs text-white/70 backdrop-blur"
-						>
-							<span class="size-1.5 animate-pulse rounded-full bg-red-400"></span>
-							En lecture
-						</span>
-					{:else}
-						<div class="absolute inset-0 opacity-40">
-							<div class="absolute left-[12%] top-[18%] h-px w-[76%] bg-white/10"></div>
-							<div class="absolute left-[12%] top-[34%] h-px w-[52%] bg-white/10"></div>
-						</div>
-						<div
-							class="relative grid size-20 place-items-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur"
-						>
-							<Play class="ml-1" size={29} fill="currentColor" aria-hidden="true" />
-						</div>
-					{/if}
-				</div>
+					<div
+						class="relative grid aspect-[4/3] place-items-center overflow-hidden rounded-[1.1rem] border border-white/8 bg-[radial-gradient(circle_at_30%_20%,rgb(155_124_255/0.34),transparent_28%),linear-gradient(145deg,#15172a,#07080d_65%)]"
+					>
+						{#if previewSrc}
+							<video
+								class="absolute inset-0 size-full object-cover"
+								src={previewSrc}
+								poster={previewPoster}
+								autoplay
+								muted
+								loop
+								playsinline
+								preload="metadata"
+								aria-hidden="true"
+							></video>
+							<div
+								class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"
+							></div>
+							<span
+								class="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full border border-white/15 bg-black/40 px-2.5 py-1 text-xs text-white/70 backdrop-blur"
+							>
+								<span class="size-1.5 animate-pulse rounded-full bg-red-400"></span>
+								{i18n.content.ui.hero.playingLabel}
+							</span>
+						{:else}
+							<div class="absolute inset-0 opacity-40">
+								<div class="absolute left-[12%] top-[18%] h-px w-[76%] bg-white/10"></div>
+								<div class="absolute left-[12%] top-[34%] h-px w-[52%] bg-white/10"></div>
+							</div>
+						{/if}
+					</div>
 
 					<div class="mt-3 rounded-[1.1rem] border border-white/8 bg-black/30 p-4">
 						<div class="relative grid gap-2">
@@ -136,8 +117,8 @@
 								<span class="w-[22%] rounded bg-cyan-200/25"></span>
 								<span class="flex-1 rounded bg-white/8"></span>
 							</div>
-						<span class="timeline-cursor absolute top-0 h-14 w-px bg-white shadow-[0_0_8px_white]"
-						></span>
+							<span class="timeline-cursor absolute top-0 h-14 w-px bg-white shadow-[0_0_8px_white]"
+							></span>
 						</div>
 					</div>
 				</div>
@@ -145,3 +126,23 @@
 		</div>
 	</Container>
 </section>
+
+<style>
+	@keyframes timeline-scrub {
+		0% {
+			left: 6%;
+		}
+		100% {
+			left: 92%;
+		}
+	}
+	.timeline-cursor {
+		animation: timeline-scrub 20s linear infinite;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.timeline-cursor {
+			animation: none;
+			left: 58%;
+		}
+	}
+</style>

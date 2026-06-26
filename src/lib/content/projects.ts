@@ -1,3 +1,5 @@
+import { projectCopyEn } from '$lib/i18n/locales/en/project-copy';
+import type { Locale } from '$lib/i18n/types';
 import type { Project, ProjectCategory, ProjectInput } from '$lib/types/project';
 import { getLocalPosterFromPreview, getPublishedVideo } from '$lib/utils/media';
 
@@ -56,7 +58,7 @@ export const projects: Project[] = [
 	defineProject({
 		slug: 'miyuna-retour-gaming-long',
 		referenceId: 'gaming_long_miyuna_retour',
-		title: 'Retour MiyunaTV',
+		title: 'MiyunaTV est de retour',
 		category: 'gaming-long-form',
 		summary: 'Une vidéo gaming longue construite autour du retour de la créatrice.',
 		objective: 'Rendre le retour plus fluide avec une sélection claire des moments utiles.',
@@ -76,7 +78,7 @@ export const projects: Project[] = [
 	defineProject({
 		slug: 'genshin-whale-accident-long',
 		referenceId: 'gaming_long_genshin_whale_accident',
-		title: 'Genshin Impact whale accident',
+		title: 'Je deviens une whale par accident sur Genshin Impact',
 		category: 'gaming-long-form',
 		summary: 'Une vidéo longue avec narration, rythme et progression autour d’un moment marquant.',
 		objective: 'Garder l’énergie du contenu tout en rendant la progression plus agréable à suivre.',
@@ -97,7 +99,7 @@ export const projects: Project[] = [
 	defineProject({
 		slug: 'miyuna-model-reveal-best-of',
 		referenceId: 'gaming_long_miyuna_model_reveal_best_of',
-		title: 'Best-of reveal modèle 2D',
+		title: 'Best-of MiyunaTV reveal nouveau modèle 2D (en attendant le 3D)',
 		category: 'gaming-long-form',
 		summary: 'Un best-of de live pensé pour garder les réactions et les moments importants.',
 		objective:
@@ -139,7 +141,7 @@ export const projects: Project[] = [
 	defineProject({
 		slug: 'carry-the-glass-long',
 		referenceId: 'gaming_long_carry_the_glass',
-		title: 'Carry the Glass en temps limité',
+		title: 'On a 2h pour finir le jeu et le rembourser (Carry the Glass)',
 		category: 'gaming-long-form',
 		summary: 'Une vidéo gaming avec contrainte de temps et progression de défi.',
 		objective: 'Mettre en valeur la tension du défi en retirant les temps morts.',
@@ -158,7 +160,7 @@ export const projects: Project[] = [
 	defineProject({
 		slug: 'funky-beau-fils-long',
 		referenceId: 'gaming_long_funky_beau_fils',
-		title: 'Story gaming long format',
+		title: 'La mère accepte pas son beau-fils',
 		category: 'gaming-long-form',
 		summary: 'Un contenu long travaillé pour garder les séquences qui font avancer la vidéo.',
 		objective: 'Structurer une vidéo longue autour des passages les plus utiles et des réactions.',
@@ -177,7 +179,7 @@ export const projects: Project[] = [
 	defineProject({
 		slug: 'flare-mort-short',
 		referenceId: 'gaming_short_palawi_flare_mort',
-		title: 'Short gaming flare',
+		title: 'Le flare de la mort',
 		category: 'gaming-short-form',
 		summary: 'Un moment gaming transformé en clip vertical court.',
 		objective: 'Créer un extrait rapide, compréhensible et efficace dès les premières secondes.',
@@ -197,7 +199,7 @@ export const projects: Project[] = [
 	defineProject({
 		slug: 'cs2-random-short',
 		referenceId: 'gaming_short_terraster_random_cs2',
-		title: 'Short CS2 random',
+		title: 'La partie la plus random de CS2',
 		category: 'gaming-short-form',
 		summary: 'Un extrait CS2 rapide construit autour d’une situation imprévisible.',
 		objective: 'Faire comprendre le gag immédiatement en gardant un rythme serré.',
@@ -216,7 +218,7 @@ export const projects: Project[] = [
 	defineProject({
 		slug: 'cs2-habitude-short',
 		referenceId: 'gaming_short_terraster_habitude_cs2',
-		title: 'Short CS2 réaction',
+		title: 'Vous aussi vous faites ça ?',
 		category: 'gaming-short-form',
 		summary: 'Un clip vertical basé sur une réaction simple et immédiatement lisible.',
 		objective: 'Transformer une séquence courte en contenu prêt pour Shorts.',
@@ -235,7 +237,7 @@ export const projects: Project[] = [
 	defineProject({
 		slug: 'cs2-totem-short',
 		referenceId: 'gaming_short_terraster_totem_cs2',
-		title: 'Short CS2 totem',
+		title: 'Ils forment un totem',
 		category: 'gaming-short-form',
 		summary: 'Un moment visuel condensé en short gaming facile à comprendre.',
 		objective: 'Garder uniquement la situation drôle et la rendre lisible sur mobile.',
@@ -254,7 +256,7 @@ export const projects: Project[] = [
 	defineProject({
 		slug: 'cs2-peur-short',
 		referenceId: 'gaming_short_terraster_peur_cs2',
-		title: 'Short CS2 peur',
+		title: 'Il a eu trop peur de nous',
 		category: 'gaming-short-form',
 		summary: 'Un extrait gaming court centré sur une réaction de surprise.',
 		objective: 'Mettre en avant la réaction sans garder les longueurs autour.',
@@ -273,7 +275,7 @@ export const projects: Project[] = [
 	defineProject({
 		slug: 'cs2-type-bizarre-short',
 		referenceId: 'gaming_short_terraster_type_bizarre_cs2',
-		title: 'Short CS2 situation étrange',
+		title: 'Il est trop bizarre ce type',
 		category: 'gaming-short-form',
 		summary: 'Un moment de partie transformé en short clair et rythmé.',
 		objective: 'Faire ressortir la situation principale en quelques secondes.',
@@ -309,9 +311,28 @@ export const projects: Project[] = [
 		previewVideo: '/videos/explainer/rant-explicatif.mp4'
 	}),
 	defineProject({
+		slug: 'business-ugc-short',
+		referenceId: 'business_ugc_short',
+		title: 'Promo Marque - UGC',
+		category: 'business-promo',
+		summary: 'Un montage UGC vertical pensé pour présenter un message de manière naturelle.',
+		objective: 'Transformer une prise de parole en contenu court, clair et publiable.',
+		result: 'Une vidéo UGC verticale avec un rythme adapté aux réseaux sociaux.',
+		work: [
+			'Montage vertical',
+			'Rythme de parole',
+			'Structure courte',
+			'Mise en avant du message',
+			'Export réseaux sociaux'
+		],
+		duration: 'Short',
+		format: '9:16',
+		previewVideo: '/videos/business/ugc.mp4'
+	}),
+	defineProject({
 		slug: 'business-boursin-short',
 		referenceId: 'business_promo_boursin_short',
-		title: 'Boursin',
+		title: 'Promo Restaurant - Boursin',
 		category: 'business-promo',
 		summary: 'Un montage vertical business autour d’un produit food.',
 		objective: 'Mettre en avant le produit avec un format court, clair et orienté réseaux sociaux.',
@@ -330,7 +351,7 @@ export const projects: Project[] = [
 	defineProject({
 		slug: 'business-cheese-naan-short',
 		referenceId: 'business_promo_cheese_naan_short',
-		title: 'Cheese naan',
+		title: 'Promo Restaurant - Cheese naan',
 		category: 'business-promo',
 		summary: 'Un montage court vertical pour une offre food.',
 		objective: 'Créer une vidéo simple à comprendre et rythmée dès les premières secondes.',
@@ -349,7 +370,7 @@ export const projects: Project[] = [
 	defineProject({
 		slug: 'business-humour-short',
 		referenceId: 'business_promo_humour_short',
-		title: 'Humour promo',
+		title: 'Promo Restaurant - Humour',
 		category: 'business-promo',
 		summary: 'Un format court qui utilise l’humour pour rendre le message plus mémorable.',
 		objective: 'Garder un rythme dynamique tout en conservant une intention commerciale claire.',
@@ -368,7 +389,7 @@ export const projects: Project[] = [
 	defineProject({
 		slug: 'business-naan-short',
 		referenceId: 'business_promo_naan_short',
-		title: 'Naan',
+		title: 'Promo Restaurant - Naan',
 		category: 'business-promo',
 		summary: 'Une vidéo verticale promotionnelle centrée sur un produit food.',
 		objective: 'Présenter le produit avec un montage court et direct.',
@@ -387,7 +408,7 @@ export const projects: Project[] = [
 	defineProject({
 		slug: 'business-poulet-short',
 		referenceId: 'business_promo_poulet_short',
-		title: 'Poulet',
+		title: 'Promo Restaurant - Poulet',
 		category: 'business-promo',
 		summary: 'Un montage court vertical pour valoriser un produit food.',
 		objective: 'Rendre la vidéo lisible et efficace pour une diffusion sur réseaux sociaux.',
@@ -406,7 +427,7 @@ export const projects: Project[] = [
 	defineProject({
 		slug: 'business-smash-short',
 		referenceId: 'business_promo_smash_short',
-		title: 'Smash',
+		title: 'Promo Restaurant - Smash',
 		category: 'business-promo',
 		summary: 'Un exemple business court avec un montage vertical orienté impact produit.',
 		objective: 'Créer une séquence promotionnelle rapide avec une lecture immédiate.',
@@ -425,7 +446,7 @@ export const projects: Project[] = [
 	defineProject({
 		slug: 'business-tacos-short',
 		referenceId: 'business_promo_tacos_short',
-		title: 'Tacos',
+		title: 'Promo Restaurant - Tacos',
 		category: 'business-promo',
 		summary: 'Une vidéo promotionnelle verticale autour d’un produit food.',
 		objective: 'Mettre le produit au centre avec un montage direct et exploitable sur mobile.',
@@ -442,28 +463,9 @@ export const projects: Project[] = [
 		previewVideo: '/videos/business/tacos.mp4'
 	}),
 	defineProject({
-		slug: 'business-ugc-short',
-		referenceId: 'business_ugc_short',
-		title: 'UGC',
-		category: 'business-promo',
-		summary: 'Un montage UGC vertical pensé pour présenter un message de manière naturelle.',
-		objective: 'Transformer une prise de parole en contenu court, clair et publiable.',
-		result: 'Une vidéo UGC verticale avec un rythme adapté aux réseaux sociaux.',
-		work: [
-			'Montage vertical',
-			'Rythme de parole',
-			'Structure courte',
-			'Mise en avant du message',
-			'Export réseaux sociaux'
-		],
-		duration: 'Short',
-		format: '9:16',
-		previewVideo: '/videos/business/ugc.mp4'
-	}),
-	defineProject({
 		slug: 'funky-live-cuisine-other',
 		referenceId: 'other_format_funky_live_cuisine',
-		title: 'Live cuisine monté',
+		title: 'Live cuisine avec les bro (ft Lespale, Majora, Galactic)',
 		category: 'other-format',
 		summary: 'Un contenu live hors gaming travaillé comme une vidéo YouTube complète.',
 		objective:
@@ -484,3 +486,25 @@ export const projects: Project[] = [
 ];
 
 export const featuredProjects = projects.filter((project) => project.featured);
+
+export const getProjects = (locale: Locale): Project[] => {
+	if (locale === 'fr') {
+		return projects;
+	}
+
+	return projects.map((project) => {
+		const localizedCopy = projectCopyEn[project.slug];
+
+		if (!localizedCopy) {
+			return project;
+		}
+
+		return {
+			...project,
+			...localizedCopy
+		};
+	});
+};
+
+export const getFeaturedProjects = (locale: Locale): Project[] =>
+	getProjects(locale).filter((project) => project.featured);

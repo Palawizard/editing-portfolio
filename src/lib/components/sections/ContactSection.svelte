@@ -2,7 +2,9 @@
 	import { Send } from '@lucide/svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import Container from '$lib/components/ui/Container.svelte';
-	import { contactCopy } from '$lib/content/site';
+	import { getLocaleContext } from '$lib/i18n/context';
+
+	const i18n = getLocaleContext();
 </script>
 
 <section class="pb-16 pt-10 md:pb-20 md:pt-12">
@@ -15,18 +17,20 @@
 			></div>
 			<div class="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
 				<div>
-					<p class="text-sm font-semibold uppercase tracking-[0.2em] text-violet-100">Contact</p>
+					<p class="text-sm font-semibold uppercase tracking-[0.2em] text-violet-100">
+						{i18n.content.ui.contactSection.eyebrow}
+					</p>
 					<h2 class="display-title mt-4 max-w-3xl text-4xl text-balance text-white md:text-6xl">
-						{contactCopy.title}
+						{i18n.content.contactCopy.title}
 					</h2>
 					<p class="mt-5 max-w-2xl text-base leading-7 text-slate-200">
-						{contactCopy.description}
+						{i18n.content.contactCopy.description}
 					</p>
 				</div>
 
 				<Button href="/contact" class="w-full sm:w-auto">
 					<Send size={18} aria-hidden="true" />
-					<span>{contactCopy.actionLabel}</span>
+					<span>{i18n.content.contactCopy.actionLabel}</span>
 				</Button>
 			</div>
 		</div>

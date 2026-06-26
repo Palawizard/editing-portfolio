@@ -2,7 +2,9 @@
 	import { Check, Clapperboard } from '@lucide/svelte';
 	import Container from '$lib/components/ui/Container.svelte';
 	import SectionHeader from '$lib/components/ui/SectionHeader.svelte';
-	import { skills, tools } from '$lib/content/services';
+	import { getLocaleContext } from '$lib/i18n/context';
+
+	const i18n = getLocaleContext();
 </script>
 
 <section class="relative overflow-hidden border-y border-white/10 bg-slate-950/35 py-16 md:py-24">
@@ -15,9 +17,9 @@
 
 	<Container size="wide" class="relative grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
 		<SectionHeader
-			eyebrow="Compétences"
-			title="Des vidéos prêtes à publier"
-			description="Le montage sert le rythme, la clarté et le format attendu sur chaque plateforme."
+			eyebrow={i18n.content.ui.skillsSection.eyebrow}
+			title={i18n.content.ui.skillsSection.title}
+			description={i18n.content.ui.skillsSection.description}
 		/>
 
 		<div class="grid gap-5">
@@ -26,15 +28,15 @@
 			>
 				<div>
 					<p class="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-200">
-						Travail réalisé
+						{i18n.content.ui.skillsSection.workTitle}
 					</p>
 					<p class="mt-2 max-w-md text-sm leading-6 text-slate-400">
-						Des compétences orientées résultat, du tri des rushs à l’export final.
+						{i18n.content.ui.skillsSection.workDescription}
 					</p>
 				</div>
 
 				<ul class="mt-7 grid gap-3 sm:grid-cols-2">
-					{#each skills as skill (skill)}
+					{#each i18n.content.skills as skill (skill)}
 						<li
 							class="flex items-start gap-3 rounded-xl border border-white/8 bg-black/20 px-4 py-3.5 transition duration-300 hover:border-violet-300/25 hover:bg-white/[0.04]"
 						>
@@ -52,13 +54,15 @@
 			<article
 				class="overflow-hidden rounded-[1.5rem] border border-cyan-200/20 bg-[linear-gradient(135deg,rgb(101_216_255/0.1),rgb(155_124_255/0.06)_55%,rgb(255_255_255/0.02))] p-6 md:p-8"
 			>
-				<p class="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-200">Outils</p>
+				<p class="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-200">
+					{i18n.content.ui.skillsSection.toolsTitle}
+				</p>
 				<p class="mt-2 max-w-lg text-sm leading-6 text-slate-400">
-					Un workflow centré sur un logiciel principal, sans liste d’outils superflue.
+					{i18n.content.ui.skillsSection.toolsDescription}
 				</p>
 
 				<div class="mt-6 grid gap-3">
-					{#each tools as tool (tool.name)}
+					{#each i18n.content.tools as tool (tool.name)}
 						<div
 							class="flex items-center gap-4 rounded-xl border border-white/10 bg-black/25 px-4 py-4"
 						>

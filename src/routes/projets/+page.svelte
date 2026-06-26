@@ -5,33 +5,30 @@
 	import Button from '$lib/components/ui/Button.svelte';
 	import Container from '$lib/components/ui/Container.svelte';
 	import { getContactStyleHref } from '$lib/content/contact';
-	import { projectCategoryLabels } from '$lib/content/formats';
-	import { projects } from '$lib/content/projects';
+	import { getLocaleContext } from '$lib/i18n/context';
 	import type { ProjectChoice } from '$lib/types/project';
 
 	let selectedChoice = $state<ProjectChoice>();
+	const i18n = getLocaleContext();
 
 	const filteredProjects = $derived(
 		!selectedChoice || selectedChoice === 'custom'
 			? []
-			: projects.filter((project) => project.category === selectedChoice)
+			: i18n.content.projects.filter((project) => project.category === selectedChoice)
 	);
 
 	const selectedLabel = $derived(
 		selectedChoice === 'custom'
-			? 'Commande personnalisée'
+			? i18n.content.customFormatChoice.title
 			: selectedChoice
-				? projectCategoryLabels[selectedChoice]
+				? i18n.content.projectCategoryLabels[selectedChoice]
 				: ''
 	);
 </script>
 
 <svelte:head>
-	<title>Choisir un style de montage | Portfolio</title>
-	<meta
-		name="description"
-		content="Choisis un style de montage et découvre les projets réalisés dans ce format."
-	/>
+	<title>{i18n.content.ui.projectsPage.metaTitle}</title>
+	<meta name="description" content={i18n.content.ui.projectsPage.metaDescription} />
 </svelte:head>
 
 <main id="main-content">
@@ -42,7 +39,7 @@
 		<Container size="wide">
 			<div class="mx-auto max-w-4xl text-center">
 				<h1 class="display-title text-5xl text-gradient sm:text-6xl md:text-7xl">
-					Choisis ton style de montage.
+					{i18n.content.ui.projectsPage.title}
 				</h1>
 			</div>
 
@@ -74,16 +71,15 @@
 							<div>
 								<SlidersHorizontal class="text-cyan-100" size={25} aria-hidden="true" />
 								<h2 class="display-title mt-6 max-w-3xl text-4xl text-white md:text-6xl">
-									Ton projet ne rentre pas dans une case ?
+									{i18n.content.ui.projectsPage.customTitle}
 								</h2>
 								<p class="mt-6 max-w-2xl text-base leading-7 text-slate-300 md:text-lg">
-									Envoie une référence, ton idée et la plateforme visée. Je te propose une direction
-									de montage cohérente avec ton contenu, sans forcer un format prédéfini.
+									{i18n.content.ui.projectsPage.customDescription}
 								</p>
 							</div>
 							<div class="lg:justify-self-end">
 								<Button href={getContactStyleHref('custom')} class="w-full sm:w-auto">
-									Parler de mon projet
+									{i18n.content.ui.projectsPage.customCta}
 									<ArrowRight size={18} aria-hidden="true" />
 								</Button>
 							</div>
@@ -95,7 +91,7 @@
 							<h2 class="display-title text-4xl text-white md:text-6xl">{selectedLabel}</h2>
 						</div>
 						<Button href={getContactStyleHref(selectedChoice)} variant="secondary">
-							Commander ce style
+							{i18n.content.ui.projectsPage.orderStyle}
 						</Button>
 					</div>
 
@@ -108,8 +104,7 @@
 							<p
 								class="rounded-[1.25rem] border border-white/10 bg-white/[0.035] p-6 text-sm leading-6 text-slate-300 md:col-span-2 xl:col-span-3"
 							>
-								Aucun exemple publié pour ce style pour le moment. Tu peux quand même envoyer une
-								référence pour définir un rendu adapté.
+								{i18n.content.ui.projectsPage.emptyState}
 							</p>
 						{/if}
 					</div>

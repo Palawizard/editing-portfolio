@@ -5,38 +5,25 @@
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import Container from '$lib/components/ui/Container.svelte';
-	import { editingFormats } from '$lib/content/formats';
-	import { contactCopy } from '$lib/content/site';
+	import { getLocaleContext } from '$lib/i18n/context';
 
 	const formId = env.PUBLIC_FORMSPREE_FORM_ID?.trim() ?? '';
 	const turnstileSiteKey = env.PUBLIC_TURNSTILE_SITE_KEY?.trim() ?? '';
 	const contactEmail = env.PUBLIC_CONTACT_EMAIL?.trim() ?? '';
+	const i18n = getLocaleContext();
 
-	const briefItems = [
-		{
-			icon: FileText,
-			title: 'Le format',
-			description: 'Long, court, vertical, horizontal ou une idée sur mesure.'
-		},
-		{
-			icon: Link2,
-			title: 'Les références',
-			description: 'Une ou deux vidéos qui montrent le rythme et le rendu recherchés.'
-		},
-		{
-			icon: Clapperboard,
-			title: 'Les rushs',
-			description: 'Le volume disponible, la durée visée et la plateforme de publication.'
-		}
-	];
+	const briefIcons = [FileText, Link2, Clapperboard];
+	const briefItems = $derived(
+		i18n.content.ui.contactPage.briefItems.map((item, index) => ({
+			...item,
+			icon: briefIcons[index]
+		}))
+	);
 </script>
 
 <svelte:head>
-	<title>Contact | Montage vidéo</title>
-	<meta
-		name="description"
-		content="Présente ton projet de montage vidéo, son format, ses références et les rushs disponibles."
-	/>
+	<title>{i18n.content.ui.contactPage.metaTitle}</title>
+	<meta name="description" content={i18n.content.ui.contactPage.metaDescription} />
 </svelte:head>
 
 <main id="main-content">
@@ -51,12 +38,14 @@
 				>
 					<WandSparkles size={25} aria-hidden="true" />
 				</div>
-				<p class="mt-6 text-xs font-semibold uppercase tracking-[0.28em] text-cyan-200">Contact</p>
+				<p class="mt-6 text-xs font-semibold uppercase tracking-[0.28em] text-cyan-200">
+					{i18n.content.ui.contactPage.eyebrow}
+				</p>
 				<h1 class="display-title mt-5 text-5xl text-gradient sm:text-6xl md:text-8xl">
-					{contactCopy.title}
+					{i18n.content.contactCopy.title}
 				</h1>
 				<p class="mx-auto mt-7 max-w-2xl text-base leading-7 text-slate-300 md:text-lg">
-					{contactCopy.description}
+					{i18n.content.contactCopy.description}
 				</p>
 			</div>
 		</Container>
@@ -70,9 +59,11 @@
 						class="rounded-[1.5rem] border border-white/10 bg-white/[0.035] p-6 shadow-[var(--shadow-premium)] md:p-9"
 					>
 						<p class="text-xs font-semibold uppercase tracking-[0.24em] text-violet-200">
-							Préparer la demande
+							{i18n.content.ui.contactPage.briefEyebrow}
 						</p>
-						<h2 class="mt-4 text-3xl font-bold text-white">Un brief simple suffit</h2>
+						<h2 class="mt-4 text-3xl font-bold text-white">
+							{i18n.content.ui.contactPage.briefTitle}
+						</h2>
 						<div class="mt-8 grid gap-4">
 							{#each briefItems as item, index (item.title)}
 								{@const Icon = item.icon}
@@ -97,16 +88,20 @@
 
 					<div class="rounded-[1.5rem] border border-white/10 bg-white/[0.025] p-6 md:p-9">
 						<p class="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-200">
-							Formats acceptés
+							{i18n.content.ui.contactPage.formatsEyebrow}
 						</p>
-						<h2 class="mt-4 text-2xl font-bold text-white">Une base ou du sur mesure</h2>
+						<h2 class="mt-4 text-2xl font-bold text-white">
+							{i18n.content.ui.contactPage.formatsTitle}
+						</h2>
 						<div class="mt-6 flex flex-wrap gap-2">
-							{#each editingFormats as format (format.id)}
+							{#each i18n.content.editingFormats as format (format.id)}
 								<Badge>{format.title}</Badge>
 							{/each}
-							<Badge tone="cyan">Commande personnalisée</Badge>
+							<Badge tone="cyan">{i18n.content.ui.contactPage.customBadge}</Badge>
 						</div>
-						<Button href="/projets" variant="secondary" class="mt-7">Revoir les styles</Button>
+						<Button href="/projets" variant="secondary" class="mt-7">
+							{i18n.content.ui.contactPage.reviewStyles}
+						</Button>
 					</div>
 				</div>
 

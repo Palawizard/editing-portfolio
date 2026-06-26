@@ -5,6 +5,7 @@ export const siteMetadata: SiteMetadata = {
 	title: 'Montage vidéo pour créateurs, streamers et businesses',
 	description:
 		'Je transforme des rushs, idées ou vidéos longues en contenus clairs, rythmés et prêts à publier.',
+	image: '/images/brand/pfp.jpg',
 	locale: 'fr-FR'
 };
 

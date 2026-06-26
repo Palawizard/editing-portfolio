@@ -29,7 +29,7 @@
 		100% { left: 92%; }
 	}
 	.timeline-cursor {
-		animation: timeline-scrub 9s linear infinite;
+		animation: timeline-scrub 20s linear infinite;
 	}
 	@media (prefers-reduced-motion: reduce) {
 		.timeline-cursor { animation: none; left: 58%; }

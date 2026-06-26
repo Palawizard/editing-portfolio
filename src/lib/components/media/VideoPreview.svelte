@@ -6,10 +6,18 @@
 		poster?: string;
 		src?: string;
 		aspect?: 'video' | 'vertical';
+		autoplay?: boolean;
 		class?: string;
 	};
 
-	let { title, poster, src, aspect = 'video', class: className = '' }: Props = $props();
+	let {
+		title,
+		poster,
+		src,
+		aspect = 'video',
+		autoplay = false,
+		class: className = ''
+	}: Props = $props();
 
 	const aspectClasses = {
 		video: 'aspect-video',
@@ -30,9 +38,11 @@
 			{poster}
 			{src}
 			preload="metadata"
+			{autoplay}
+			loop={autoplay}
 			muted
 			playsinline
-			controls
+			controls={!autoplay}
 			aria-label={title}
 		></video>
 	{:else if poster}

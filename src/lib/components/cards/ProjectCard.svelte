@@ -4,6 +4,7 @@
 	import VideoPreview from '$lib/components/media/VideoPreview.svelte';
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import { projectCategoryLabels } from '$lib/content/formats';
+	import { getPublishedVideo } from '$lib/utils/media';
 	import type { Project } from '$lib/types/project';
 
 	type Props = {
@@ -15,23 +16,42 @@
 
 	let { project, compact = false, index = 0, minimal = false }: Props = $props();
 	const mediaAspect = $derived(project.format === '9:16' ? 'vertical' : 'video');
+	const publishedVideo = $derived(getPublishedVideo(project.externalUrl));
+	const inlineVideoSrc = $derived(project.previewVideo ?? publishedVideo?.directUrl);
+	const showInlineVideo = $derived(minimal && Boolean(inlineVideoSrc));
 </script>
 
 <article
 	class="group relative h-full overflow-hidden rounded-[1.35rem] border border-white/10 bg-white/[0.035] transition duration-300 hover:-translate-y-1 hover:border-violet-300/35 hover:bg-white/[0.055]"
 >
 	<div class="relative overflow-hidden">
-		<VideoPreview
-			title={project.title}
-			poster={project.poster || undefined}
-			src={project.previewVideo}
-			aspect={mediaAspect}
-			class={compact
-				? 'max-h-72 rounded-none border-0 shadow-none'
-				: 'rounded-none border-0 shadow-none'}
-		/>
+		{#if showInlineVideo && inlineVideoSrc}
+			<VideoPreview
+				title={project.title}
+				poster={(publishedVideo?.poster ?? project.poster) || undefined}
+				src={inlineVideoSrc}
+				aspect={mediaAspect}
+				autoplay
+				class={compact
+					? 'max-h-72 rounded-none border-0 shadow-none'
+					: 'rounded-none border-0 shadow-none'}
+			/>
+		{:else}
+			<VideoPreview
+				title={project.title}
+				poster={project.poster || undefined}
+				src={project.previewVideo}
+				aspect={mediaAspect}
+				class={compact
+					? 'max-h-72 rounded-none border-0 shadow-none'
+					: 'rounded-none border-0 shadow-none'}
+			/>
+		{/if}
 		<div
-			class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent"
+			class={[
+				'pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent',
+				showInlineVideo ? 'hidden' : ''
+			]}
 		></div>
 		{#if !minimal}
 			<span

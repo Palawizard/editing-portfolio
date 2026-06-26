@@ -293,7 +293,7 @@ export const projects: Project[] = [
 		duration: 'Court',
 		platform: ['Google Drive'],
 		format: '9:16',
-		externalUrl: 'https://drive.google.com/file/d/1LLcBZZng4SAtdh5Vfl0V8QGtlp6ICDV9/view'
+		previewVideo: '/videos/explainer/rant-explicatif.mp4'
 	}),
 	defineProject({
 		slug: 'business-boursin-short',

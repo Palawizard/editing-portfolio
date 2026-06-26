@@ -102,19 +102,25 @@
 							aria-hidden="true"
 						></video>
 						<div
-							class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgb(155_124_255/0.18),transparent_40%),linear-gradient(145deg,#15172a/30,#07080d/50_65%)]"
+							class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"
 						></div>
+						<span
+							class="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full border border-white/15 bg-black/40 px-2.5 py-1 text-xs text-white/70 backdrop-blur"
+						>
+							<span class="size-1.5 animate-pulse rounded-full bg-red-400"></span>
+							En lecture
+						</span>
 					{:else}
 						<div class="absolute inset-0 opacity-40">
 							<div class="absolute left-[12%] top-[18%] h-px w-[76%] bg-white/10"></div>
 							<div class="absolute left-[12%] top-[34%] h-px w-[52%] bg-white/10"></div>
 						</div>
+						<div
+							class="relative grid size-20 place-items-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur"
+						>
+							<Play class="ml-1" size={29} fill="currentColor" aria-hidden="true" />
+						</div>
 					{/if}
-					<div
-						class="relative grid size-20 place-items-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur transition hover:scale-105 hover:bg-white/15"
-					>
-						<Play class="ml-1" size={29} fill="currentColor" aria-hidden="true" />
-					</div>
 				</div>
 
 					<div class="mt-3 rounded-[1.1rem] border border-white/8 bg-black/30 p-4">

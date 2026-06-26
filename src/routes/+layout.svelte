@@ -7,8 +7,8 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" type="image/jpeg" href={siteMetadata.image} />
-	<link rel="apple-touch-icon" href={siteMetadata.image} />
+	<link rel="icon" type="image/png" href="/favicon.png" />
+	<link rel="apple-touch-icon" href="/favicon.png" />
 	<title>{siteMetadata.title}</title>
 	<meta name="description" content={siteMetadata.description} />
 	<meta property="og:site_name" content={siteMetadata.name} />

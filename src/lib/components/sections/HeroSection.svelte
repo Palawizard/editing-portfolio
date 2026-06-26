@@ -13,7 +13,7 @@
 	onMount(() => {
 		const candidates = projects.filter((p) => {
 			const src = p.previewVideo ?? getPublishedVideo(p.externalUrl)?.directUrl;
-			return Boolean(src);
+			return Boolean(src) && p.format === '16:9';
 		});
 		if (!candidates.length) return;
 		const pick = candidates[Math.floor(Math.random() * candidates.length)];

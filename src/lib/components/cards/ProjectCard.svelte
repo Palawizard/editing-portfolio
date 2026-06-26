@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { ArrowUpRight } from '@lucide/svelte';
-	import { resolve } from '$app/paths';
 	import VideoPreview from '$lib/components/media/VideoPreview.svelte';
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import { projectCategoryLabels } from '$lib/content/formats';
@@ -76,19 +74,8 @@
 		</h3>
 		<p class="mt-3 text-sm leading-6 text-slate-300">{project.summary}</p>
 
-		<div
-			class={['mt-6 flex min-w-0 items-center gap-4', minimal ? 'justify-end' : 'justify-between']}
-		>
-			{#if !minimal}
-				<p class="text-sm text-slate-400">{project.platform.join(' / ')}</p>
-			{/if}
-			<a
-				class="inline-flex size-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-white transition group-hover:border-cyan-200/50 group-hover:bg-cyan-200/10"
-				href={resolve('/projets/[slug]', { slug: project.slug })}
-				aria-label={`Voir le projet ${project.title}`}
-			>
-				<ArrowUpRight size={18} aria-hidden="true" />
-			</a>
-		</div>
+		{#if !minimal}
+			<p class="mt-6 text-sm text-slate-400">{project.platform.join(' / ')}</p>
+		{/if}
 	</div>
 </article>

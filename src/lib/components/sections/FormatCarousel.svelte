@@ -53,6 +53,20 @@
 
 	const getSegmentWidth = () => middleGroup?.offsetWidth ?? 0;
 
+	const isVerticalCategory = (id: string) =>
+		id !== 'gaming-long-form' && id !== 'other-format' && id !== 'custom';
+
+	const getCardSizeClass = (id: string, isProminent: boolean) => {
+		if (isVerticalCategory(id)) {
+			return isProminent
+				? 'aspect-[9/16] w-[52vw] max-w-[18rem] sm:w-[17rem]'
+				: 'aspect-[9/16] w-[46vw] max-w-[15rem] sm:w-[14rem]';
+		}
+		return isProminent
+			? 'min-h-[29rem] w-[82vw] max-w-[27rem] sm:w-[26rem]'
+			: 'min-h-[22rem] w-[82vw] max-w-[22rem] sm:w-[21rem]';
+	};
+
 	const randomItem = <T,>(items: T[]) => items[Math.floor(Math.random() * items.length)];
 
 	const getRandomStart = (category: ProjectCategory) => {
@@ -306,11 +320,10 @@
 					<button
 						data-choice={choice.id}
 						data-group={groupIndex}
-						class={[
-							'group relative shrink-0 snap-center overflow-hidden border text-left transition duration-500',
-							prominent
-								? 'min-h-[29rem] w-[82vw] max-w-[27rem] rounded-[1.75rem] p-8 sm:w-[26rem]'
-								: 'min-h-[22rem] w-[82vw] max-w-[22rem] rounded-[1.4rem] p-6 sm:w-[21rem]',
+					class={[
+						'group relative shrink-0 snap-center overflow-hidden border text-left transition duration-500',
+						getCardSizeClass(choice.id, prominent),
+						prominent ? 'rounded-[1.75rem] p-8' : 'rounded-[1.4rem] p-6',
 							locked && activeGroupIndex === groupIndex && selected === choice.id
 								? 'z-10 scale-[1.08] border-violet-200 bg-violet-300/[0.14] shadow-[0_28px_100px_rgb(81_49_150/0.42)]'
 								: 'border-white/10 bg-white/[0.035] hover:-translate-y-1 hover:border-white/25 hover:bg-white/[0.065]'

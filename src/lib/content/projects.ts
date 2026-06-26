@@ -1,5 +1,5 @@
 import type { Project, ProjectCategory, ProjectInput } from '$lib/types/project';
-import { getPublishedVideo } from '$lib/utils/media';
+import { getLocalPosterFromPreview, getPublishedVideo } from '$lib/utils/media';
 
 const categoryDefaults: Record<ProjectCategory, Pick<Project, 'format' | 'platform'>> = {
 	'gaming-long-form': {
@@ -24,8 +24,22 @@ const categoryDefaults: Record<ProjectCategory, Pick<Project, 'format' | 'platfo
 	}
 };
 
+const resolveProjectPoster = (
+	input: ProjectInput,
+	publishedVideo: ReturnType<typeof getPublishedVideo>,
+	localPoster?: string
+): string => {
+	if (input.poster) return input.poster;
+	if (publishedVideo?.provider === 'youtube' && publishedVideo.poster) {
+		return publishedVideo.poster;
+	}
+	if (localPoster) return localPoster;
+	return publishedVideo?.poster ?? '';
+};
+
 const defineProject = (input: ProjectInput): Project => {
 	const publishedVideo = getPublishedVideo(input.externalUrl);
+	const localPoster = getLocalPosterFromPreview(input.previewVideo);
 	const defaults = categoryDefaults[input.category];
 
 	return {
@@ -33,7 +47,7 @@ const defineProject = (input: ProjectInput): Project => {
 		referenceId: input.referenceId ?? input.slug,
 		format: input.format ?? defaults.format,
 		platform: input.platform ?? defaults.platform,
-		poster: input.poster ?? publishedVideo?.poster ?? '',
+		poster: resolveProjectPoster(input, publishedVideo, localPoster),
 		featured: input.featured ?? false
 	};
 };
@@ -291,7 +305,6 @@ export const projects: Project[] = [
 			'Clarification du message'
 		],
 		duration: 'Court',
-		platform: ['Google Drive'],
 		format: '9:16',
 		previewVideo: '/videos/explainer/rant-explicatif.mp4'
 	}),
@@ -311,10 +324,8 @@ export const projects: Project[] = [
 			'Export réseaux sociaux'
 		],
 		duration: 'Short',
-		platform: ['Google Drive', 'Instagram', 'TikTok'],
 		format: '9:16',
-		previewVideo: '/videos/business/boursin.mp4',
-		externalUrl: 'https://drive.google.com/file/d/1btUdvqBK9NOXXF7uMvrcBLhl9gW-kgli/view'
+		previewVideo: '/videos/business/boursin.mp4'
 	}),
 	defineProject({
 		slug: 'business-cheese-naan-short',
@@ -332,10 +343,8 @@ export const projects: Project[] = [
 			'Export réseaux sociaux'
 		],
 		duration: 'Short',
-		platform: ['Google Drive', 'Instagram', 'TikTok'],
 		format: '9:16',
-		previewVideo: '/videos/business/cheese-naan.mp4',
-		externalUrl: 'https://drive.google.com/file/d/1U4PQG1N8sN_qovwT9pNay0Es6XauNYRC/view'
+		previewVideo: '/videos/business/cheese-naan.mp4'
 	}),
 	defineProject({
 		slug: 'business-humour-short',
@@ -353,10 +362,8 @@ export const projects: Project[] = [
 			'Export réseaux sociaux'
 		],
 		duration: 'Short',
-		platform: ['Google Drive', 'Instagram', 'TikTok'],
 		format: '9:16',
-		previewVideo: '/videos/business/humour-promo.mp4',
-		externalUrl: 'https://drive.google.com/file/d/1bzjPYywDNZGf76H9IyEJ4IbMJkNmelhG/view'
+		previewVideo: '/videos/business/humour-promo.mp4'
 	}),
 	defineProject({
 		slug: 'business-naan-short',
@@ -374,10 +381,8 @@ export const projects: Project[] = [
 			'Export réseaux sociaux'
 		],
 		duration: 'Short',
-		platform: ['Google Drive', 'Instagram', 'TikTok'],
 		format: '9:16',
-		previewVideo: '/videos/business/naan.mp4',
-		externalUrl: 'https://drive.google.com/file/d/15u7sCw0V3EbYSGLeBB9kiBtUylyDaayO/view'
+		previewVideo: '/videos/business/naan.mp4'
 	}),
 	defineProject({
 		slug: 'business-poulet-short',
@@ -395,10 +400,8 @@ export const projects: Project[] = [
 			'Export réseaux sociaux'
 		],
 		duration: 'Short',
-		platform: ['Google Drive', 'Instagram', 'TikTok'],
 		format: '9:16',
-		previewVideo: '/videos/business/poulet.mp4',
-		externalUrl: 'https://drive.google.com/file/d/1ViRBiMlv8pazpXOexrUV8ikawNtQ3paB/view'
+		previewVideo: '/videos/business/poulet.mp4'
 	}),
 	defineProject({
 		slug: 'business-smash-short',
@@ -416,10 +419,8 @@ export const projects: Project[] = [
 			'Export réseaux sociaux'
 		],
 		duration: 'Short',
-		platform: ['Google Drive', 'Instagram', 'TikTok'],
 		format: '9:16',
-		previewVideo: '/videos/business/smash.mp4',
-		externalUrl: 'https://drive.google.com/file/d/1PHYoX4hY5e7UiONryxLils7r673aJYYv/view'
+		previewVideo: '/videos/business/smash.mp4'
 	}),
 	defineProject({
 		slug: 'business-tacos-short',
@@ -437,10 +438,8 @@ export const projects: Project[] = [
 			'Export réseaux sociaux'
 		],
 		duration: 'Short',
-		platform: ['Google Drive', 'Instagram', 'TikTok'],
 		format: '9:16',
-		previewVideo: '/videos/business/tacos.mp4',
-		externalUrl: 'https://drive.google.com/file/d/1UYxVaRX4yzYtUjb2TEhzu3H7IUF_k1G6/view'
+		previewVideo: '/videos/business/tacos.mp4'
 	}),
 	defineProject({
 		slug: 'business-ugc-short',
@@ -458,10 +457,8 @@ export const projects: Project[] = [
 			'Export réseaux sociaux'
 		],
 		duration: 'Short',
-		platform: ['Google Drive', 'Instagram', 'TikTok'],
 		format: '9:16',
-		previewVideo: '/videos/business/ugc.mp4',
-		externalUrl: 'https://drive.google.com/file/d/1RRCzNrFaeKx4rhSWWzJxmwGnOiSRaPoT/view'
+		previewVideo: '/videos/business/ugc.mp4'
 	}),
 	defineProject({
 		slug: 'funky-live-cuisine-other',

@@ -55,6 +55,7 @@ export const projects: Project[] = [
 			'Sound design léger'
 		],
 		duration: 'Long format',
+		previewVideo: '/videos/gaming/miyuna-retour-gaming-long.mp4',
 		externalUrl: 'https://youtu.be/l0bbmDD3gI4?si=VDm3Nbh1PJwK9WfC',
 		featured: true
 	}),
@@ -75,6 +76,7 @@ export const projects: Project[] = [
 			'Transitions discrètes'
 		],
 		duration: 'Long format',
+		previewVideo: '/videos/gaming/genshin-whale-accident-long.mp4',
 		externalUrl: 'https://youtu.be/GPhsBWWzEPU?si=V3a9eEbbo2Mrjq6R',
 		featured: true
 	}),
@@ -96,6 +98,7 @@ export const projects: Project[] = [
 			'Structure de vidéo'
 		],
 		duration: 'Long format',
+		previewVideo: '/videos/gaming/miyuna-model-reveal-best-of.mp4',
 		externalUrl: 'https://www.youtube.com/watch?v=8htW720ozwQ',
 		featured: true
 	}),
@@ -115,6 +118,7 @@ export const projects: Project[] = [
 			'Export YouTube'
 		],
 		duration: 'Long format',
+		previewVideo: '/videos/gaming/palawi-fireball-long.mp4',
 		externalUrl: 'https://www.youtube.com/watch?v=a0VkCk89dAg',
 		featured: true
 	}),
@@ -134,6 +138,7 @@ export const projects: Project[] = [
 			'Nettoyage des longueurs'
 		],
 		duration: 'Long format',
+		previewVideo: '/videos/gaming/carry-the-glass-long.mp4',
 		externalUrl: 'https://www.youtube.com/watch?v=mFY1k4lSGO8'
 	}),
 	defineProject({
@@ -152,6 +157,7 @@ export const projects: Project[] = [
 			'Export YouTube'
 		],
 		duration: 'Long format',
+		previewVideo: '/videos/gaming/funky-beau-fils-long.mp4',
 		externalUrl: 'https://www.youtube.com/watch?v=b9jeLxpKvuY&t=209s'
 	}),
 	defineProject({
@@ -170,6 +176,7 @@ export const projects: Project[] = [
 			'Export Shorts'
 		],
 		duration: 'Short',
+		previewVideo: '/videos/gaming/flare-mort-short.mp4',
 		externalUrl: 'https://www.youtube.com/shorts/r9KrsHKDExQ',
 		featured: true
 	}),
@@ -189,6 +196,7 @@ export const projects: Project[] = [
 			'Export Shorts'
 		],
 		duration: 'Short',
+		previewVideo: '/videos/gaming/cs2-random-short.mp4',
 		externalUrl: 'https://www.youtube.com/shorts/0T1TAPXgpCw'
 	}),
 	defineProject({
@@ -207,6 +215,7 @@ export const projects: Project[] = [
 			'Export vertical'
 		],
 		duration: 'Short',
+		previewVideo: '/videos/gaming/cs2-habitude-short.mp4',
 		externalUrl: 'https://www.youtube.com/shorts/w8AUOeyibhU'
 	}),
 	defineProject({
@@ -225,6 +234,7 @@ export const projects: Project[] = [
 			'Export Shorts'
 		],
 		duration: 'Short',
+		previewVideo: '/videos/gaming/cs2-totem-short.mp4',
 		externalUrl: 'https://www.youtube.com/shorts/bBnOLx1dpHQ'
 	}),
 	defineProject({
@@ -243,6 +253,7 @@ export const projects: Project[] = [
 			'Export Shorts'
 		],
 		duration: 'Short',
+		previewVideo: '/videos/gaming/cs2-peur-short.mp4',
 		externalUrl: 'https://www.youtube.com/shorts/5PsSeDvLIk8'
 	}),
 	defineProject({
@@ -261,6 +272,7 @@ export const projects: Project[] = [
 			'Export Shorts'
 		],
 		duration: 'Short',
+		previewVideo: '/videos/gaming/cs2-type-bizarre-short.mp4',
 		externalUrl: 'https://www.youtube.com/shorts/bytnZXOfnHM'
 	}),
 	defineProject({
@@ -469,6 +481,7 @@ export const projects: Project[] = [
 			'Export YouTube'
 		],
 		duration: 'Long format',
+		previewVideo: '/videos/other/funky-live-cuisine-other.mp4',
 		externalUrl: 'https://www.youtube.com/watch?v=CvN1kRSoErE&t=94s'
 	})
 ];

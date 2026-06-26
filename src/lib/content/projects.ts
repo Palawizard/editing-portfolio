@@ -17,6 +17,10 @@ const categoryDefaults: Record<ProjectCategory, Pick<Project, 'format' | 'platfo
 	'business-promo': {
 		format: '9:16',
 		platform: ['Instagram', 'TikTok']
+	},
+	'other-format': {
+		format: '16:9',
+		platform: ['YouTube']
 	}
 };
 
@@ -26,6 +30,7 @@ const defineProject = (input: ProjectInput): Project => {
 
 	return {
 		...input,
+		referenceId: input.referenceId ?? input.slug,
 		format: input.format ?? defaults.format,
 		platform: input.platform ?? defaults.platform,
 		poster: input.poster ?? publishedVideo?.poster ?? '',
@@ -35,50 +40,237 @@ const defineProject = (input: ProjectInput): Project => {
 
 export const projects: Project[] = [
 	defineProject({
-		slug: 'gaming-long-format-session',
-		title: 'Session gaming long format',
+		slug: 'miyuna-retour-gaming-long',
+		referenceId: 'gaming_long_miyuna_retour',
+		title: 'Retour MiyunaTV',
 		category: 'gaming-long-form',
-		summary: 'Une session longue transformée en vidéo structurée et plus fluide à suivre.',
-		objective:
-			'Garder les moments forts et retirer les temps morts sans casser le ton du gameplay.',
-		result:
-			'Une vidéo pensée pour YouTube, avec une progression plus claire et une ambiance de partie conservée.',
+		summary: 'Une vidéo gaming longue construite autour du retour de la créatrice.',
+		objective: 'Rendre le retour plus fluide avec une sélection claire des moments utiles.',
+		result: 'Une vidéo YouTube structurée, lisible et centrée sur les temps forts de la session.',
 		work: [
 			'Tri des séquences utiles',
 			'Suppression des temps morts',
 			'Cuts de rythme',
-			'Sous-titres ponctuels',
+			'Conservation du ton stream',
 			'Sound design léger'
 		],
 		duration: 'Long format',
+		externalUrl: 'https://youtu.be/l0bbmDD3gI4?si=VDm3Nbh1PJwK9WfC',
 		featured: true
 	}),
 	defineProject({
-		slug: 'gaming-short-highlight',
-		title: 'Highlight gaming vertical',
-		category: 'gaming-short-form',
-		summary: 'Un moment fort transformé en clip court pour les réseaux.',
-		objective: 'Créer un extrait rapide, lisible et accrocheur dès les premières secondes.',
+		slug: 'genshin-whale-accident-long',
+		referenceId: 'gaming_long_genshin_whale_accident',
+		title: 'Genshin Impact whale accident',
+		category: 'gaming-long-form',
+		summary: 'Une vidéo longue avec narration, rythme et progression autour d’un moment marquant.',
+		objective: 'Garder l’énergie du contenu tout en rendant la progression plus agréable à suivre.',
 		result:
-			'Un clip vertical court, facile à comprendre sans contexte et adapté à une publication rapide.',
+			'Un montage YouTube long format qui met en avant la montée du gag et les réactions clés.',
+		work: [
+			'Sélection des moments forts',
+			'Rythme narratif',
+			'Cuts de réaction',
+			'Nettoyage des longueurs',
+			'Transitions discrètes'
+		],
+		duration: 'Long format',
+		externalUrl: 'https://youtu.be/GPhsBWWzEPU?si=V3a9eEbbo2Mrjq6R',
+		featured: true
+	}),
+	defineProject({
+		slug: 'miyuna-model-reveal-best-of',
+		referenceId: 'gaming_long_miyuna_model_reveal_best_of',
+		title: 'Best-of reveal modèle 2D',
+		category: 'gaming-long-form',
+		summary: 'Un best-of de live pensé pour garder les réactions et les moments importants.',
+		objective:
+			'Transformer un contenu live en vidéo YouTube plus directe et plus facile à regarder.',
+		result:
+			'Une vidéo structurée autour des meilleurs moments, avec un rythme plus dense que le direct.',
+		work: [
+			'Best-of de live',
+			'Tri des réactions',
+			'Resserrement du rythme',
+			'Cuts de respiration',
+			'Structure de vidéo'
+		],
+		duration: 'Long format',
+		externalUrl: 'https://www.youtube.com/watch?v=8htW720ozwQ',
+		featured: true
+	}),
+	defineProject({
+		slug: 'palawi-fireball-long',
+		referenceId: 'gaming_long_palawi_fireball',
+		title: 'Fireball',
+		category: 'gaming-long-form',
+		summary: 'Un montage gaming long format centré sur le rythme et les moments de partie.',
+		objective: 'Construire une vidéo plus compacte autour des moments forts du gameplay.',
+		result: 'Un long format YouTube avec une progression claire et des séquences mieux enchaînées.',
+		work: [
+			'Tri des rushs',
+			'Cuts de gameplay',
+			'Rythme de séquence',
+			'Transitions sobres',
+			'Export YouTube'
+		],
+		duration: 'Long format',
+		externalUrl: 'https://www.youtube.com/watch?v=a0VkCk89dAg',
+		featured: true
+	}),
+	defineProject({
+		slug: 'carry-the-glass-long',
+		referenceId: 'gaming_long_carry_the_glass',
+		title: 'Carry the Glass en temps limité',
+		category: 'gaming-long-form',
+		summary: 'Une vidéo gaming avec contrainte de temps et progression de défi.',
+		objective: 'Mettre en valeur la tension du défi en retirant les temps morts.',
+		result: 'Une vidéo YouTube plus rythmée, centrée sur les essais, réactions et moments clés.',
+		work: [
+			'Construction du défi',
+			'Sélection des échecs utiles',
+			'Cuts de rythme',
+			'Moments de réaction',
+			'Nettoyage des longueurs'
+		],
+		duration: 'Long format',
+		externalUrl: 'https://www.youtube.com/watch?v=mFY1k4lSGO8'
+	}),
+	defineProject({
+		slug: 'funky-beau-fils-long',
+		referenceId: 'gaming_long_funky_beau_fils',
+		title: 'Story gaming long format',
+		category: 'gaming-long-form',
+		summary: 'Un contenu long travaillé pour garder les séquences qui font avancer la vidéo.',
+		objective: 'Structurer une vidéo longue autour des passages les plus utiles et des réactions.',
+		result: 'Un montage pensé pour garder le rythme sans perdre le contexte principal.',
+		work: [
+			'Sélection des passages clés',
+			'Cuts de réaction',
+			'Rythme long format',
+			'Nettoyage des silences',
+			'Export YouTube'
+		],
+		duration: 'Long format',
+		externalUrl: 'https://www.youtube.com/watch?v=b9jeLxpKvuY&t=209s'
+	}),
+	defineProject({
+		slug: 'flare-mort-short',
+		referenceId: 'gaming_short_palawi_flare_mort',
+		title: 'Short gaming flare',
+		category: 'gaming-short-form',
+		summary: 'Un moment gaming transformé en clip vertical court.',
+		objective: 'Créer un extrait rapide, compréhensible et efficace dès les premières secondes.',
+		result: 'Un short vertical adapté à YouTube Shorts avec un rythme direct.',
 		work: [
 			'Hook rapide',
 			'Recadrage vertical',
-			'Zooms ciblés',
-			'Sous-titres dynamiques',
-			'Impacts sonores légers'
+			'Cuts courts',
+			'Accentuation du moment',
+			'Export Shorts'
 		],
-		duration: 'Court vertical',
+		duration: 'Short',
+		externalUrl: 'https://www.youtube.com/shorts/r9KrsHKDExQ',
 		featured: true
 	}),
 	defineProject({
-		slug: 'explainer-short-edit',
-		title: 'Vidéo explicative illustrée',
+		slug: 'cs2-random-short',
+		referenceId: 'gaming_short_terraster_random_cs2',
+		title: 'Short CS2 random',
+		category: 'gaming-short-form',
+		summary: 'Un extrait CS2 rapide construit autour d’une situation imprévisible.',
+		objective: 'Faire comprendre le gag immédiatement en gardant un rythme serré.',
+		result: 'Un clip court lisible sans contexte, pensé pour la consommation mobile.',
+		work: [
+			'Repérage du moment drôle',
+			'Resserrement du timing',
+			'Recadrage vertical',
+			'Cuts de réaction',
+			'Export Shorts'
+		],
+		duration: 'Short',
+		externalUrl: 'https://www.youtube.com/shorts/0T1TAPXgpCw'
+	}),
+	defineProject({
+		slug: 'cs2-habitude-short',
+		referenceId: 'gaming_short_terraster_habitude_cs2',
+		title: 'Short CS2 réaction',
+		category: 'gaming-short-form',
+		summary: 'Un clip vertical basé sur une réaction simple et immédiatement lisible.',
+		objective: 'Transformer une séquence courte en contenu prêt pour Shorts.',
+		result: 'Un short clair, direct et centré sur la réaction principale.',
+		work: [
+			'Coupe du contexte inutile',
+			'Rythme court',
+			'Recadrage mobile',
+			'Timing de réaction',
+			'Export vertical'
+		],
+		duration: 'Short',
+		externalUrl: 'https://www.youtube.com/shorts/w8AUOeyibhU'
+	}),
+	defineProject({
+		slug: 'cs2-totem-short',
+		referenceId: 'gaming_short_terraster_totem_cs2',
+		title: 'Short CS2 totem',
+		category: 'gaming-short-form',
+		summary: 'Un moment visuel condensé en short gaming facile à comprendre.',
+		objective: 'Garder uniquement la situation drôle et la rendre lisible sur mobile.',
+		result: 'Un clip vertical court avec une chute rapide.',
+		work: [
+			'Sélection du gag',
+			'Cuts rapides',
+			'Recadrage vertical',
+			'Rythme de chute',
+			'Export Shorts'
+		],
+		duration: 'Short',
+		externalUrl: 'https://www.youtube.com/shorts/bBnOLx1dpHQ'
+	}),
+	defineProject({
+		slug: 'cs2-peur-short',
+		referenceId: 'gaming_short_terraster_peur_cs2',
+		title: 'Short CS2 peur',
+		category: 'gaming-short-form',
+		summary: 'Un extrait gaming court centré sur une réaction de surprise.',
+		objective: 'Mettre en avant la réaction sans garder les longueurs autour.',
+		result: 'Un short rapide, lisible et pensé pour une publication verticale.',
+		work: [
+			'Hook immédiat',
+			'Resserrement de la scène',
+			'Recadrage vertical',
+			'Timing comique',
+			'Export Shorts'
+		],
+		duration: 'Short',
+		externalUrl: 'https://www.youtube.com/shorts/5PsSeDvLIk8'
+	}),
+	defineProject({
+		slug: 'cs2-type-bizarre-short',
+		referenceId: 'gaming_short_terraster_type_bizarre_cs2',
+		title: 'Short CS2 situation étrange',
+		category: 'gaming-short-form',
+		summary: 'Un moment de partie transformé en short clair et rythmé.',
+		objective: 'Faire ressortir la situation principale en quelques secondes.',
+		result: 'Un clip vertical simple, centré sur le gag et prêt à publier.',
+		work: [
+			'Sélection du moment',
+			'Rythme serré',
+			'Recadrage mobile',
+			'Cuts de réaction',
+			'Export Shorts'
+		],
+		duration: 'Short',
+		externalUrl: 'https://www.youtube.com/shorts/bytnZXOfnHM'
+	}),
+	defineProject({
+		slug: 'rant-explicatif-drive',
+		referenceId: 'explainer_short_drive_rant_visual_edit',
+		title: 'Rant explicatif illustré',
 		category: 'explainer-short-form',
-		summary: 'Un propos parlé renforcé par des visuels et un rythme plus clair.',
-		objective: 'Rendre une idée plus facile à suivre avec des appuis visuels utiles.',
-		result:
-			'Une vidéo courte qui accompagne la parole avec des visuels utiles sans surcharger le message.',
+		summary: 'Un propos parlé accompagné par du rythme et des visuels utiles.',
+		objective: 'Rendre le message plus clair avec des appuis visuels et un montage plus fluide.',
+		result: 'Une vidéo courte qui accompagne la parole sans surcharger le propos.',
 		work: [
 			'Rythme de parole',
 			"Images d'appui",
@@ -86,25 +278,30 @@ export const projects: Project[] = [
 			'Transitions discrètes',
 			'Clarification du message'
 		],
-		duration: 'Court vertical',
-		featured: true
+		duration: 'Court',
+		platform: ['Google Drive'],
+		format: '9:16',
+		externalUrl: 'https://drive.google.com/file/d/1LLcBZZng4SAtdh5Vfl0V8QGtlp6ICDV9/view'
 	}),
 	defineProject({
-		slug: 'business-promo-short',
-		title: 'Présentation business courte',
-		category: 'business-promo',
-		summary: 'Une vidéo courte pour présenter clairement une activité ou un service.',
-		objective: "Mettre en valeur une offre avec un message simple et un appel à l'action clair.",
-		result: 'Un format court et propre, pensé pour présenter une activité sur les réseaux sociaux.',
+		slug: 'funky-live-cuisine-other',
+		referenceId: 'other_format_funky_live_cuisine',
+		title: 'Live cuisine monté',
+		category: 'other-format',
+		summary: 'Un contenu live hors gaming travaillé comme une vidéo YouTube complète.',
+		objective:
+			'Garder les meilleurs moments du live et donner une structure plus claire au contenu.',
+		result:
+			'Une vidéo plus accessible, avec les longueurs réduites et les séquences mieux enchaînées.',
 		work: [
-			'Sélection des plans',
-			"Texte à l'écran",
-			'Rythme court',
-			"Appel à l'action",
-			'Export réseaux sociaux'
+			'Tri de live',
+			'Structure de séquences',
+			'Cuts de rythme',
+			'Conservation des interactions',
+			'Export YouTube'
 		],
-		duration: 'Court vertical',
-		featured: true
+		duration: 'Long format',
+		externalUrl: 'https://www.youtube.com/watch?v=CvN1kRSoErE&t=94s'
 	})
 ];
 

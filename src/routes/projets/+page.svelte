@@ -100,9 +100,18 @@
 					</div>
 
 					<div class="mt-10 grid min-w-0 gap-6 md:grid-cols-2 xl:grid-cols-3">
-						{#each filteredProjects as project, index (project.slug)}
-							<ProjectCard {project} {index} minimal />
-						{/each}
+						{#if filteredProjects.length}
+							{#each filteredProjects as project, index (project.slug)}
+								<ProjectCard {project} {index} minimal />
+							{/each}
+						{:else}
+							<p
+								class="rounded-[1.25rem] border border-white/10 bg-white/[0.035] p-6 text-sm leading-6 text-slate-300 md:col-span-2 xl:col-span-3"
+							>
+								Aucun exemple publié pour ce style pour le moment. Tu peux quand même envoyer une
+								référence pour définir un rendu adapté.
+							</p>
+						{/if}
 					</div>
 				{/if}
 			</Container>

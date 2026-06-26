@@ -50,12 +50,16 @@ export const skills = [
 	'Sound design',
 	'Transitions',
 	'Illustrations visuelles',
-	'Storytelling',
 	'Adaptation TikTok, Reels et Shorts',
 	'Exports optimisés'
 ];
 
-export const tools = ['DaVinci Resolve Studio'];
+export const tools = [
+	{
+		name: 'DaVinci Resolve Studio',
+		note: 'Montage principal, étalonnage et exports finaux'
+	}
+] as const;
 
 export const beforeAfterSection: BeforeAfterSection = {
 	enabled: false,

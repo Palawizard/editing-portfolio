@@ -283,7 +283,7 @@
 	});
 </script>
 
-<div class="relative" role="region" aria-label="Carrousel des styles de montage">
+<div class="relative overflow-x-clip" role="region" aria-label="Carrousel des styles de montage">
 	<div class="absolute right-4 top-12 z-30 hidden gap-2 sm:flex">
 		<button
 			class="grid size-11 place-items-center rounded-full border border-white/15 bg-slate-950/80 text-white shadow-xl backdrop-blur-md transition hover:border-cyan-200/50 hover:bg-slate-900"
@@ -306,7 +306,7 @@
 	<div
 		bind:this={carousel}
 		class={[
-			'carousel-fade scrollbar-hidden -mx-5 flex overflow-x-auto px-5 pb-8 pt-8 sm:mx-0 sm:px-0',
+			'carousel-fade scrollbar-hidden -mx-5 flex overflow-x-auto px-5 pb-36 pt-8 -mb-28 sm:mx-0 sm:px-0',
 			locked ? 'snap-x snap-mandatory' : ''
 		]}
 		aria-label="Choisir un style de montage"

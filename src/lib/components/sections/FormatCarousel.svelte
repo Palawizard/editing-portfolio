@@ -306,7 +306,7 @@
 	<div
 		bind:this={carousel}
 		class={[
-			'carousel-fade scrollbar-hidden -mx-5 flex overflow-x-auto px-5 pb-32 pt-8 sm:mx-0 sm:px-0',
+			'carousel-fade scrollbar-hidden -mx-5 flex overflow-x-auto px-5 pb-8 pt-8 sm:mx-0 sm:px-0',
 			locked ? 'snap-x snap-mandatory' : ''
 		]}
 		aria-label="Choisir un style de montage"

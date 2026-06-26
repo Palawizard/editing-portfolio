@@ -1,8 +1,16 @@
-export type PublishedVideoProvider = 'instagram' | 'tiktok' | 'vimeo' | 'youtube' | 'other';
+export type PublishedVideoProvider =
+	| 'google-drive'
+	| 'instagram'
+	| 'tiktok'
+	| 'vimeo'
+	| 'youtube'
+	| 'other';
 
 export type PublishedVideo = {
+	id?: string;
 	url: string;
 	provider: PublishedVideoProvider;
+	directUrl?: string;
 	embedUrl?: string;
 	poster?: string;
 };
@@ -29,6 +37,23 @@ const getYouTubeId = (url: URL) => {
 	return undefined;
 };
 
+const getGoogleDriveFileId = (url: URL) => {
+	if (!hasDomain(url, 'drive.google.com') && !hasDomain(url, 'drive.usercontent.google.com')) {
+		return undefined;
+	}
+
+	if (url.searchParams.has('id')) {
+		return url.searchParams.get('id') ?? undefined;
+	}
+
+	const [, type, id] = url.pathname.split('/');
+	if (type === 'file' && id === 'd') {
+		return url.pathname.split('/')[3];
+	}
+
+	return undefined;
+};
+
 export const getPublishedVideo = (source?: string): PublishedVideo | undefined => {
 	if (!source) return undefined;
 
@@ -40,9 +65,22 @@ export const getPublishedVideo = (source?: string): PublishedVideo | undefined =
 		return { url: source, provider: 'other' };
 	}
 
+	const googleDriveFileId = getGoogleDriveFileId(url);
+	if (googleDriveFileId) {
+		return {
+			id: googleDriveFileId,
+			url: source,
+			provider: 'google-drive',
+			directUrl: `https://drive.usercontent.google.com/uc?id=${googleDriveFileId}&export=download`,
+			embedUrl: `https://drive.google.com/file/d/${googleDriveFileId}/preview?autoplay=1`,
+			poster: `https://drive.google.com/thumbnail?id=${googleDriveFileId}&sz=w1000`
+		};
+	}
+
 	const youtubeId = getYouTubeId(url);
 	if (youtubeId) {
 		return {
+			id: youtubeId,
 			url: source,
 			provider: 'youtube',
 			embedUrl: `https://www.youtube-nocookie.com/embed/${youtubeId}`,

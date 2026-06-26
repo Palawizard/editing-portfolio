@@ -1,8 +1,26 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { ArrowDownRight, Play } from '@lucide/svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import Container from '$lib/components/ui/Container.svelte';
 	import { heroActions } from '$lib/content/site';
+	import { projects } from '$lib/content/projects';
+	import { getPublishedVideo } from '$lib/utils/media';
+
+	let previewSrc = $state<string | undefined>();
+	let previewPoster = $state<string | undefined>();
+
+	onMount(() => {
+		const candidates = projects.filter((p) => {
+			const src = p.previewVideo ?? getPublishedVideo(p.externalUrl)?.directUrl;
+			return Boolean(src);
+		});
+		if (!candidates.length) return;
+		const pick = candidates[Math.floor(Math.random() * candidates.length)];
+		const published = getPublishedVideo(pick.externalUrl);
+		previewSrc = pick.previewVideo ?? published?.directUrl;
+		previewPoster = pick.poster || published?.poster || undefined;
+	});
 </script>
 
 <section class="relative overflow-hidden pb-14 pt-14 md:pb-18 md:pt-20">
@@ -55,19 +73,36 @@
 						</div>
 					</div>
 
-					<div
-						class="relative grid aspect-[4/3] place-items-center overflow-hidden rounded-[1.1rem] border border-white/8 bg-[radial-gradient(circle_at_30%_20%,rgb(155_124_255/0.34),transparent_28%),linear-gradient(145deg,#15172a,#07080d_65%)]"
-					>
+				<div
+					class="relative grid aspect-[4/3] place-items-center overflow-hidden rounded-[1.1rem] border border-white/8 bg-[radial-gradient(circle_at_30%_20%,rgb(155_124_255/0.34),transparent_28%),linear-gradient(145deg,#15172a,#07080d_65%)]"
+				>
+					{#if previewSrc}
+						<video
+							class="absolute inset-0 size-full object-cover"
+							src={previewSrc}
+							poster={previewPoster}
+							autoplay
+							muted
+							loop
+							playsinline
+							preload="metadata"
+							aria-hidden="true"
+						></video>
+						<div
+							class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgb(155_124_255/0.18),transparent_40%),linear-gradient(145deg,#15172a/30,#07080d/50_65%)]"
+						></div>
+					{:else}
 						<div class="absolute inset-0 opacity-40">
 							<div class="absolute left-[12%] top-[18%] h-px w-[76%] bg-white/10"></div>
 							<div class="absolute left-[12%] top-[34%] h-px w-[52%] bg-white/10"></div>
 						</div>
-						<div
-							class="relative grid size-20 place-items-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur transition hover:scale-105 hover:bg-white/15"
-						>
-							<Play class="ml-1" size={29} fill="currentColor" aria-hidden="true" />
-						</div>
+					{/if}
+					<div
+						class="relative grid size-20 place-items-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur transition hover:scale-105 hover:bg-white/15"
+					>
+						<Play class="ml-1" size={29} fill="currentColor" aria-hidden="true" />
 					</div>
+				</div>
 
 					<div class="mt-3 rounded-[1.1rem] border border-white/8 bg-black/30 p-4">
 						<div class="relative grid gap-2">

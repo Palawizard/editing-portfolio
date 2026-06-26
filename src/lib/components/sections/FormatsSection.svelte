@@ -8,7 +8,7 @@
 	import { editingFormats } from '$lib/content/formats';
 	import type { ProjectChoice } from '$lib/types/project';
 
-	let selectedChoice = $state<ProjectChoice>('gaming-long-form');
+	let selectedChoice = $state<ProjectChoice | undefined>(undefined);
 	const selectedFormat = $derived(
 		selectedChoice === 'custom'
 			? undefined
@@ -30,6 +30,7 @@
 			<FormatCarousel selected={selectedChoice} onSelect={(choice) => (selectedChoice = choice)} />
 		</div>
 
+		{#if selectedChoice}
 		<div
 			class="mt-8 grid gap-8 rounded-[1.5rem] border border-white/10 bg-black/20 p-6 md:grid-cols-[1fr_auto] md:items-center md:p-8"
 		>
@@ -69,5 +70,6 @@
 				</Button>
 			{/if}
 		</div>
+		{/if}
 	</Container>
 </section>

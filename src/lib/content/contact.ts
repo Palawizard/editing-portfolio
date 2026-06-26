@@ -1,5 +1,5 @@
 import { editingFormats } from '$lib/content/formats';
-import type { ContactBudget, ContactFormValues, ContactOption } from '$lib/types/contact';
+import type { ContactFormValues, ContactOption } from '$lib/types/contact';
 import type { ProjectChoice } from '$lib/types/project';
 import type { ContactHref } from '$lib/types/site';
 
@@ -12,14 +12,6 @@ export const contactStyleOptions: ContactOption<ProjectChoice>[] = [
 		value: 'custom',
 		label: 'Commande personnalisée'
 	}
-];
-
-export const contactBudgetOptions: ContactOption<ContactBudget>[] = [
-	{ value: 'under-100', label: 'Moins de 100 €' },
-	{ value: '100-250', label: '100 à 250 €' },
-	{ value: '250-500', label: '250 à 500 €' },
-	{ value: 'over-500', label: 'Plus de 500 €' },
-	{ value: 'unknown', label: 'Je ne sais pas encore' }
 ];
 
 export const emptyContactFormValues: ContactFormValues = {
@@ -54,9 +46,6 @@ export const contactFormCopy = {
 
 export const getContactStyleLabel = (style: ProjectChoice | '') =>
 	contactStyleOptions.find((option) => option.value === style)?.label ?? '';
-
-export const getContactBudgetLabel = (budget: ContactBudget | '') =>
-	contactBudgetOptions.find((option) => option.value === budget)?.label ?? '';
 
 export const getContactStyleHref = (style: ProjectChoice): ContactHref => `/contact?style=${style}`;
 

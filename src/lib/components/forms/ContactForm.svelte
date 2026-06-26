@@ -9,7 +9,6 @@
 		contactFormCopy,
 		contactStyleOptions,
 		emptyContactFormValues,
-		getContactBudgetLabel,
 		getContactStyleLabel
 	} from '$lib/content/contact';
 	import { projects } from '$lib/content/projects';
@@ -171,7 +170,7 @@
 				email: values.email.trim(),
 				style: getContactStyleLabel(values.style),
 				projectTitle: context.projectTitle,
-				budget: getContactBudgetLabel(values.budget) || undefined
+				budget: values.budget.trim() || undefined
 			};
 			isSuccess = true;
 			await focusResult();
@@ -193,9 +192,15 @@
 		window.history.replaceState({}, '', resolve('/contact'));
 	};
 
-	const handleTurnstileError = () => {
+	const handleTurnstileError = (errorCode = '') => {
+		if (errorCode) {
+			console.warn(`Cloudflare Turnstile error: ${errorCode}`);
+		}
+
 		submitError =
-			'La vérification anti-spam ne répond pas. Recharge la page ou utilise l’adresse email de secours.';
+			errorCode === '110200'
+				? "La vérification anti-spam n'est pas autorisée sur ce domaine. Utilise l’adresse email de secours."
+				: 'La vérification anti-spam ne répond pas. Recharge la page ou utilise l’adresse email de secours.';
 	};
 </script>
 
@@ -236,7 +241,7 @@
 			{/if}
 			{#if submissionSummary.budget}
 				<div>
-					<dt class="text-slate-400">Budget prévu</dt>
+					<dt class="text-slate-400">Budget</dt>
 					<dd class="mt-1 font-semibold text-white">{submissionSummary.budget}</dd>
 				</div>
 			{/if}
@@ -294,7 +299,6 @@
 		<input type="hidden" name="project_slug" value={values.projectSlug} />
 		<input type="hidden" name="project_title" value={context.projectTitle ?? ''} />
 		<input type="hidden" name="style_label" value={getContactStyleLabel(values.style)} />
-		<input type="hidden" name="budget_label" value={getContactBudgetLabel(values.budget)} />
 		<input type="hidden" name="subject" value={subjectTemplate} />
 		<div class="absolute -left-[10000px]" aria-hidden="true">
 			<label for="companyWebsite">Ne pas remplir ce champ</label>

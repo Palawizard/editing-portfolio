@@ -3,7 +3,7 @@
 
 	type Props = {
 		siteKey: string;
-		onError?: () => void;
+		onError?: (errorCode?: string) => void;
 	};
 
 	let { siteKey, onError }: Props = $props();
@@ -11,12 +11,7 @@
 	let widgetId = $state<string>();
 
 	const renderWidget = () => {
-		if (
-			!container ||
-			widgetId !== undefined ||
-			container.querySelector('[name="cf-turnstile-response"]') ||
-			!window.turnstile
-		) {
+		if (!container || widgetId !== undefined || !window.turnstile) {
 			return;
 		}
 
@@ -25,8 +20,8 @@
 			theme: 'dark',
 			language: 'fr',
 			appearance: 'interaction-only',
-			'error-callback': () => {
-				onError?.();
+			'error-callback': (errorCode) => {
+				onError?.(errorCode);
 				return true;
 			}
 		});
@@ -38,7 +33,7 @@
 		const interval = window.setInterval(renderWidget, 100);
 		const timeout = window.setTimeout(() => {
 			window.clearInterval(interval);
-			if (widgetId === undefined) {
+			if (widgetId === undefined && !container.querySelector('[name="cf-turnstile-response"]')) {
 				onError?.();
 			}
 		}, 8000);
@@ -54,15 +49,11 @@
 </script>
 
 <svelte:head>
-	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+	<script
+		src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+		async
+		defer
+	></script>
 </svelte:head>
 
-<div
-	bind:this={container}
-	class="cf-turnstile min-h-[65px]"
-	data-sitekey={siteKey}
-	data-theme="dark"
-	data-language="fr"
-	data-appearance="interaction-only"
-	aria-label="Vérification anti-spam"
-></div>
+<div bind:this={container} class="min-h-[65px]" aria-label="Vérification anti-spam"></div>

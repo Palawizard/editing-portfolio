@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { contactBudgetOptions, contactFormCopy, contactStyleOptions } from '$lib/content/contact';
+	import { contactFormCopy, contactStyleOptions } from '$lib/content/contact';
 	import type { ContactFormErrors, ContactFormValues } from '$lib/types/contact';
 
 	type Props = {
@@ -134,13 +134,21 @@
 	</div>
 
 	<div>
-		<label class={labelClasses} for="budget">Budget prévu</label>
-		<select class={fieldClasses} id="budget" name="budget" bind:value={values.budget}>
-			<option value="">Choisir une fourchette</option>
-			{#each contactBudgetOptions as option (option.value)}
-				<option value={option.value}>{option.label}</option>
-			{/each}
-		</select>
+		<label class={labelClasses} for="budget">Budget</label>
+		<p id="budget-help" class="mt-1 text-xs leading-5 text-slate-400">
+			Indique le montant ou la fourchette que tu as en tête.
+		</p>
+		<input
+			class={fieldClasses}
+			id="budget"
+			name="budget"
+			type="text"
+			inputmode="text"
+			maxlength="80"
+			placeholder="Ex. 150 €, 300 à 500 €, à définir"
+			bind:value={values.budget}
+			aria-describedby="budget-help"
+		/>
 	</div>
 
 	<div class="sm:col-span-2">

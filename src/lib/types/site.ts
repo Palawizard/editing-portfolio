@@ -22,6 +22,7 @@ export type SiteMetadata = {
 	name: string;
 	title: string;
 	description: string;
+	image: string;
 	locale: 'fr-FR';
 };
 

@@ -23,6 +23,15 @@
 		video: 'aspect-video',
 		vertical: 'aspect-[9/16]'
 	};
+
+	const showFirstFrame = (event: Event) => {
+		if (poster) return;
+
+		const video = event.currentTarget as HTMLVideoElement;
+		if (video.currentTime === 0) {
+			video.currentTime = 0.01;
+		}
+	};
 </script>
 
 <figure
@@ -35,7 +44,7 @@
 	{#if src}
 		<video
 			class="absolute inset-0 size-full object-cover object-center"
-			{poster}
+			poster={poster || undefined}
 			{src}
 			preload="metadata"
 			{autoplay}
@@ -44,6 +53,7 @@
 			playsinline
 			controls={!autoplay}
 			aria-label={title}
+			onloadeddata={showFirstFrame}
 		></video>
 	{:else if poster}
 		<img

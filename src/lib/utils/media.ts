@@ -54,6 +54,14 @@ const getGoogleDriveFileId = (url: URL) => {
 	return undefined;
 };
 
+export const getLocalPosterFromPreview = (previewVideo?: string): string | undefined => {
+	if (!previewVideo?.startsWith('/videos/')) return undefined;
+
+	return previewVideo
+		.replace('/videos/', '/images/posters/')
+		.replace(/\.(mp4|webm|mov)$/i, '.webp');
+};
+
 export const getPublishedVideo = (source?: string): PublishedVideo | undefined => {
 	if (!source) return undefined;
 

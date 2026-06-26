@@ -34,7 +34,7 @@
 >
 	{#if src}
 		<video
-			class="size-full object-cover"
+			class="size-full object-contain"
 			{poster}
 			{src}
 			preload="metadata"

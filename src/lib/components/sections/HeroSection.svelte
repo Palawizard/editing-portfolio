@@ -23,6 +23,19 @@
 	});
 </script>
 
+<style>
+	@keyframes timeline-scrub {
+		0% { left: 92%; }
+		100% { left: 6%; }
+	}
+	.timeline-cursor {
+		animation: timeline-scrub 9s linear infinite;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.timeline-cursor { animation: none; left: 58%; }
+	}
+</style>
+
 <section class="relative overflow-hidden pb-14 pt-14 md:pb-18 md:pt-20">
 	<div
 		class="pointer-events-none absolute -left-36 top-16 size-[32rem] rounded-full bg-violet-600/12 blur-[110px]"
@@ -117,8 +130,8 @@
 								<span class="w-[22%] rounded bg-cyan-200/25"></span>
 								<span class="flex-1 rounded bg-white/8"></span>
 							</div>
-							<span class="absolute -top-1 left-[58%] h-14 w-px bg-white shadow-[0_0_8px_white]"
-							></span>
+						<span class="timeline-cursor absolute -top-1 h-14 w-px bg-white shadow-[0_0_8px_white]"
+						></span>
 						</div>
 					</div>
 				</div>

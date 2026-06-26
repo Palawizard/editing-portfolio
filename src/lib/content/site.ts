@@ -1,10 +1,10 @@
 import type { CallToAction, NavigationLink, SiteMetadata } from '$lib/types/site';
 
 export const siteMetadata: SiteMetadata = {
-	name: 'Portfolio montage vidéo',
-	title: 'Montage vidéo pour créateurs, streamers et businesses',
+	name: 'Palawi',
+	title: 'Palawi — Montage vidéo pour créateurs, streamers et businesses',
 	description:
-		'Je transforme des rushs, idées ou vidéos longues en contenus clairs, rythmés et prêts à publier.',
+		'Portfolio de Palawi, monteur vidéo. Je transforme des rushs, idées ou vidéos longues en contenus clairs, rythmés et prêts à publier.',
 	image: '/images/brand/pfp.jpg',
 	locale: 'fr-FR'
 };

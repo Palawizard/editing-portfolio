@@ -14,9 +14,16 @@
 	<div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-3.5 sm:px-6 lg:px-8">
 		<a href={resolve('/')} class="group flex items-center gap-3" aria-label="Retour à l'accueil">
 			<span
-				class="grid h-10 min-w-10 place-items-center rounded-xl border border-violet-300/25 bg-violet-300/10 px-2 font-mono text-xs font-black text-violet-100"
+				class="grid size-10 overflow-hidden rounded-xl border border-violet-300/25 bg-violet-300/10 shadow-[0_0_24px_rgb(167_139_250/0.18)]"
 			>
-				CUT
+				<img
+					class="size-full object-cover"
+					src={siteMetadata.image}
+					alt=""
+					width="40"
+					height="40"
+					aria-hidden="true"
+				/>
 			</span>
 			<span class="hidden text-xs font-semibold tracking-[0.18em] text-white uppercase sm:block">
 				{siteMetadata.name}

@@ -16,8 +16,14 @@
 	);
 </script>
 
-<section id="formats" class="scroll-mt-28 border-y border-white/10 bg-white/[0.018] py-14 md:py-18">
-	<Container size="wide">
+<section
+	id="formats"
+	class="relative overflow-hidden scroll-mt-28 border-y border-white/10 bg-[var(--color-bg-soft)] py-16 md:py-24"
+>
+	<div
+		class="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_50%_0%,rgb(155_124_255/0.07),transparent_68%)]"
+	></div>
+	<Container size="wide" class="relative">
 		<SectionHeader
 			eyebrow="Trouve ton format"
 			title="Un style différent pour chaque objectif"

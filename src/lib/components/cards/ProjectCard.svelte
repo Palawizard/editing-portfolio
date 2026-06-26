@@ -12,13 +12,14 @@
 		compact?: boolean;
 		index?: number;
 		minimal?: boolean;
+		autoplay?: boolean;
 	};
 
-	let { project, compact = false, index = 0, minimal = false }: Props = $props();
+	let { project, compact = false, index = 0, minimal = false, autoplay = false }: Props = $props();
 	const mediaAspect = $derived(project.format === '9:16' ? 'vertical' : 'video');
 	const publishedVideo = $derived(getPublishedVideo(project.externalUrl));
 	const inlineVideoSrc = $derived(project.previewVideo ?? publishedVideo?.directUrl);
-	const showInlineVideo = $derived(minimal && Boolean(inlineVideoSrc));
+	const showInlineVideo = $derived(autoplay && Boolean(inlineVideoSrc));
 </script>
 
 <article

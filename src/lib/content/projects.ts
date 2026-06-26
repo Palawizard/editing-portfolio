@@ -284,6 +284,174 @@ export const projects: Project[] = [
 		externalUrl: 'https://drive.google.com/file/d/1LLcBZZng4SAtdh5Vfl0V8QGtlp6ICDV9/view'
 	}),
 	defineProject({
+		slug: 'business-boursin-short',
+		referenceId: 'business_promo_boursin_short',
+		title: 'Boursin',
+		category: 'business-promo',
+		summary: 'Un montage vertical business autour d’un produit food.',
+		objective: 'Mettre en avant le produit avec un format court, clair et orienté réseaux sociaux.',
+		result: 'Une vidéo promo verticale utilisable comme référence pour du contenu food et UGC.',
+		work: [
+			'Montage vertical',
+			'Cuts de rythme',
+			'Rythme publicitaire',
+			'Mise en avant du produit',
+			'Export réseaux sociaux'
+		],
+		duration: 'Short',
+		platform: ['Google Drive', 'Instagram', 'TikTok'],
+		format: '9:16',
+		previewVideo: '/videos/business/boursin.mp4',
+		externalUrl: 'https://drive.google.com/file/d/1btUdvqBK9NOXXF7uMvrcBLhl9gW-kgli/view'
+	}),
+	defineProject({
+		slug: 'business-cheese-naan-short',
+		referenceId: 'business_promo_cheese_naan_short',
+		title: 'Cheese naan',
+		category: 'business-promo',
+		summary: 'Un montage court vertical pour une offre food.',
+		objective: 'Créer une vidéo simple à comprendre et rythmée dès les premières secondes.',
+		result: 'Un contenu promo vertical adapté à Instagram, TikTok et Shorts.',
+		work: [
+			'Montage vertical',
+			'Structure courte',
+			'Rythme publicitaire',
+			'Mise en avant du produit',
+			'Export réseaux sociaux'
+		],
+		duration: 'Short',
+		platform: ['Google Drive', 'Instagram', 'TikTok'],
+		format: '9:16',
+		previewVideo: '/videos/business/cheese-naan.mp4',
+		externalUrl: 'https://drive.google.com/file/d/1U4PQG1N8sN_qovwT9pNay0Es6XauNYRC/view'
+	}),
+	defineProject({
+		slug: 'business-humour-short',
+		referenceId: 'business_promo_humour_short',
+		title: 'Humour promo',
+		category: 'business-promo',
+		summary: 'Un format court qui utilise l’humour pour rendre le message plus mémorable.',
+		objective: 'Garder un rythme dynamique tout en conservant une intention commerciale claire.',
+		result: 'Une vidéo verticale orientée engagement, avec un ton plus léger.',
+		work: [
+			'Montage vertical',
+			'Timing comique',
+			'Cuts de rythme',
+			'Mise en avant du message',
+			'Export réseaux sociaux'
+		],
+		duration: 'Short',
+		platform: ['Google Drive', 'Instagram', 'TikTok'],
+		format: '9:16',
+		previewVideo: '/videos/business/humour-promo.mp4',
+		externalUrl: 'https://drive.google.com/file/d/1bzjPYywDNZGf76H9IyEJ4IbMJkNmelhG/view'
+	}),
+	defineProject({
+		slug: 'business-naan-short',
+		referenceId: 'business_promo_naan_short',
+		title: 'Naan',
+		category: 'business-promo',
+		summary: 'Une vidéo verticale promotionnelle centrée sur un produit food.',
+		objective: 'Présenter le produit avec un montage court et direct.',
+		result: 'Un exemple de contenu business pensé pour une lecture rapide sur mobile.',
+		work: [
+			'Montage vertical',
+			'Rythme court',
+			'Mise en avant du produit',
+			'Structure promo',
+			'Export réseaux sociaux'
+		],
+		duration: 'Short',
+		platform: ['Google Drive', 'Instagram', 'TikTok'],
+		format: '9:16',
+		previewVideo: '/videos/business/naan.mp4',
+		externalUrl: 'https://drive.google.com/file/d/15u7sCw0V3EbYSGLeBB9kiBtUylyDaayO/view'
+	}),
+	defineProject({
+		slug: 'business-poulet-short',
+		referenceId: 'business_promo_poulet_short',
+		title: 'Poulet',
+		category: 'business-promo',
+		summary: 'Un montage court vertical pour valoriser un produit food.',
+		objective: 'Rendre la vidéo lisible et efficace pour une diffusion sur réseaux sociaux.',
+		result: 'Un contenu promo vertical centré sur le produit et le rythme.',
+		work: [
+			'Montage vertical',
+			'Cuts de rythme',
+			'Rythme publicitaire',
+			'Mise en avant du produit',
+			'Export réseaux sociaux'
+		],
+		duration: 'Short',
+		platform: ['Google Drive', 'Instagram', 'TikTok'],
+		format: '9:16',
+		previewVideo: '/videos/business/poulet.mp4',
+		externalUrl: 'https://drive.google.com/file/d/1ViRBiMlv8pazpXOexrUV8ikawNtQ3paB/view'
+	}),
+	defineProject({
+		slug: 'business-smash-short',
+		referenceId: 'business_promo_smash_short',
+		title: 'Smash',
+		category: 'business-promo',
+		summary: 'Un exemple business court avec un montage vertical orienté impact produit.',
+		objective: 'Créer une séquence promotionnelle rapide avec une lecture immédiate.',
+		result: 'Un short business utilisable comme référence pour une offre food.',
+		work: [
+			'Montage vertical',
+			'Rythme court',
+			'Mise en avant du produit',
+			'Structure promo',
+			'Export réseaux sociaux'
+		],
+		duration: 'Short',
+		platform: ['Google Drive', 'Instagram', 'TikTok'],
+		format: '9:16',
+		previewVideo: '/videos/business/smash.mp4',
+		externalUrl: 'https://drive.google.com/file/d/1PHYoX4hY5e7UiONryxLils7r673aJYYv/view'
+	}),
+	defineProject({
+		slug: 'business-tacos-short',
+		referenceId: 'business_promo_tacos_short',
+		title: 'Tacos',
+		category: 'business-promo',
+		summary: 'Une vidéo promotionnelle verticale autour d’un produit food.',
+		objective: 'Mettre le produit au centre avec un montage direct et exploitable sur mobile.',
+		result: 'Un contenu court pensé pour une publication Instagram, TikTok ou Shorts.',
+		work: [
+			'Montage vertical',
+			'Cuts de rythme',
+			'Rythme publicitaire',
+			'Mise en avant du produit',
+			'Export réseaux sociaux'
+		],
+		duration: 'Short',
+		platform: ['Google Drive', 'Instagram', 'TikTok'],
+		format: '9:16',
+		previewVideo: '/videos/business/tacos.mp4',
+		externalUrl: 'https://drive.google.com/file/d/1UYxVaRX4yzYtUjb2TEhzu3H7IUF_k1G6/view'
+	}),
+	defineProject({
+		slug: 'business-ugc-short',
+		referenceId: 'business_ugc_short',
+		title: 'UGC',
+		category: 'business-promo',
+		summary: 'Un montage UGC vertical pensé pour présenter un message de manière naturelle.',
+		objective: 'Transformer une prise de parole en contenu court, clair et publiable.',
+		result: 'Une vidéo UGC verticale avec un rythme adapté aux réseaux sociaux.',
+		work: [
+			'Montage vertical',
+			'Rythme de parole',
+			'Structure courte',
+			'Mise en avant du message',
+			'Export réseaux sociaux'
+		],
+		duration: 'Short',
+		platform: ['Google Drive', 'Instagram', 'TikTok'],
+		format: '9:16',
+		previewVideo: '/videos/business/ugc.mp4',
+		externalUrl: 'https://drive.google.com/file/d/1RRCzNrFaeKx4rhSWWzJxmwGnOiSRaPoT/view'
+	}),
+	defineProject({
 		slug: 'funky-live-cuisine-other',
 		referenceId: 'other_format_funky_live_cuisine',
 		title: 'Live cuisine monté',

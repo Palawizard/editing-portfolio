@@ -23,6 +23,9 @@ Thumbs.db
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
-# Large local video assets (hosted separately, not committed to git)
+# Local video assets — never commit, host separately in production
 /static/videos/gaming/
 /static/videos/other/
+/static/videos/explainer/
+/static/videos/showreel/
+/static/videos/previews/

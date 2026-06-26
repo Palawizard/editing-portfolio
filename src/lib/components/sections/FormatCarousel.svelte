@@ -53,18 +53,20 @@
 
 	const getSegmentWidth = () => middleGroup?.offsetWidth ?? 0;
 
-	const isVerticalCategory = (id: string) =>
-		id !== 'gaming-long-form' && id !== 'other-format' && id !== 'custom';
-
 	const getCardSizeClass = (id: string, isProminent: boolean) => {
-		if (isVerticalCategory(id)) {
+		if (id === 'custom') {
 			return isProminent
-				? 'aspect-[9/16] w-[52vw] max-w-[18rem] sm:w-[17rem]'
-				: 'aspect-[9/16] w-[46vw] max-w-[15rem] sm:w-[14rem]';
+				? 'min-h-[29rem] w-[82vw] max-w-[27rem] sm:w-[26rem]'
+				: 'min-h-[22rem] w-[82vw] max-w-[22rem] sm:w-[21rem]';
+		}
+		if (id === 'gaming-long-form' || id === 'other-format') {
+			return isProminent
+				? 'aspect-video w-[82vw] max-w-[32rem] sm:w-[30rem]'
+				: 'aspect-video w-[82vw] max-w-[28rem] sm:w-[26rem]';
 		}
 		return isProminent
-			? 'min-h-[29rem] w-[82vw] max-w-[27rem] sm:w-[26rem]'
-			: 'min-h-[22rem] w-[82vw] max-w-[22rem] sm:w-[21rem]';
+			? 'aspect-[9/16] w-[52vw] max-w-[18rem] sm:w-[17rem]'
+			: 'aspect-[9/16] w-[46vw] max-w-[15rem] sm:w-[14rem]';
 	};
 
 	const randomItem = <T,>(items: T[]) => items[Math.floor(Math.random() * items.length)];

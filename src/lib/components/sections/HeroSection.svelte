@@ -23,8 +23,8 @@
 				</h1>
 
 				<p class="mt-7 max-w-2xl text-base leading-7 text-slate-300 md:text-lg">
-					Montage vidéo pour créateurs, streamers et businesses. Du contenu brut à une vidéo claire,
-					rythmée et pensée pour sa plateforme.
+					Portfolio de Palawi, monteur vidéo pour créateurs, streamers et businesses. Du contenu
+					brut à une vidéo claire, rythmée et pensée pour sa plateforme.
 				</p>
 
 				<div class="mt-9 flex flex-wrap gap-3">

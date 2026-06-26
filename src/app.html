@@ -7,6 +7,45 @@
 		<link rel="icon" href="/favicon.png" type="image/png" />
 		<link rel="shortcut icon" href="/favicon.png" />
 		<link rel="apple-touch-icon" href="/favicon.png" />
+		<style>
+			html:not([data-locale-ready]) body {
+				visibility: hidden;
+			}
+		</style>
+		<script>
+			(function () {
+				var storageKey = 'portfolio-locale';
+				var stored = localStorage.getItem(storageKey);
+				var locale = stored === 'en' || stored === 'fr' ? stored : null;
+
+				if (!locale) {
+					var languages =
+						navigator.languages && navigator.languages.length
+							? navigator.languages
+							: [navigator.language || 'fr'];
+
+					locale = 'fr';
+
+					for (var index = 0; index < languages.length; index += 1) {
+						var language = String(languages[index] || '').toLowerCase();
+
+						if (language.indexOf('en') === 0) {
+							locale = 'en';
+							break;
+						}
+
+						if (language.indexOf('fr') === 0) {
+							locale = 'fr';
+							break;
+						}
+					}
+				}
+
+				document.documentElement.lang = locale;
+				document.documentElement.dataset.initialLocale = locale;
+				document.documentElement.setAttribute('data-locale-ready', '');
+			})();
+		</script>
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">

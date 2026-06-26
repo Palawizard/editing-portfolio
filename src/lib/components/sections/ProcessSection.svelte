@@ -1,19 +1,21 @@
 <script lang="ts">
 	import Container from '$lib/components/ui/Container.svelte';
 	import SectionHeader from '$lib/components/ui/SectionHeader.svelte';
-	import { processSteps } from '$lib/content/services';
+	import { getLocaleContext } from '$lib/i18n/context';
+
+	const i18n = getLocaleContext();
 </script>
 
 <section class="border-y border-white/10 bg-slate-950/40 py-14 md:py-18">
 	<Container size="wide">
 		<SectionHeader
-			eyebrow="Méthode"
-			title="Une méthode simple, du brief à la livraison"
-			description="Un cadre clair pour avancer vite, garder la bonne direction et livrer un fichier prêt à publier."
+			eyebrow={i18n.content.ui.processSection.eyebrow}
+			title={i18n.content.ui.processSection.title}
+			description={i18n.content.ui.processSection.description}
 		/>
 
 		<div class="mt-9 grid gap-4 md:grid-cols-4">
-			{#each processSteps as step, index (step.title)}
+			{#each i18n.content.processSteps as step, index (step.title)}
 				<article
 					class="relative overflow-hidden rounded-[1.25rem] border border-white/10 bg-white/[0.035] p-6"
 				>

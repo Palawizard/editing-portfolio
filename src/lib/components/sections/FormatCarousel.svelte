@@ -10,8 +10,7 @@
 		Store,
 		WandSparkles
 	} from '@lucide/svelte';
-	import { editingFormats } from '$lib/content/formats';
-	import { projects } from '$lib/content/projects';
+	import { getLocaleContext } from '$lib/i18n/context';
 	import { getPublishedVideo } from '$lib/utils/media';
 	import type { ProjectCategory, ProjectChoice } from '$lib/types/project';
 
@@ -22,6 +21,7 @@
 	};
 
 	let { selected, onSelect, prominent = false }: Props = $props();
+	const i18n = getLocaleContext();
 	let carousel: HTMLDivElement;
 	let middleGroup: HTMLDivElement | undefined;
 	let animationFrame = 0;
@@ -39,17 +39,13 @@
 		poster?: string;
 	};
 
-	const choices = [
-		...editingFormats,
+	const choices = $derived([
+		...i18n.content.editingFormats,
 		{
 			id: 'custom' as const,
-			title: 'Commande personnalisée',
-			promise: 'Un format construit autour de ton idée.',
-			description:
-				'Tu as une référence précise ou un projet qui ne rentre pas dans une case ? On définit ensemble le rythme et la direction.',
-			highlights: ['Direction sur mesure', 'Format libre', 'Échange avant montage']
+			...i18n.content.customFormatChoice
 		}
-	];
+	]);
 
 	const getSegmentWidth = () => middleGroup?.offsetWidth ?? 0;
 
@@ -84,7 +80,7 @@
 	};
 
 	const getCategoryPreview = (category: ProjectCategory): CarouselPreview | undefined => {
-		const candidates = projects
+		const candidates = i18n.content.projects
 			.filter((project) => project.category === category)
 			.flatMap((project) => {
 				const video = getPublishedVideo(project.externalUrl);
@@ -114,7 +110,7 @@
 
 	const buildCategoryPreviews = () => {
 		categoryPreviews = Object.fromEntries(
-			editingFormats.map((format) => [format.id, getCategoryPreview(format.id)])
+			i18n.content.editingFormats.map((format) => [format.id, getCategoryPreview(format.id)])
 		);
 	};
 
@@ -283,12 +279,16 @@
 	});
 </script>
 
-<div class="relative overflow-x-clip" role="region" aria-label="Carrousel des styles de montage">
+<div
+	class="relative overflow-x-clip"
+	role="region"
+	aria-label={i18n.content.ui.formatCarousel.regionAriaLabel}
+>
 	<div class="absolute right-4 top-12 z-30 hidden gap-2 sm:flex">
 		<button
 			class="grid size-11 place-items-center rounded-full border border-white/15 bg-slate-950/80 text-white shadow-xl backdrop-blur-md transition hover:border-cyan-200/50 hover:bg-slate-900"
 			type="button"
-			aria-label="Voir les formats précédents"
+			aria-label={i18n.content.ui.formatCarousel.previousAriaLabel}
 			onclick={() => scrollCarousel(-1)}
 		>
 			<ChevronLeft size={19} aria-hidden="true" />
@@ -296,7 +296,7 @@
 		<button
 			class="grid size-11 place-items-center rounded-full border border-white/15 bg-slate-950/80 text-white shadow-xl backdrop-blur-md transition hover:border-cyan-200/50 hover:bg-slate-900"
 			type="button"
-			aria-label="Voir les formats suivants"
+			aria-label={i18n.content.ui.formatCarousel.nextAriaLabel}
 			onclick={() => scrollCarousel(1)}
 		>
 			<ChevronRight size={19} aria-hidden="true" />
@@ -309,7 +309,7 @@
 			'carousel-fade scrollbar-hidden -mx-5 flex overflow-x-auto px-5 pb-36 pt-8 -mb-28 sm:mx-0 sm:px-0',
 			locked ? 'snap-x snap-mandatory' : ''
 		]}
-		aria-label="Choisir un style de montage"
+		aria-label={i18n.content.ui.formatCarousel.chooseAriaLabel}
 		onscroll={keepInLoop}
 	>
 		{#each [0, 1, 2] as groupIndex (groupIndex)}
@@ -322,10 +322,10 @@
 					<button
 						data-choice={choice.id}
 						data-group={groupIndex}
-					class={[
-						'group relative shrink-0 snap-center overflow-hidden border text-left transition duration-500',
-						getCardSizeClass(choice.id, prominent),
-						prominent ? 'rounded-[1.75rem] p-8' : 'rounded-[1.4rem] p-6',
+						class={[
+							'group relative shrink-0 snap-center overflow-hidden border text-left transition duration-500',
+							getCardSizeClass(choice.id, prominent),
+							prominent ? 'rounded-[1.75rem] p-8' : 'rounded-[1.4rem] p-6',
 							locked && activeGroupIndex === groupIndex && selected === choice.id
 								? 'z-10 scale-[1.08] border-violet-200 bg-violet-300/[0.14] shadow-[0_28px_100px_rgb(81_49_150/0.42)]'
 								: 'border-white/10 bg-white/[0.035] hover:-translate-y-1 hover:border-white/25 hover:bg-white/[0.065]'

@@ -5,13 +5,9 @@
 	import ContactFormFields from '$lib/components/forms/ContactFormFields.svelte';
 	import TurnstileWidget from '$lib/components/forms/TurnstileWidget.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
-	import {
-		contactFormCopy,
-		contactStyleOptions,
-		emptyContactFormValues,
-		getContactStyleLabel
-	} from '$lib/content/contact';
-	import { projects } from '$lib/content/projects';
+	import { emptyContactFormValues } from '$lib/content/contact';
+	import { getContactStyleLabel } from '$lib/content/contact';
+	import { getLocaleContext } from '$lib/i18n/context';
 	import type {
 		ContactFormErrors,
 		ContactFormField,
@@ -35,6 +31,9 @@
 	};
 
 	let { formId = '', turnstileSiteKey = '', contactEmail = '' }: Props = $props();
+	const i18n = getLocaleContext();
+	const copy = $derived(i18n.content.contactFormCopy);
+	const styleOptions = $derived(i18n.content.contactStyleOptions);
 
 	let values = $state<ContactFormValues>({ ...emptyContactFormValues });
 	let errors = $state<ContactFormErrors>({});
@@ -49,16 +48,15 @@
 
 	const endpoint = $derived(formId ? `https://formspree.io/f/${formId}` : '');
 	const isConfigured = $derived(Boolean(endpoint && turnstileSiteKey));
-	const subjectTemplate = 'Nouvelle demande de montage de {{ name }}';
 
 	const isProjectChoice = (value: string): value is ProjectChoice =>
-		contactStyleOptions.some((option) => option.value === value);
+		styleOptions.some((option) => option.value === value);
 
 	const setContextFromUrl = () => {
 		const searchParams = new URLSearchParams(window.location.search);
 		const projectSlug = searchParams.get('project')?.trim() ?? '';
 		const style = searchParams.get('style')?.trim() ?? '';
-		const project = projects.find((entry) => entry.slug === projectSlug);
+		const project = i18n.content.projects.find((entry) => entry.slug === projectSlug);
 
 		if (project) {
 			values.projectSlug = project.slug;
@@ -90,19 +88,19 @@
 		const trimmedDescription = values.projectDescription.trim();
 
 		if (trimmedName.length < 2) {
-			nextErrors.name = 'Indique un nom ou un pseudo.';
+			nextErrors.name = copy.validation.name;
 		}
 
 		if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
-			nextErrors.email = 'Indique une adresse email valide.';
+			nextErrors.email = copy.validation.email;
 		}
 
 		if (!values.style) {
-			nextErrors.style = 'Choisis un type de montage.';
+			nextErrors.style = copy.validation.style;
 		}
 
 		if (trimmedDescription.length < 20) {
-			nextErrors.projectDescription = 'Décris ton projet en au moins 20 caractères.';
+			nextErrors.projectDescription = copy.validation.projectDescription;
 		}
 
 		return nextErrors;
@@ -145,7 +143,7 @@
 		const formData = new FormData(form);
 
 		if (turnstileSiteKey && !formData.get('cf-turnstile-response')) {
-			submitError = 'La vérification anti-spam est en cours. Attends un instant puis réessaie.';
+			submitError = copy.turnstilePending;
 			await focusResult();
 			return;
 		}
@@ -168,14 +166,14 @@
 			submissionSummary = {
 				name: values.name.trim(),
 				email: values.email.trim(),
-				style: getContactStyleLabel(values.style),
+				style: getContactStyleLabel(values.style, i18n.locale),
 				projectTitle: context.projectTitle,
 				budget: values.budget.trim() || undefined
 			};
 			isSuccess = true;
 			await focusResult();
 		} catch {
-			submitError = contactFormCopy.errorDescription;
+			submitError = copy.errorDescription;
 			await focusResult();
 		} finally {
 			isSubmitting = false;
@@ -197,10 +195,7 @@
 			console.warn(`Cloudflare Turnstile error: ${errorCode}`);
 		}
 
-		submitError =
-			errorCode === '110200'
-				? "La vérification anti-spam n'est pas autorisée sur ce domaine. Utilise l’adresse email de secours."
-				: 'La vérification anti-spam ne répond pas. Recharge la page ou utilise l’adresse email de secours.';
+		submitError = errorCode === '110200' ? copy.turnstileDomainError : copy.turnstileGenericError;
 	};
 </script>
 
@@ -215,33 +210,33 @@
 		<div class="grid size-12 place-items-center rounded-2xl bg-emerald-300/12 text-emerald-200">
 			<CheckCircle2 size={24} aria-hidden="true" />
 		</div>
-		<h2 class="mt-6 text-3xl font-bold text-white">{contactFormCopy.successTitle}</h2>
-		<p class="mt-3 max-w-2xl leading-7 text-slate-200">{contactFormCopy.successDescription}</p>
+		<h2 class="mt-6 text-3xl font-bold text-white">{copy.successTitle}</h2>
+		<p class="mt-3 max-w-2xl leading-7 text-slate-200">{copy.successDescription}</p>
 
 		<dl
 			class="mt-7 grid gap-3 rounded-2xl border border-white/10 bg-black/20 p-5 text-sm sm:grid-cols-2"
 		>
 			<div>
-				<dt class="text-slate-400">Contact</dt>
+				<dt class="text-slate-400">{copy.successFields.contact}</dt>
 				<dd class="mt-1 font-semibold text-white">{submissionSummary.name}</dd>
 			</div>
 			<div>
-				<dt class="text-slate-400">Email</dt>
+				<dt class="text-slate-400">{copy.successFields.email}</dt>
 				<dd class="mt-1 font-semibold text-white">{submissionSummary.email}</dd>
 			</div>
 			<div>
-				<dt class="text-slate-400">Type de montage</dt>
+				<dt class="text-slate-400">{copy.successFields.style}</dt>
 				<dd class="mt-1 font-semibold text-white">{submissionSummary.style}</dd>
 			</div>
 			{#if submissionSummary.projectTitle}
 				<div>
-					<dt class="text-slate-400">Projet de référence</dt>
+					<dt class="text-slate-400">{copy.successFields.referenceProject}</dt>
 					<dd class="mt-1 font-semibold text-white">{submissionSummary.projectTitle}</dd>
 				</div>
 			{/if}
 			{#if submissionSummary.budget}
 				<div>
-					<dt class="text-slate-400">Budget</dt>
+					<dt class="text-slate-400">{copy.successFields.budget}</dt>
 					<dd class="mt-1 font-semibold text-white">{submissionSummary.budget}</dd>
 				</div>
 			{/if}
@@ -249,7 +244,7 @@
 
 		<div class="mt-7 flex flex-col gap-3 sm:flex-row">
 			<Button href="/projets">
-				Voir les projets
+				{copy.viewProjects}
 				<ArrowRight size={18} aria-hidden="true" />
 			</Button>
 			<button
@@ -258,7 +253,7 @@
 				onclick={resetForm}
 			>
 				<RotateCcw size={17} aria-hidden="true" />
-				Envoyer une autre demande
+				{copy.sendAnother}
 			</button>
 		</div>
 	</div>
@@ -271,26 +266,24 @@
 		class="rounded-[1.5rem] border border-white/10 bg-white/[0.035] p-6 shadow-[var(--shadow-premium)] md:p-9"
 	>
 		<div>
-			<p class="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-200">
-				{contactFormCopy.eyebrow}
-			</p>
-			<h2 class="mt-4 text-3xl font-bold text-white">{contactFormCopy.title}</h2>
-			<p class="mt-3 max-w-2xl text-sm leading-6 text-slate-300">
-				{contactFormCopy.description}
-			</p>
+			<p class="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-200">{copy.eyebrow}</p>
+			<h2 class="mt-4 text-3xl font-bold text-white">{copy.title}</h2>
+			<p class="mt-3 max-w-2xl text-sm leading-6 text-slate-300">{copy.description}</p>
 		</div>
 
 		{#if context.style}
 			<div class="mt-7 rounded-xl border border-violet-300/20 bg-violet-300/[0.08] p-4">
 				<p class="text-sm font-semibold text-violet-100">
-					Tu demandes un montage de type {getContactStyleLabel(context.style)}.
+					{copy.contextPrefix}
+					{getContactStyleLabel(context.style, i18n.locale)}.
 				</p>
 				{#if context.projectTitle}
 					<p class="mt-1 text-sm text-slate-300">
-						Projet de référence : {context.projectTitle}
+						{copy.contextReference}
+						{context.projectTitle}
 					</p>
 				{/if}
-				<p class="mt-2 text-xs text-slate-400">Tu peux modifier ce choix dans le formulaire.</p>
+				<p class="mt-2 text-xs text-slate-400">{copy.contextHint}</p>
 			</div>
 		{/if}
 
@@ -298,10 +291,14 @@
 
 		<input type="hidden" name="project_slug" value={values.projectSlug} />
 		<input type="hidden" name="project_title" value={context.projectTitle ?? ''} />
-		<input type="hidden" name="style_label" value={getContactStyleLabel(values.style)} />
-		<input type="hidden" name="subject" value={subjectTemplate} />
+		<input
+			type="hidden"
+			name="style_label"
+			value={getContactStyleLabel(values.style, i18n.locale)}
+		/>
+		<input type="hidden" name="subject" value={copy.subjectTemplate} />
 		<div class="absolute -left-[10000px]" aria-hidden="true">
-			<label for="companyWebsite">Ne pas remplir ce champ</label>
+			<label for="companyWebsite">{copy.honeypotLabel}</label>
 			<input id="companyWebsite" name="_gotcha" type="text" tabindex="-1" autocomplete="off" />
 		</div>
 
@@ -319,7 +316,7 @@
 				role="alert"
 				aria-live="assertive"
 			>
-				<p class="font-semibold text-rose-100">{contactFormCopy.errorTitle}</p>
+				<p class="font-semibold text-rose-100">{copy.errorTitle}</p>
 				<p class="mt-1 text-sm leading-6 text-slate-200">{submitError}</p>
 			</div>
 		{/if}
@@ -328,31 +325,31 @@
 			<div
 				class="mt-6 rounded-xl border border-amber-200/20 bg-amber-200/[0.06] p-4 text-sm leading-6 text-slate-200"
 			>
-				<p>{contactFormCopy.unavailable}</p>
+				<p>{copy.unavailable}</p>
 			</div>
 		{/if}
 
 		<div
 			class="mt-7 flex flex-col gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between"
 		>
-			<p class="max-w-md text-xs leading-5 text-slate-400">{contactFormCopy.privacy}</p>
+			<p class="max-w-md text-xs leading-5 text-slate-400">{copy.privacy}</p>
 			<button
 				type="submit"
 				class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-violet-300 px-6 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-violet-950/35 transition hover:bg-violet-200 disabled:pointer-events-none disabled:opacity-50"
 				disabled={isSubmitting || !isConfigured}
 			>
 				<Send size={17} aria-hidden="true" />
-				{isSubmitting ? contactFormCopy.submittingLabel : contactFormCopy.submitLabel}
+				{isSubmitting ? copy.submittingLabel : copy.submitLabel}
 			</button>
 		</div>
 
 		{#if contactEmail}
 			<p class="mt-5 flex flex-wrap items-center gap-2 text-sm text-slate-400">
 				<Mail size={16} aria-hidden="true" />
-				Une difficulté avec le formulaire ?
+				{copy.emailFallbackLead}
 				<!-- eslint-disable svelte/no-navigation-without-resolve -- Mailto is an external protocol. -->
 				<a class="font-semibold text-cyan-100 hover:text-cyan-50" href={`mailto:${contactEmail}`}>
-					Écrire par email
+					{copy.emailFallbackAction}
 				</a>
 				<!-- eslint-enable svelte/no-navigation-without-resolve -->
 			</p>

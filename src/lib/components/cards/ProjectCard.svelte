@@ -1,7 +1,7 @@
 <script lang="ts">
 	import VideoPreview from '$lib/components/media/VideoPreview.svelte';
 	import Badge from '$lib/components/ui/Badge.svelte';
-	import { projectCategoryLabels } from '$lib/content/formats';
+	import { getLocaleContext } from '$lib/i18n/context';
 	import { getPublishedVideo } from '$lib/utils/media';
 	import type { Project } from '$lib/types/project';
 
@@ -14,6 +14,7 @@
 	};
 
 	let { project, compact = false, index = 0, minimal = false, autoplay = false }: Props = $props();
+	const i18n = getLocaleContext();
 	const mediaAspect = $derived(project.format === '9:16' ? 'vertical' : 'video');
 	const publishedVideo = $derived(getPublishedVideo(project.externalUrl));
 	const inlineVideoSrc = $derived(project.previewVideo ?? publishedVideo?.directUrl);
@@ -64,7 +65,7 @@
 	<div class="p-6">
 		{#if !minimal}
 			<div class="flex flex-wrap items-center gap-2">
-				<Badge tone="accent">{projectCategoryLabels[project.category]}</Badge>
+				<Badge tone="accent">{i18n.content.projectCategoryLabels[project.category]}</Badge>
 				<span class="text-sm text-slate-400">{project.format}</span>
 			</div>
 		{/if}
@@ -72,7 +73,9 @@
 		<h3 class={[minimal ? '' : 'mt-5', 'text-2xl font-bold text-balance text-white']}>
 			{project.title}
 		</h3>
-		<p class="mt-3 text-sm leading-6 text-slate-300">{project.summary}</p>
+		{#if !minimal}
+			<p class="mt-3 text-sm leading-6 text-slate-300">{project.summary}</p>
+		{/if}
 
 		{#if !minimal}
 			<p class="mt-6 text-sm text-slate-400">{project.platform.join(' / ')}</p>

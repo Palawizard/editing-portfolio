@@ -59,14 +59,14 @@ Le formulaire reste sur une seule page. Un formulaire en plusieurs étapes serai
 
 Champs recommandés :
 
-1. `Nom ou pseudo` — obligatoire.
-2. `Email` — obligatoire.
-3. `Type de montage` — obligatoire et prérempli si possible.
-4. `Décris ton projet` — obligatoire.
-5. `Durée et volume des rushs` — facultatif mais visible.
-6. `Date souhaitée` — facultative.
-7. `Budget` — champ libre facultatif pour indiquer un montant ou une fourchette.
-8. `Liens utiles` — références, rushs cloud, chaîne ou publication existante.
+1. `Nom ou pseudo` - obligatoire.
+2. `Email` - obligatoire.
+3. `Type de montage` - obligatoire et prérempli si possible.
+4. `Décris ton projet` - obligatoire.
+5. `Durée et volume des rushs` - facultatif mais visible.
+6. `Date souhaitée` - facultative.
+7. `Budget` - champ libre facultatif pour indiquer un montant ou une fourchette.
+8. `Liens utiles` - références, rushs cloud, chaîne ou publication existante.
 
 Le champ `Type de montage` contient :
 
@@ -256,26 +256,26 @@ Le service pourrait ensuite être ajouté comme second conteneur dans Docker Com
 
 ## Plan d'implémentation
 
-### Sous-étape 1 — Contenu et parcours
+### Sous-étape 1 - Contenu et parcours
 
 - Ajouter les champs et textes dans `src/lib/content`.
 - Faire transmettre `style` et `project` depuis les CTA.
 - Préremplir le formulaire depuis l'URL.
 
-### Sous-étape 2 — Formulaire accessible
+### Sous-étape 2 - Formulaire accessible
 
 - Créer un composant `ContactForm.svelte`.
 - Ajouter validation, erreurs, chargement et succès.
 - Conserver une soumission HTML standard comme solution de secours.
 
-### Sous-étape 3 — Formspree et Turnstile
+### Sous-étape 3 - Formspree et Turnstile
 
 - Créer le formulaire Formspree.
 - Restreindre le domaine.
 - Configurer Turnstile.
 - Ajouter les variables publiques au déploiement.
 
-### Sous-étape 4 — Qualité
+### Sous-étape 4 - Qualité
 
 - Tester clavier et lecteur d'écran.
 - Tester une erreur réseau.

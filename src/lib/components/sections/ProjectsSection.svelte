@@ -4,9 +4,12 @@
 	import Container from '$lib/components/ui/Container.svelte';
 	import SectionHeader from '$lib/components/ui/SectionHeader.svelte';
 	import { getLocaleContext } from '$lib/i18n/context';
+	import { sortProjectsByPrice } from '$lib/utils/pricing';
 
 	const i18n = getLocaleContext();
-	const featuredProjects = $derived(i18n.content.projects.filter((project) => project.featured));
+	const featuredProjects = $derived(
+		sortProjectsByPrice(i18n.content.projects.filter((project) => project.featured))
+	);
 </script>
 
 <section class="py-20 md:py-28">

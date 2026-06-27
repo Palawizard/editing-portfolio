@@ -5,7 +5,8 @@ import {
 	buildContactPrefill,
 	calculatePriceEstimate,
 	getContextualEstimateQuestion,
-	isEstimateQuestionVisible
+	isEstimateQuestionVisible,
+	sanitizeEstimateAnswers
 } from './estimate';
 
 const completeAnswers = (overrides: Partial<EstimateAnswers> = {}): EstimateAnswers => ({
@@ -19,6 +20,7 @@ const completeAnswers = (overrides: Partial<EstimateAnswers> = {}): EstimateAnsw
 	footageDuration: 'lt-15',
 	finalDuration: '30-60s',
 	shortsCount: '1',
+	shortDuration: '30-60s',
 	sources: '1',
 	editingLevel: 'simple',
 	styleReference: 'example',
@@ -62,6 +64,7 @@ describe('calculatePriceEstimate', () => {
 			footageDuration: '2-4',
 			finalDuration: '15-30m',
 			shortsCount: '6-10',
+			shortDuration: '30-60s',
 			sources: '3',
 			editingLevel: 'premium',
 			subtitles: 'word',
@@ -78,6 +81,28 @@ describe('calculatePriceEstimate', () => {
 
 		expect(complex.minimum).toBeGreaterThan(simple.maximum * 5);
 		expect(complex.maximum).toBeGreaterThan(relaxedDeadline.maximum);
+	});
+
+	it('uses the dedicated short duration for hybrid long-form projects', () => {
+		const shortClips = calculatePriceEstimate(
+			completeAnswers({
+				projectType: 'gaming-long-shorts',
+				finalDuration: '8-15m',
+				shortsCount: '4-5',
+				shortDuration: 'lt-30s'
+			})
+		);
+		const longerClips = calculatePriceEstimate(
+			completeAnswers({
+				projectType: 'gaming-long-shorts',
+				finalDuration: '8-15m',
+				shortsCount: '4-5',
+				shortDuration: '1-3m'
+			})
+		);
+
+		expect(longerClips.minimum).toBeGreaterThan(shortClips.minimum);
+		expect(longerClips.estimatedHours).toBeGreaterThan(shortClips.estimatedHours);
 	});
 
 	it('widens uncertainty when key values are unknown', () => {
@@ -117,6 +142,9 @@ describe('calculatePriceEstimate', () => {
 describe('questionnaire flow and prefill', () => {
 	it('shows short and UGC questions only when relevant', () => {
 		const shortsCount = estimateCopy.questions.find((question) => question.id === 'shortsCount')!;
+		const shortDuration = estimateCopy.questions.find(
+			(question) => question.id === 'shortDuration'
+		)!;
 		const ugcAssets = estimateCopy.questions.find((question) => question.id === 'ugcAssets')!;
 
 		expect(
@@ -126,32 +154,45 @@ describe('questionnaire flow and prefill', () => {
 			isEstimateQuestionVisible(shortsCount, completeAnswers({ projectType: 'gaming-long-shorts' }))
 		).toBe(true);
 		expect(
+			isEstimateQuestionVisible(
+				shortDuration,
+				completeAnswers({ projectType: 'gaming-long-shorts' })
+			)
+		).toBe(true);
+		expect(
+			isEstimateQuestionVisible(shortDuration, completeAnswers({ projectType: 'gaming-clip' }))
+		).toBe(false);
+		expect(
 			isEstimateQuestionVisible(ugcAssets, completeAnswers({ projectType: 'ugc-shorts' }))
 		).toBe(true);
 	});
 
-	it('does not ask where shorts come from when the project type already answers it', () => {
+	it('infers the shorts source but asks for useful scripted-rush details', () => {
 		const shortsSource = estimateCopy.questions.find((question) => question.id === 'shortsSource')!;
 		const moments = estimateCopy.questions.find((question) => question.id === 'moments')!;
 		const longWithShorts = completeAnswers({ projectType: 'gaming-long-shorts' });
-		const scriptedShorts = completeAnswers({ projectType: 'scripted-rush-shorts' });
+		const structure = estimateCopy.questions.find((question) => question.id === 'structure')!;
+		const scriptedShorts = completeAnswers({
+			projectType: 'scripted-rush-shorts',
+			providedFiles: ['raw', 'script']
+		});
 
 		expect(isEstimateQuestionVisible(shortsSource, longWithShorts)).toBe(false);
 		expect(isEstimateQuestionVisible(moments, longWithShorts)).toBe(true);
 		expect(isEstimateQuestionVisible(shortsSource, scriptedShorts)).toBe(false);
-		expect(isEstimateQuestionVisible(moments, scriptedShorts)).toBe(false);
+		expect(isEstimateQuestionVisible(structure, scriptedShorts)).toBe(true);
+		expect(isEstimateQuestionVisible(moments, scriptedShorts)).toBe(true);
 	});
 
-	it('does not ask about a script for clip-based or already scripted projects', () => {
+	it('keeps structure hidden only for routes where it is already irrelevant', () => {
 		const structure = estimateCopy.questions.find((question) => question.id === 'structure')!;
 
-		for (const projectType of [
-			'gaming-clip',
-			'shorts-from-long',
-			'scripted-rush-shorts'
-		] as const) {
+		for (const projectType of ['gaming-clip', 'shorts-from-long'] as const) {
 			expect(isEstimateQuestionVisible(structure, completeAnswers({ projectType }))).toBe(false);
 		}
+		expect(
+			isEstimateQuestionVisible(structure, completeAnswers({ projectType: 'scripted-rush-shorts' }))
+		).toBe(true);
 		expect(
 			isEstimateQuestionVisible(structure, completeAnswers({ projectType: 'gaming-long-shorts' }))
 		).toBe(true);
@@ -183,15 +224,65 @@ describe('questionnaire flow and prefill', () => {
 		expect(
 			isEstimateQuestionVisible(
 				moments,
-				completeAnswers({ projectType: 'ugc-shorts', shortsSource: 'from-scratch' })
+				completeAnswers({
+					projectType: 'gaming-long-shorts',
+					providedFiles: ['script', 'voice-over']
+				})
 			)
 		).toBe(false);
 		expect(
 			isEstimateQuestionVisible(
 				moments,
-				completeAnswers({ projectType: 'ugc-shorts', shortsSource: 'long-rushes' })
+				completeAnswers({ projectType: 'gaming-long-shorts', providedFiles: ['raw'] })
 			)
 		).toBe(true);
+		for (const projectType of [
+			'gaming-long-shorts',
+			'other-long-shorts',
+			'shorts-from-long'
+		] as const) {
+			expect(
+				isEstimateQuestionVisible(
+					moments,
+					completeAnswers({ projectType, providedFiles: ['editing-project'] })
+				)
+			).toBe(false);
+		}
+	});
+
+	it('asks source count only for footage that may need synchronization', () => {
+		const sources = estimateCopy.questions.find((question) => question.id === 'sources')!;
+
+		expect(isEstimateQuestionVisible(sources, completeAnswers({ providedFiles: ['raw'] }))).toBe(
+			true
+		);
+		for (const providedFiles of [['script'], ['voice-over'], ['editing-project'], ['assets']]) {
+			expect(isEstimateQuestionVisible(sources, completeAnswers({ providedFiles }))).toBe(false);
+		}
+	});
+
+	it('hides non-temporal material duration and adapts wording for timed files', () => {
+		const footageDuration = estimateCopy.questions.find(
+			(question) => question.id === 'footageDuration'
+		)!;
+
+		expect(
+			isEstimateQuestionVisible(footageDuration, completeAnswers({ providedFiles: ['script'] }))
+		).toBe(false);
+		expect(
+			getContextualEstimateQuestion(
+				footageDuration,
+				completeAnswers({ providedFiles: ['editing-project'] }),
+				estimateCopy.contextualQuestions
+			).title
+		).toContain('projet à reprendre');
+		expect(
+			getContextualEstimateQuestion(
+				footageDuration,
+				completeAnswers({ providedFiles: ['voice-over'] }),
+				estimateCopy.contextualQuestions
+			).title
+		).toContain('voix off');
 	});
 
 	it('clarifies whether duration refers to the long video or each short', () => {
@@ -240,21 +331,62 @@ describe('questionnaire flow and prefill', () => {
 		expect(values).toEqual(['complete', 'idea']);
 	});
 
-	it('does not ask for UGC assets that were already declared', () => {
+	it('separates UGC footage from the UGC assets inventory', () => {
+		const providedFiles = estimateCopy.questions.find(
+			(question) => question.id === 'providedFiles'
+		)!;
 		const ugcAssets = estimateCopy.questions.find((question) => question.id === 'ugcAssets')!;
-		const contextualQuestion = getContextualEstimateQuestion(
-			ugcAssets,
-			completeAnswers({
-				projectType: 'ugc-shorts',
-				providedFiles: ['script', 'voice-over']
-			}),
+		const contextualFiles = getContextualEstimateQuestion(
+			providedFiles,
+			completeAnswers({ projectType: 'ugc-shorts' }),
 			estimateCopy.contextualQuestions
 		);
-		const values = contextualQuestion.options?.map((option) => option.value);
+		const fileValues = contextualFiles.options?.map((option) => option.value);
+		const assetValues = ugcAssets.options?.map((option) => option.value);
 
-		expect(contextualQuestion.title).toContain('autres éléments');
-		expect(values).not.toContain('script');
-		expect(values).not.toContain('voice-over');
+		expect(contextualFiles.title).toContain('rushs ou un projet de montage');
+		expect(fileValues).not.toContain('script');
+		expect(fileValues).not.toContain('voice-over');
+		expect(fileValues).not.toContain('assets');
+		expect(fileValues).toContain('none');
+		expect(assetValues).toContain('script');
+		expect(assetValues).toContain('voice-over');
+	});
+
+	it('clears hidden and no-longer-available answers after a route change', () => {
+		const ugcAnswers = completeAnswers({
+			projectType: 'ugc-shorts',
+			providedFiles: ['raw', 'script', 'voice-over'],
+			ugcAssets: ['script', 'facecam'],
+			footageDuration: '30-60',
+			sources: '3',
+			moments: 'find'
+		});
+		const sanitizedUgc = sanitizeEstimateAnswers(
+			ugcAnswers,
+			estimateCopy.questions,
+			estimateCopy.contextualQuestions
+		);
+
+		expect(sanitizedUgc.providedFiles).toEqual(['raw']);
+		expect(sanitizedUgc.ugcAssets).toEqual(['script', 'facecam']);
+
+		const changedRoute = sanitizeEstimateAnswers(
+			{
+				...sanitizedUgc,
+				projectType: 'gaming-long',
+				providedFiles: ['script']
+			},
+			estimateCopy.questions,
+			estimateCopy.contextualQuestions
+		);
+
+		expect(changedRoute.ugcAssets).toEqual([]);
+		expect(changedRoute.footageDuration).toBe('');
+		expect(changedRoute.sources).toBe('');
+		expect(changedRoute.moments).toBe('');
+		expect(changedRoute.shortsCount).toBe('');
+		expect(changedRoute.shortDuration).toBe('');
 	});
 
 	it('keeps a non-email contact method in the request description', () => {
@@ -296,5 +428,19 @@ describe('questionnaire flow and prefill', () => {
 		expect(prefill.projectDescription).toContain('3 à 5 jours');
 		expect(prefill.projectDescription).toContain('4K');
 		expect(prefill.projectDescription).toContain('Fichiers de projet à livrer: Oui');
+	});
+
+	it('transfers both long-form and short durations for hybrid projects', () => {
+		const answers = completeAnswers({
+			projectType: 'gaming-long-shorts',
+			finalDuration: '8-15m',
+			shortsCount: '2-3',
+			shortDuration: 'lt-30s'
+		});
+		const estimate = calculatePriceEstimate(answers);
+		const prefill = buildContactPrefill(answers, estimate, estimateCopy.questions, 'fr');
+
+		expect(prefill.footageDetails).toContain('Durée finale: 8 à 15 minutes');
+		expect(prefill.footageDetails).toContain('Durée moyenne de chaque short: Moins de 30 secondes');
 	});
 });

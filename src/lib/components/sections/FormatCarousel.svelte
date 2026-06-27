@@ -12,7 +12,7 @@
 	} from '@lucide/svelte';
 	import LazyAutoplayVideo from '$lib/components/media/LazyAutoplayVideo.svelte';
 	import PriceBadge from '$lib/components/ui/PriceBadge.svelte';
-	import { categoryStartingPrices, getProjectPricing } from '$lib/content/project-pricing';
+	import { categoryStartingPrices } from '$lib/content/project-pricing';
 	import {
 		initialCategoryAutoplayPreviews,
 		selectRandomCategoryAutoplayPreviews
@@ -318,8 +318,10 @@
 					{@const previewIsActive = Boolean(
 						preview && activePreviewGroupIndex === groupIndex && activePreviewChoice === choice.id
 					)}
-					{@const previewPrice = preview
-						? formatProjectPrice(getProjectPricing(preview.slug), i18n.locale)
+					{@const startingPrice =
+						choice.id === 'custom' ? undefined : categoryStartingPrices[choice.id]}
+					{@const startingPriceLabel = startingPrice
+						? `${i18n.content.ui.media.startingPriceLabel} ${formatProjectPrice(startingPrice, i18n.locale)}`
 						: undefined}
 					<button
 						data-choice={choice.id}
@@ -365,10 +367,10 @@
 							></span>
 						{/if}
 
-						{#if previewPrice}
+						{#if startingPriceLabel}
 							<PriceBadge
-								price={previewPrice}
-								ariaLabel={`${i18n.content.ui.media.priceLabel} : ${previewPrice}`}
+								price={startingPriceLabel}
+								ariaLabel={startingPriceLabel}
 								size={prominent ? 'md' : 'sm'}
 								class={prominent ? 'absolute right-3 top-3 z-20' : 'absolute right-2.5 top-2.5 z-20'}
 							/>

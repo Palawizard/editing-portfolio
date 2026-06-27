@@ -142,7 +142,6 @@
 
 	<div>
 		<label class={labelClasses} for="budget">{copy.fields.budget}</label>
-		<p id="budget-help" class="mt-1 text-xs leading-5 text-slate-400">{copy.fields.budgetHelp}</p>
 		<input
 			class={fieldClasses}
 			id="budget"
@@ -152,7 +151,6 @@
 			maxlength="80"
 			placeholder={copy.fields.budgetPlaceholder}
 			bind:value={values.budget}
-			aria-describedby="budget-help"
 		/>
 	</div>
 

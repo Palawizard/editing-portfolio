@@ -148,6 +148,7 @@ export type UiCopy = {
 		customCta: string;
 		orderStyle: string;
 		emptyState: string;
+		priceDisclaimer: string;
 	};
 	contactPage: {
 		eyebrow: string;

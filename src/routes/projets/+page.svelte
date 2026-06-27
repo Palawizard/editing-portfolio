@@ -89,11 +89,16 @@
 						</div>
 					</div>
 				{:else}
-					<div class="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+					<div class="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
 						<div>
 							<h2 class="display-title text-4xl text-white md:text-6xl">{selectedLabel}</h2>
+							{#if filteredProjects.length}
+								<p class="mt-4 max-w-2xl text-sm leading-6 text-slate-400" role="note">
+									{i18n.content.ui.projectsPage.priceDisclaimer}
+								</p>
+							{/if}
 						</div>
-						<Button href={getContactStyleHref(selectedChoice)} variant="secondary">
+						<Button href={getContactStyleHref(selectedChoice)} variant="secondary" class="shrink-0">
 							{i18n.content.ui.projectsPage.orderStyle}
 						</Button>
 					</div>

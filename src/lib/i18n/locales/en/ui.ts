@@ -88,7 +88,9 @@ export const uiBundle = {
 		customCta: 'Talk about my project',
 		orderStyle: 'Order this style',
 		emptyState:
-			'No published example for this style yet. You can still send a reference to define a suitable result.'
+			'No published example for this style yet. You can still send a reference to define a suitable result.',
+		priceDisclaimer:
+			'Prices shown on the examples are indicative. They reflect the fee paid for the original commission behind each video and may vary depending on your project.'
 	},
 	contactPage: {
 		eyebrow: 'Contact',

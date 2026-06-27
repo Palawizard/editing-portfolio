@@ -42,7 +42,7 @@
 	let activePreviewGroupIndex = $state(1);
 	let activePreviewChoice = $state<ProjectCategory | undefined>('gaming-long-form');
 	let selectedCategoryPreviews = $state(initialCategoryAutoplayPreviews);
-	let previewScrollTimeout: ReturnType<typeof setTimeout> | undefined;
+	let previewUpdateFrame = 0;
 
 	const getChoicePrice = (choice: ProjectChoice) =>
 		choice === 'custom' ? Number.POSITIVE_INFINITY : categoryStartingPrices[choice].minimum;
@@ -102,10 +102,12 @@
 			carousel.scrollLeft -= segmentWidth;
 			pendingDistance = 0;
 			if (activeGroupIndex !== undefined) activeGroupIndex -= 1;
+			scheduleActivePreviewUpdate();
 		} else if (carousel.scrollLeft < segmentWidth * 0.15) {
 			carousel.scrollLeft += segmentWidth;
 			pendingDistance = 0;
 			if (activeGroupIndex !== undefined) activeGroupIndex += 1;
+			scheduleActivePreviewUpdate();
 		}
 	};
 
@@ -156,20 +158,14 @@
 	};
 
 	const scheduleActivePreviewUpdate = (immediate = false) => {
-		if (previewScrollTimeout) {
-			clearTimeout(previewScrollTimeout);
-			previewScrollTimeout = undefined;
-		}
+		cancelAnimationFrame(previewUpdateFrame);
 
 		if (immediate) {
 			updateActivePreview();
 			return;
 		}
 
-		previewScrollTimeout = setTimeout(() => {
-			previewScrollTimeout = undefined;
-			updateActivePreview();
-		}, 140);
+		previewUpdateFrame = requestAnimationFrame(updateActivePreview);
 	};
 
 	const handleCarouselScroll = () => {
@@ -205,6 +201,7 @@
 				carousel.scrollLeft += wholePixels;
 				pendingDistance -= wholePixels;
 				keepInLoop();
+				scheduleActivePreviewUpdate();
 			}
 		}
 
@@ -282,7 +279,7 @@
 
 		return () => {
 			cancelAnimationFrame(animationFrame);
-			if (previewScrollTimeout) clearTimeout(previewScrollTimeout);
+			cancelAnimationFrame(previewUpdateFrame);
 			if (centeringTimeout) clearTimeout(centeringTimeout);
 			window.removeEventListener('resize', handleResize);
 		};
@@ -317,7 +314,7 @@
 		<div
 			bind:this={carousel}
 			class={[
-				'carousel-track scrollbar-hidden -mx-5 flex overflow-x-auto px-5 pb-36 pt-8 -mb-28 sm:mx-0 sm:px-0',
+				'carousel-track scrollbar-hidden -mx-5 flex items-center overflow-x-auto px-5 pb-20 pt-8 -mb-12 sm:mx-0 sm:px-0',
 				locked ? 'snap-x snap-mandatory' : ''
 			]}
 			aria-label={i18n.content.ui.formatCarousel.chooseAriaLabel}
@@ -347,8 +344,8 @@
 							getCardSizeClass(choice.id, prominent),
 							prominent ? 'rounded-[1.75rem] p-8' : 'rounded-[1.4rem] p-6',
 							locked && activeGroupIndex === groupIndex && selected === choice.id
-								? 'z-10 scale-[1.08] border-violet-200 bg-violet-300/[0.14] shadow-[0_28px_100px_rgb(81_49_150/0.42)]'
-								: 'border-white/10 bg-white/[0.035] hover:-translate-y-1 hover:border-white/25 hover:bg-white/[0.065]'
+								? 'z-10 scale-[1.05] border-violet-200 bg-violet-300/[0.14] shadow-[0_14px_48px_rgb(81_49_150/0.28)]'
+								: 'border-white/10 bg-white/[0.035] hover:border-white/25 hover:bg-white/[0.065]'
 						]}
 						type="button"
 						aria-pressed={locked && activeGroupIndex === groupIndex && selected === choice.id}
@@ -394,13 +391,13 @@
 
 						<span
 							class={[
-								'pointer-events-none absolute -right-12 -top-12 size-56 rounded-full transition-opacity duration-300',
+								'pointer-events-none absolute -right-8 -top-8 size-40 rounded-full transition-opacity duration-300',
 								choice.id === 'custom'
-									? 'bg-[radial-gradient(circle,rgb(103_232_249/0.22),transparent_68%)]'
-									: 'bg-[radial-gradient(circle,rgb(167_139_250/0.24),transparent_68%)]',
+									? 'bg-[radial-gradient(circle,rgb(103_232_249/0.16),transparent_70%)]'
+									: 'bg-[radial-gradient(circle,rgb(167_139_250/0.18),transparent_70%)]',
 								locked && activeGroupIndex === groupIndex && selected === choice.id
-									? 'opacity-100'
-									: 'opacity-40 group-hover:opacity-70'
+									? 'opacity-90'
+									: 'opacity-35 group-hover:opacity-55'
 							]}
 						></span>
 
@@ -473,7 +470,7 @@
 	.carousel-edge-fade {
 		position: absolute;
 		top: 2rem;
-		bottom: 7rem;
+		bottom: 5rem;
 		z-index: 20;
 		width: var(--carousel-fade-width);
 		pointer-events: none;
@@ -512,14 +509,14 @@
 		45% {
 			opacity: 1;
 			box-shadow:
-				inset 0 0 28px rgb(196 181 253 / 0.16),
-				0 0 24px rgb(139 92 246 / 0.22);
+				inset 0 0 18px rgb(196 181 253 / 0.12),
+				0 0 16px rgb(139 92 246 / 0.16);
 		}
 		100% {
 			opacity: 0.62;
 			box-shadow:
-				inset 0 0 24px rgb(196 181 253 / 0.12),
-				0 0 20px rgb(139 92 246 / 0.16);
+				inset 0 0 14px rgb(196 181 253 / 0.1),
+				0 0 12px rgb(139 92 246 / 0.12);
 		}
 	}
 
@@ -547,8 +544,8 @@
 	.preview-focus-ring-active {
 		opacity: 0.62;
 		box-shadow:
-			inset 0 0 24px rgb(196 181 253 / 0.12),
-			0 0 20px rgb(139 92 246 / 0.16);
+			inset 0 0 14px rgb(196 181 253 / 0.1),
+			0 0 12px rgb(139 92 246 / 0.12);
 		animation: preview-ring-focus 620ms ease-out both;
 	}
 

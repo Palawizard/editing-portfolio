@@ -22,7 +22,6 @@ export const categoryAutoplayPreviews: Record<ProjectCategory, AutoplayPreview[]
 	'gaming-long-form': [
 		definePreview('miyuna-retour-gaming-long', 'gaming', 'video'),
 		definePreview('genshin-whale-accident-long', 'gaming', 'video'),
-		definePreview('miyuna-model-reveal-best-of', 'gaming', 'video'),
 		definePreview('palawi-fireball-long', 'gaming', 'video'),
 		definePreview('carry-the-glass-long', 'gaming', 'video'),
 		definePreview('funky-beau-fils-long', 'gaming', 'video')
@@ -46,7 +45,10 @@ export const categoryAutoplayPreviews: Record<ProjectCategory, AutoplayPreview[]
 		definePreview('smash', 'business', 'vertical'),
 		definePreview('tacos', 'business', 'vertical')
 	],
-	'other-format': [definePreview('funky-live-cuisine-other', 'other', 'video')]
+	'other-format': [
+		definePreview('miyuna-model-reveal-best-of', 'gaming', 'video'),
+		definePreview('funky-live-cuisine-other', 'other', 'video')
+	]
 };
 
 export const initialCategoryAutoplayPreviews = Object.fromEntries(

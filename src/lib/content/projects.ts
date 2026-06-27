@@ -102,7 +102,7 @@ export const projects: Project[] = [
 		slug: 'miyuna-model-reveal-best-of',
 		referenceId: 'gaming_long_miyuna_model_reveal_best_of',
 		title: 'Best-of MiyunaTV reveal nouveau modèle 2D (en attendant le 3D)',
-		category: 'gaming-long-form',
+		category: 'other-format',
 		summary: 'Un best-of de live pensé pour garder les réactions et les moments importants.',
 		objective:
 			'Transformer un contenu live en vidéo YouTube plus directe et plus facile à regarder.',

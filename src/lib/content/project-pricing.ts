@@ -28,7 +28,7 @@ const pricingGroups: Array<{
 		maximum: 15
 	},
 	{ slugs: restaurantPromotionProjectSlugs, minimum: 20, maximum: 20 },
-	{ slugs: ['business-ugc-short'], minimum: 5, maximum: 10 },
+	{ slugs: ['business-ugc-short'], minimum: 10, maximum: 10 },
 	{ slugs: ['rant-explicatif-drive'], minimum: 10, maximum: 15 },
 	{ slugs: ['funky-live-cuisine-other'], minimum: 40, maximum: 50 },
 	{
@@ -55,9 +55,9 @@ const defineStartingPrice = (amount: number): ProjectPricing => ({
 export const categoryStartingPrices: Record<ProjectCategory, ProjectPricing> = {
 	'gaming-short-form': defineStartingPrice(5),
 	'explainer-short-form': defineStartingPrice(10),
-	'business-promo': defineStartingPrice(15),
-	'gaming-long-form': defineStartingPrice(25),
-	'other-format': defineStartingPrice(25)
+	'business-promo': defineStartingPrice(10),
+	'gaming-long-form': defineStartingPrice(20),
+	'other-format': defineStartingPrice(20)
 };
 
 export const getProjectPricing = (slug: string): ProjectPricing => {

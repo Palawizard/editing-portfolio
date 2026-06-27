@@ -91,7 +91,9 @@ export const uiBundle = {
 		customCta: 'Parler de mon projet',
 		orderStyle: 'Commander ce style',
 		emptyState:
-			'Aucun exemple publié pour ce style pour le moment. Tu peux quand même envoyer une référence pour définir un rendu adapté.'
+			'Aucun exemple publié pour ce style pour le moment. Tu peux quand même envoyer une référence pour définir un rendu adapté.',
+		priceDisclaimer:
+			'Les prix affichés sur les exemples sont indicatifs. Ils reprennent le tarif des prestations d’origine ayant permis de réaliser chaque vidéo, et peuvent varier selon ton projet.'
 	},
 	contactPage: {
 		eyebrow: 'Contact',
@@ -125,7 +127,7 @@ export const uiBundle = {
 		metaDescription:
 			'Choisis entre une estimation rapide de ton projet ou un message direct pour présenter ton montage.',
 		eyebrow: 'Prochaine étape',
-		title: 'Comment veux-tu avancer ?',
+		title: 'Par quoi veux-tu commencer ?',
 		description:
 			'Une estimation te donne une fourchette indicative en quelques questions. Le contact te permet d’envoyer directement ton brief.',
 		estimateTitle: 'Estimation',

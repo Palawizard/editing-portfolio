@@ -41,7 +41,7 @@ describe('project pricing', () => {
 			'cs2-totem-short': [10, 15],
 			'cs2-peur-short': [10, 15],
 			'cs2-type-bizarre-short': [10, 15],
-			'business-ugc-short': [5, 10],
+			'business-ugc-short': [10, 10],
 			'rant-explicatif-drive': [10, 15],
 			'funky-live-cuisine-other': [40, 50],
 			'miyuna-retour-gaming-long': [45, 55],
@@ -73,9 +73,9 @@ describe('project pricing', () => {
 		).toEqual({
 			'gaming-short-form': 5,
 			'explainer-short-form': 10,
-			'business-promo': 15,
-			'gaming-long-form': 25,
-			'other-format': 25
+			'business-promo': 10,
+			'gaming-long-form': 20,
+			'other-format': 20
 		});
 	});
 
@@ -95,6 +95,7 @@ describe('project pricing', () => {
 	});
 
 	it('formats approximate ranges, fixed estimates and starting amounts', () => {
+		expect(formatProjectPrice(getProjectPricing('business-ugc-short'), 'fr')).toBe('≈ 10 €');
 		expect(formatProjectPrice(getProjectPricing('rant-explicatif-drive'), 'fr')).toBe('≈ 10–15 €');
 		expect(formatProjectPrice(getProjectPricing('business-boursin-short'), 'fr')).toMatch(
 			/^≈\s20\s?€$/

@@ -93,6 +93,7 @@ export type UiCopy = {
 	media: {
 		playLabel: string;
 		priceLabel: string;
+		startingPriceLabel: string;
 	};
 	showreel: {
 		title: string;

@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { getProjectPricing, restaurantPromotionProjectSlugs } from '$lib/content/project-pricing';
+import {
+	categoryStartingPrices,
+	getProjectPricing,
+	restaurantPromotionProjectSlugs
+} from '$lib/content/project-pricing';
 import { formatProjectPrice, sortProjectsByPrice } from './pricing';
 
 describe('project pricing', () => {
@@ -22,6 +26,23 @@ describe('project pricing', () => {
 			currency: 'EUR',
 			approximate: false,
 			temporary: true
+		});
+	});
+
+	it('defines coherent starting prices from simple shorts to standard long-form edits', () => {
+		expect(
+			Object.fromEntries(
+				Object.entries(categoryStartingPrices).map(([category, pricing]) => [
+					category,
+					pricing.amount
+				])
+			)
+		).toEqual({
+			'gaming-short-form': 5,
+			'explainer-short-form': 10,
+			'business-promo': 15,
+			'gaming-long-form': 25,
+			'other-format': 25
 		});
 	});
 

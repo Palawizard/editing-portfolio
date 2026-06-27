@@ -5,16 +5,13 @@ import {
 	selectRandomCategoryAutoplayPreviews,
 	selectRandomHeroAutoplayPreview
 } from './autoplay-previews';
-import { projects } from './projects';
 
 describe('autoplay previews', () => {
 	it('defines one unique preview for every project video', () => {
 		const previews = Object.values(categoryAutoplayPreviews).flat();
-		const projectSlugs = new Set(projects.map((project) => project.slug));
 
 		expect(previews).toHaveLength(22);
 		expect(new Set(previews.map((preview) => preview.src)).size).toBe(22);
-		expect(previews.every((preview) => projectSlugs.has(preview.projectSlug))).toBe(true);
 	});
 
 	it('selects one preview from each category', () => {

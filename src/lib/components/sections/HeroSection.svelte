@@ -78,15 +78,17 @@
 					<div
 						class="relative grid aspect-[4/3] place-items-center overflow-hidden rounded-[1.1rem] border border-white/8 bg-[radial-gradient(circle_at_30%_20%,rgb(155_124_255/0.34),transparent_28%),linear-gradient(145deg,#15172a,#07080d_65%)]"
 					>
-						<LazyAutoplayVideo
-							src={heroPreview.src}
-							poster={heroPreview.poster}
-							loop={false}
-							onDurationChange={(duration) => (previewDuration = duration)}
-							onEnded={switchPreview}
-							onPlaybackChange={(playing) => (isPreviewPlaying = playing)}
-							class="absolute inset-0 size-full object-cover"
-						/>
+						{#key heroPreview.src}
+							<LazyAutoplayVideo
+								src={heroPreview.src}
+								poster={heroPreview.poster}
+								loop={false}
+								onDurationChange={(duration) => (previewDuration = duration)}
+								onEnded={switchPreview}
+								onPlaybackChange={(playing) => (isPreviewPlaying = playing)}
+								class="absolute inset-0 size-full object-cover"
+							/>
+						{/key}
 						<div
 							class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"
 						></div>

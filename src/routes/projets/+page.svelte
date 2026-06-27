@@ -6,6 +6,7 @@
 	import Container from '$lib/components/ui/Container.svelte';
 	import { getContactStyleHref } from '$lib/content/contact';
 	import { getLocaleContext } from '$lib/i18n/context';
+	import { sortProjectsByPrice } from '$lib/utils/pricing';
 	import type { ProjectChoice } from '$lib/types/project';
 
 	let selectedChoice = $state<ProjectChoice>();
@@ -14,7 +15,9 @@
 	const filteredProjects = $derived(
 		!selectedChoice || selectedChoice === 'custom'
 			? []
-			: i18n.content.projects.filter((project) => project.category === selectedChoice)
+			: sortProjectsByPrice(
+					i18n.content.projects.filter((project) => project.category === selectedChoice)
+				)
 	);
 
 	const selectedLabel = $derived(

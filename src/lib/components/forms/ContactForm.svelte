@@ -79,22 +79,22 @@
 	};
 
 	const setEstimatePrefillFromSession = () => {
-		const searchParams = new URLSearchParams(window.location.search);
-		if (searchParams.get('estimate') !== '1') return;
-
 		const storedPrefill = sessionStorage.getItem(ESTIMATE_PREFILL_STORAGE_KEY);
 		if (!storedPrefill) return;
 
 		try {
 			const prefill = JSON.parse(storedPrefill) as Partial<EstimateContactPrefill>;
-			values.name = typeof prefill.name === 'string' ? prefill.name : '';
-			values.email = typeof prefill.email === 'string' ? prefill.email : '';
+			values.name = typeof prefill.name === 'string' ? prefill.name.slice(0, 80) : '';
+			values.email = typeof prefill.email === 'string' ? prefill.email.slice(0, 160) : '';
 			values.projectDescription =
-				typeof prefill.projectDescription === 'string' ? prefill.projectDescription : '';
+				typeof prefill.projectDescription === 'string'
+					? prefill.projectDescription.slice(0, 2000)
+					: '';
 			values.footageDetails =
-				typeof prefill.footageDetails === 'string' ? prefill.footageDetails : '';
-			values.budget = typeof prefill.budget === 'string' ? prefill.budget : '';
-			values.usefulLinks = typeof prefill.usefulLinks === 'string' ? prefill.usefulLinks : '';
+				typeof prefill.footageDetails === 'string' ? prefill.footageDetails.slice(0, 600) : '';
+			values.budget = typeof prefill.budget === 'string' ? prefill.budget.slice(0, 80) : '';
+			values.usefulLinks =
+				typeof prefill.usefulLinks === 'string' ? prefill.usefulLinks.slice(0, 1200) : '';
 
 			if (typeof prefill.style === 'string' && isProjectChoice(prefill.style)) {
 				values.style = prefill.style;

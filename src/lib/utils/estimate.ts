@@ -356,7 +356,7 @@ export const buildContactPrefill = (
 				: ''
 		]
 			.filter(Boolean)
-			.join('\n'),
+			.join(' · '),
 		usefulLinks: answers.referenceLink.trim()
 	};
 };

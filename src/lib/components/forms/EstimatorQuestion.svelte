@@ -19,9 +19,11 @@
 		'w-full rounded-2xl border border-white/12 bg-black/25 px-5 py-4 text-base text-white outline-none transition placeholder:text-slate-500 hover:border-white/20 focus:border-cyan-200/60 focus:ring-2 focus:ring-cyan-200/15 aria-invalid:border-rose-300/70';
 
 	$effect(() => {
-		question.id;
+		const questionId = question.id;
 		tick().then(() => {
-			questionRoot?.querySelector<HTMLElement>('input, textarea, button')?.focus();
+			if (question.id === questionId) {
+				questionRoot?.querySelector<HTMLElement>('input, textarea, button')?.focus();
+			}
 		});
 	});
 
@@ -64,7 +66,7 @@
 			{/each}
 		</div>
 	{:else if question.type === 'multi'}
-		<div class="grid gap-3 sm:grid-cols-2" aria-label={question.title}>
+		<div class="grid gap-3 sm:grid-cols-2" role="group" aria-label={question.title}>
 			{#each question.options ?? [] as option (option.value)}
 				{@const selected = selectedValues.includes(option.value)}
 				<button
@@ -93,6 +95,7 @@
 	{:else if question.type === 'textarea'}
 		<textarea
 			class={[fieldClasses, 'min-h-40 resize-y']}
+			aria-label={question.title}
 			value={textValue}
 			placeholder={question.placeholder}
 			maxlength="2000"
@@ -101,6 +104,7 @@
 	{:else}
 		<input
 			class={fieldClasses}
+			aria-label={question.title}
 			type={question.type}
 			value={textValue}
 			placeholder={question.placeholder}

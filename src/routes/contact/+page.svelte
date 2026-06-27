@@ -47,6 +47,9 @@
 				<p class="mx-auto mt-7 max-w-2xl text-base leading-7 text-slate-300 md:text-lg">
 					{i18n.content.contactCopy.description}
 				</p>
+				<Button href="/estimation" variant="secondary" class="mt-7">
+					{i18n.content.ui.contactPage.estimateCta}
+				</Button>
 			</div>
 		</Container>
 	</section>

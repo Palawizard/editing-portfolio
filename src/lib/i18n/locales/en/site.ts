@@ -12,6 +12,7 @@ export const siteMetadata: SiteMetadata = {
 export const navigationLinks: NavigationLink[] = [
 	{ label: 'Home', href: '/' },
 	{ label: 'Projects', href: '/projets' },
+	{ label: 'Estimate', href: '/estimation' },
 	{ label: 'Contact', href: '/contact' }
 ];
 
@@ -24,7 +25,8 @@ export const contactCopy = {
 	title: "Let's talk about your next edit",
 	description:
 		'Send me the format you want, a few references and the footage you have. I will reply with a clear direction for the edit.',
-	actionLabel: 'Get in touch'
+	actionLabel: 'Get in touch',
+	estimateActionLabel: 'Estimate my project'
 };
 
 export const siteBundle = {

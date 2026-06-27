@@ -155,6 +155,7 @@ export type UiCopy = {
 		formatsTitle: string;
 		customBadge: string;
 		reviewStyles: string;
+		estimateCta: string;
 	};
 	turnstileAriaLabel: string;
 };
@@ -174,6 +175,7 @@ export type LocaleBundle = {
 		title: string;
 		description: string;
 		actionLabel: string;
+		estimateActionLabel: string;
 	};
 	editingFormats: EditingFormat[];
 	projectCategoryLabels: Record<ProjectCategory, string>;

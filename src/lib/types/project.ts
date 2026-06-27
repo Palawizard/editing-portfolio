@@ -52,7 +52,8 @@ export type ProjectBeforeAfter = {
 };
 
 export type ProjectPricing = {
-	amount: number;
+	minimum: number;
+	maximum: number;
 	currency: 'EUR';
 	approximate: boolean;
 	temporary: boolean;

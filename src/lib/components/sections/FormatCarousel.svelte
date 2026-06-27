@@ -43,7 +43,7 @@
 	let previewUpdateFrame = 0;
 
 	const getChoicePrice = (choice: ProjectChoice) =>
-		choice === 'custom' ? Number.POSITIVE_INFINITY : categoryStartingPrices[choice].amount;
+		choice === 'custom' ? Number.POSITIVE_INFINITY : categoryStartingPrices[choice].minimum;
 
 	const choices = $derived(
 		[

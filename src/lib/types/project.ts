@@ -26,6 +26,7 @@ export type Project = {
 	beforeAfter?: ProjectBeforeAfter;
 	pricing: ProjectPricing;
 	featured: boolean;
+	disclaimer?: string;
 };
 
 export type ProjectInput = Omit<

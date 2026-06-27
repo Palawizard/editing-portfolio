@@ -2,8 +2,10 @@ import type { Project } from '$lib/types/project';
 
 type ProjectLocaleCopy = Pick<
 	Project,
-	'title' | 'summary' | 'objective' | 'result' | 'work' | 'duration'
+	'title' | 'summary' | 'objective' | 'result' | 'work' | 'duration' | 'disclaimer'
 >;
+
+const noBackgroundMusicDisclaimer = 'This video was requested without background music.';
 
 export const projectCopyEn: Record<string, ProjectLocaleCopy> = {
 	'miyuna-retour-gaming-long': {
@@ -174,7 +176,8 @@ export const projectCopyEn: Record<string, ProjectLocaleCopy> = {
 			'Subtle transitions',
 			'Message clarification'
 		],
-		duration: 'Short'
+		duration: 'Short',
+		disclaimer: noBackgroundMusicDisclaimer
 	},
 	'business-ugc-short': {
 		title: 'Brand promo - UGC',
@@ -196,7 +199,8 @@ export const projectCopyEn: Record<string, ProjectLocaleCopy> = {
 		objective: 'Highlight the product in a short, clear social-ready format.',
 		result: 'A vertical promo video usable as a food and UGC reference.',
 		work: ['Vertical editing', 'Pacing cuts', 'Ad-style pacing', 'Product focus', 'Social export'],
-		duration: 'Short'
+		duration: 'Short',
+		disclaimer: noBackgroundMusicDisclaimer
 	},
 	'business-cheese-naan-short': {
 		title: 'Restaurant promo - Cheese naan',
@@ -210,7 +214,8 @@ export const projectCopyEn: Record<string, ProjectLocaleCopy> = {
 			'Product focus',
 			'Social export'
 		],
-		duration: 'Short'
+		duration: 'Short',
+		disclaimer: noBackgroundMusicDisclaimer
 	},
 	'business-humour-short': {
 		title: 'Restaurant promo - Humour',
@@ -226,7 +231,8 @@ export const projectCopyEn: Record<string, ProjectLocaleCopy> = {
 		objective: 'Present the product with a short and direct edit.',
 		result: 'A business short designed for fast mobile viewing.',
 		work: ['Vertical editing', 'Short pacing', 'Product focus', 'Promo structure', 'Social export'],
-		duration: 'Short'
+		duration: 'Short',
+		disclaimer: noBackgroundMusicDisclaimer
 	},
 	'business-poulet-short': {
 		title: 'Restaurant promo - Chicken',
@@ -234,7 +240,8 @@ export const projectCopyEn: Record<string, ProjectLocaleCopy> = {
 		objective: 'Make the video readable and effective for social publishing.',
 		result: 'Vertical promo content focused on the product and pacing.',
 		work: ['Vertical editing', 'Pacing cuts', 'Ad-style pacing', 'Product focus', 'Social export'],
-		duration: 'Short'
+		duration: 'Short',
+		disclaimer: noBackgroundMusicDisclaimer
 	},
 	'business-smash-short': {
 		title: 'Restaurant promo - Smash',
@@ -242,7 +249,8 @@ export const projectCopyEn: Record<string, ProjectLocaleCopy> = {
 		objective: 'Create a fast promotional sequence with immediate readability.',
 		result: 'A business short usable as a food offer reference.',
 		work: ['Vertical editing', 'Short pacing', 'Product focus', 'Promo structure', 'Social export'],
-		duration: 'Short'
+		duration: 'Short',
+		disclaimer: noBackgroundMusicDisclaimer
 	},
 	'business-tacos-short': {
 		title: 'Restaurant promo - Tacos',
@@ -250,7 +258,8 @@ export const projectCopyEn: Record<string, ProjectLocaleCopy> = {
 		objective: 'Put the product at the center with a direct edit usable on mobile.',
 		result: 'Short content designed for Instagram, TikTok or Shorts.',
 		work: ['Vertical editing', 'Pacing cuts', 'Ad-style pacing', 'Product focus', 'Social export'],
-		duration: 'Short'
+		duration: 'Short',
+		disclaimer: noBackgroundMusicDisclaimer
 	},
 	'funky-live-cuisine-other': {
 		title: 'Cooking live with the crew (ft Lespale, Majora, Galactic)',

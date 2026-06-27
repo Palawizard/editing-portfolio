@@ -109,7 +109,8 @@ export const uiBundle = {
 		formatsEyebrow: 'Accepted formats',
 		formatsTitle: 'A preset base or custom work',
 		customBadge: 'Custom request',
-		reviewStyles: 'Review styles'
+		reviewStyles: 'Review styles',
+		estimateCta: 'Estimate my project'
 	},
 	turnstileAriaLabel: 'Spam verification'
 } satisfies LocaleBundle['ui'];

@@ -112,7 +112,8 @@ export const uiBundle = {
 		formatsEyebrow: 'Formats acceptés',
 		formatsTitle: 'Une base ou du sur mesure',
 		customBadge: 'Commande personnalisée',
-		reviewStyles: 'Revoir les styles'
+		reviewStyles: 'Revoir les styles',
+		estimateCta: 'Estimer mon projet'
 	},
 	turnstileAriaLabel: 'Vérification anti-spam'
 } satisfies LocaleBundle['ui'];

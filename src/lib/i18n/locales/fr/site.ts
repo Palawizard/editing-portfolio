@@ -12,6 +12,7 @@ export const siteMetadata: SiteMetadata = {
 export const navigationLinks: NavigationLink[] = [
 	{ label: 'Accueil', href: '/' },
 	{ label: 'Projets', href: '/projets' },
+	{ label: 'Estimation', href: '/estimation' },
 	{ label: 'Contact', href: '/contact' }
 ];
 
@@ -24,7 +25,8 @@ export const contactCopy = {
 	title: 'Parlons de ton prochain montage',
 	description:
 		'Envoie-moi le format souhaité, quelques références et les rushs disponibles. Je te répondrai avec une direction claire pour le montage.',
-	actionLabel: 'Me contacter'
+	actionLabel: 'Me contacter',
+	estimateActionLabel: 'Estimer mon projet'
 };
 
 export const siteBundle = {

@@ -1,4 +1,5 @@
 import type { ContactOption } from '$lib/types/contact';
+import type { EstimateCopy } from '$lib/types/estimate';
 import type { EditingFormat, ProjectCategory, ProjectChoice } from '$lib/types/project';
 import type {
 	BeforeAfterSection,
@@ -35,6 +36,8 @@ export type ContactFormCopy = {
 	contextPrefix: string;
 	contextReference: string;
 	contextHint: string;
+	estimateContextTitle: string;
+	estimateContextHint: string;
 	successFields: {
 		contact: string;
 		email: string;
@@ -152,6 +155,7 @@ export type UiCopy = {
 		formatsTitle: string;
 		customBadge: string;
 		reviewStyles: string;
+		estimateCta: string;
 	};
 	turnstileAriaLabel: string;
 };
@@ -171,12 +175,14 @@ export type LocaleBundle = {
 		title: string;
 		description: string;
 		actionLabel: string;
+		estimateActionLabel: string;
 	};
 	editingFormats: EditingFormat[];
 	projectCategoryLabels: Record<ProjectCategory, string>;
 	customFormatChoice: CustomFormatChoice;
 	contactStyleOptions: ContactOption<ProjectChoice>[];
 	contactFormCopy: ContactFormCopy;
+	estimateCopy: EstimateCopy;
 	services: Service[];
 	processSteps: ProcessStep[];
 	skills: string[];

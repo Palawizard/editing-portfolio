@@ -8,6 +8,7 @@
 	import { emptyContactFormValues } from '$lib/content/contact';
 	import { getContactStyleLabel } from '$lib/content/contact';
 	import { getLocaleContext } from '$lib/i18n/context';
+	import type { EstimateContactPrefill } from '$lib/types/estimate';
 	import type {
 		ContactFormErrors,
 		ContactFormField,
@@ -15,6 +16,7 @@
 		ContactRequestContext
 	} from '$lib/types/contact';
 	import type { ProjectChoice } from '$lib/types/project';
+	import { ESTIMATE_PREFILL_STORAGE_KEY } from '$lib/utils/estimate';
 
 	type Props = {
 		formId?: string;
@@ -45,6 +47,7 @@
 	let minimumDate = $state('');
 	let statusElement = $state<HTMLElement>();
 	let submissionSummary = $state<SubmissionSummary>();
+	let hasEstimatePrefill = $state(false);
 
 	const endpoint = $derived(formId ? `https://formspree.io/f/${formId}` : '');
 	const isConfigured = $derived(Boolean(endpoint && turnstileSiteKey));
@@ -75,10 +78,41 @@
 		}
 	};
 
+	const setEstimatePrefillFromSession = () => {
+		const storedPrefill = sessionStorage.getItem(ESTIMATE_PREFILL_STORAGE_KEY);
+		if (!storedPrefill) return;
+
+		try {
+			const prefill = JSON.parse(storedPrefill) as Partial<EstimateContactPrefill>;
+			values.name = typeof prefill.name === 'string' ? prefill.name.slice(0, 80) : '';
+			values.email = typeof prefill.email === 'string' ? prefill.email.slice(0, 160) : '';
+			values.projectDescription =
+				typeof prefill.projectDescription === 'string'
+					? prefill.projectDescription.slice(0, 4000)
+					: '';
+			values.footageDetails =
+				typeof prefill.footageDetails === 'string' ? prefill.footageDetails.slice(0, 600) : '';
+			values.budget = typeof prefill.budget === 'string' ? prefill.budget.slice(0, 80) : '';
+			values.usefulLinks =
+				typeof prefill.usefulLinks === 'string' ? prefill.usefulLinks.slice(0, 1200) : '';
+
+			if (typeof prefill.style === 'string' && isProjectChoice(prefill.style)) {
+				values.style = prefill.style;
+				context = { style: prefill.style };
+			}
+
+			hasEstimatePrefill = true;
+			sessionStorage.removeItem(ESTIMATE_PREFILL_STORAGE_KEY);
+		} catch {
+			sessionStorage.removeItem(ESTIMATE_PREFILL_STORAGE_KEY);
+		}
+	};
+
 	onMount(() => {
 		isEnhanced = true;
 		minimumDate = new Date().toISOString().slice(0, 10);
 		setContextFromUrl();
+		setEstimatePrefillFromSession();
 	});
 
 	const validate = (): ContactFormErrors => {
@@ -184,6 +218,7 @@
 		values = { ...emptyContactFormValues };
 		errors = {};
 		context = {};
+		hasEstimatePrefill = false;
 		submitError = '';
 		submissionSummary = undefined;
 		isSuccess = false;
@@ -284,6 +319,13 @@
 					</p>
 				{/if}
 				<p class="mt-2 text-xs text-slate-400">{copy.contextHint}</p>
+			</div>
+		{/if}
+
+		{#if hasEstimatePrefill}
+			<div class="mt-7 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.07] p-4">
+				<p class="text-sm font-semibold text-cyan-100">{copy.estimateContextTitle}</p>
+				<p class="mt-1 text-xs leading-5 text-slate-300">{copy.estimateContextHint}</p>
 			</div>
 		{/if}
 

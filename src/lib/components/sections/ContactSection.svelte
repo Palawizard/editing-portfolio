@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Send } from '@lucide/svelte';
+	import { Calculator, Send } from '@lucide/svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import Container from '$lib/components/ui/Container.svelte';
 	import { getLocaleContext } from '$lib/i18n/context';
@@ -28,10 +28,16 @@
 					</p>
 				</div>
 
-				<Button href="/contact" class="w-full sm:w-auto">
-					<Send size={18} aria-hidden="true" />
-					<span>{i18n.content.contactCopy.actionLabel}</span>
-				</Button>
+				<div class="flex flex-col gap-3 sm:flex-row lg:flex-col">
+					<Button href="/estimation" class="w-full sm:w-auto">
+						<Calculator size={18} aria-hidden="true" />
+						<span>{i18n.content.contactCopy.estimateActionLabel}</span>
+					</Button>
+					<Button href="/contact" variant="secondary" class="w-full sm:w-auto">
+						<Send size={18} aria-hidden="true" />
+						<span>{i18n.content.contactCopy.actionLabel}</span>
+					</Button>
+				</div>
 			</div>
 		</div>
 	</Container>

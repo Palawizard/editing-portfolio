@@ -5,7 +5,7 @@ export type ContactHref =
 	| `/contact?style=${ProjectChoice}`
 	| `/contact?project=${string}`;
 
-export type InternalHref = '/' | '/#formats' | '/projets' | ContactHref;
+export type InternalHref = '/' | '/#formats' | '/projets' | '/estimation' | ContactHref;
 
 export type NavigationLink = {
 	label: string;

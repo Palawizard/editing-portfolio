@@ -300,6 +300,9 @@
 				{#each choices as choice (choice.id)}
 					{@const preview =
 						choice.id === 'custom' ? undefined : selectedCategoryPreviews[choice.id]}
+					{@const previewIsActive = Boolean(
+						preview && activePreviewGroupIndex === groupIndex && activePreviewChoice === choice.id
+					)}
 					<button
 						data-choice={choice.id}
 						data-group={groupIndex}
@@ -317,13 +320,17 @@
 						onclick={(event) => selectChoice(choice.id, event.currentTarget, groupIndex)}
 					>
 						{#if preview}
-							<span class="pointer-events-none absolute inset-0 block overflow-hidden">
+							<span
+								class={[
+									'preview-media pointer-events-none absolute inset-0 block overflow-hidden',
+									previewIsActive ? 'preview-media-active' : ''
+								]}
+							>
 								<LazyAutoplayVideo
 									class="size-full object-cover opacity-45 saturate-[0.85] transition duration-500 group-hover:opacity-65"
 									src={preview.src}
 									poster={preview.poster}
-									active={activePreviewGroupIndex === groupIndex &&
-										activePreviewChoice === choice.id}
+									active={previewIsActive}
 								/>
 							</span>
 							<span
@@ -331,6 +338,12 @@
 							></span>
 							<span
 								class="pointer-events-none absolute inset-0 block bg-[radial-gradient(circle_at_30%_20%,rgb(155_124_255/0.22),transparent_34%)]"
+							></span>
+							<span
+								class={[
+									'preview-focus-ring pointer-events-none absolute inset-0 block rounded-[inherit] border border-violet-200/45',
+									previewIsActive ? 'preview-focus-ring-active' : ''
+								]}
 							></span>
 						{/if}
 
@@ -401,3 +414,70 @@
 		{/each}
 	</div>
 </div>
+
+<style>
+	@keyframes preview-media-focus {
+		0% {
+			filter: brightness(1);
+			transform: scale(1);
+		}
+		45% {
+			filter: brightness(1.18) saturate(1.08);
+			transform: scale(1.035);
+		}
+		100% {
+			filter: brightness(1.04);
+			transform: scale(1.01);
+		}
+	}
+
+	@keyframes preview-ring-focus {
+		0% {
+			opacity: 0;
+			box-shadow: inset 0 0 0 rgb(196 181 253 / 0);
+		}
+		45% {
+			opacity: 1;
+			box-shadow:
+				inset 0 0 28px rgb(196 181 253 / 0.16),
+				0 0 24px rgb(139 92 246 / 0.22);
+		}
+		100% {
+			opacity: 0.28;
+			box-shadow: inset 0 0 16px rgb(196 181 253 / 0.08);
+		}
+	}
+
+	.preview-media {
+		transition:
+			filter 240ms ease,
+			transform 240ms ease;
+	}
+
+	.preview-media-active {
+		animation: preview-media-focus 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+	}
+
+	.preview-focus-ring {
+		opacity: 0;
+	}
+
+	.preview-focus-ring-active {
+		animation: preview-ring-focus 620ms ease-out both;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.preview-media,
+		.preview-media-active {
+			animation: none;
+			filter: none;
+			transform: none;
+			transition: none;
+		}
+
+		.preview-focus-ring-active {
+			animation: none;
+			opacity: 0.28;
+		}
+	}
+</style>

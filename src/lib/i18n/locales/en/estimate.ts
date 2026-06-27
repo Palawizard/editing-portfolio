@@ -71,6 +71,26 @@ const questions: EstimateQuestion[] = [
 			{ value: 'script', label: 'Script' },
 			{ value: 'voice-over', label: 'Voice-over' },
 			{ value: 'assets', label: 'Images / B-roll / assets' },
+			{ value: 'none', label: 'None of these files' },
+			{ value: 'unknown', label: 'I do not know yet' }
+		]
+	},
+	{
+		id: 'ugcAssets',
+		section: 'Files provided',
+		title: 'Which elements are already provided for UGC or promotional shorts?',
+		help: 'You can select more than one.',
+		type: 'multi',
+		required: true,
+		options: [
+			{ value: 'script', label: 'Script' },
+			{ value: 'voice-over', label: 'Voice-over' },
+			{ value: 'facecam', label: 'Facecam video' },
+			{ value: 'product-images', label: 'Product images' },
+			{ value: 'b-roll', label: 'B-roll' },
+			{ value: 'brand', label: 'Logo / brand guidelines' },
+			{ value: 'music', label: 'Requested music' },
+			{ value: 'none', label: 'None of these' },
 			{ value: 'unknown', label: 'I do not know yet' }
 		]
 	},
@@ -131,6 +151,19 @@ const questions: EstimateQuestion[] = [
 			{ value: '4-5', label: '4 to 5 shorts' },
 			{ value: '6-10', label: '6 to 10 shorts' },
 			{ value: 'gt-10', label: 'More than 10 shorts' },
+			{ value: 'unknown', label: 'I do not know yet' }
+		]
+	},
+	{
+		id: 'shortDuration',
+		section: 'Amount of material',
+		title: 'What average length do you want for each short?',
+		type: 'single',
+		required: true,
+		options: [
+			{ value: 'lt-30s', label: 'Less than 30 seconds' },
+			{ value: '30-60s', label: '30 to 60 seconds' },
+			{ value: '1-3m', label: '1 to 3 minutes' },
 			{ value: 'unknown', label: 'I do not know yet' }
 		]
 	},
@@ -238,25 +271,6 @@ const questions: EstimateQuestion[] = [
 		]
 	},
 	{
-		id: 'ugcAssets',
-		section: 'Short-specific questions',
-		title: 'Which elements are already provided for UGC or promotional shorts?',
-		help: 'You can select more than one.',
-		type: 'multi',
-		required: true,
-		options: [
-			{ value: 'script', label: 'Script' },
-			{ value: 'voice-over', label: 'Voice-over' },
-			{ value: 'facecam', label: 'Facecam video' },
-			{ value: 'product-images', label: 'Product images' },
-			{ value: 'b-roll', label: 'B-roll' },
-			{ value: 'brand', label: 'Logo / brand guidelines' },
-			{ value: 'music', label: 'Requested music' },
-			{ value: 'none', label: 'None of these' },
-			{ value: 'unknown', label: 'I do not know yet' }
-		]
-	},
-	{
 		id: 'deadline',
 		section: 'Deadline',
 		title: 'What deadline do you need?',
@@ -354,9 +368,13 @@ export const estimateCopy: EstimateCopy = {
 		longFinalDuration: 'What final length do you want for the long-form video?',
 		shortFinalDuration: 'What average length do you want for each short?',
 		longShortsCount: 'How many shorts do you want extracted from the long-form video?',
+		projectFootageDuration: 'What is the total length of the edit or project to revise?',
+		voiceOverDuration: 'What is the total length of the voice-over to process?',
+		ugcFootageDuration: 'What is the total length of the video or audio elements to process?',
 		gamingShortsSource: 'How will you provide the gaming clips?',
 		providedScriptStatus: 'What is the status of the provided script?',
-		remainingUgcAssets: 'Which other elements are already provided for this project?'
+		ugcProvidedFiles: 'Will you provide footage or an editing project for this UGC project?',
+		ugcProvidedFilesHelp: 'The script, voice-over and brand elements are covered in the next step.'
 	},
 	result: {
 		eyebrow: 'Estimate complete',

@@ -24,6 +24,7 @@ export type EstimateAnswers = {
 	footageDuration: string;
 	finalDuration: string;
 	shortsCount: string;
+	shortDuration: string;
 	sources: string;
 	editingLevel: string;
 	styleReference: string;
@@ -108,9 +109,13 @@ export type EstimateCopy = {
 		longFinalDuration: string;
 		shortFinalDuration: string;
 		longShortsCount: string;
+		projectFootageDuration: string;
+		voiceOverDuration: string;
+		ugcFootageDuration: string;
 		gamingShortsSource: string;
 		providedScriptStatus: string;
-		remainingUgcAssets: string;
+		ugcProvidedFiles: string;
+		ugcProvidedFilesHelp: string;
 	};
 	result: {
 		eyebrow: string;
@@ -139,6 +144,7 @@ export const emptyEstimateAnswers: EstimateAnswers = {
 	footageDuration: '',
 	finalDuration: '',
 	shortsCount: '',
+	shortDuration: '',
 	sources: '',
 	editingLevel: '',
 	styleReference: '',

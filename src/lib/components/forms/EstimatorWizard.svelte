@@ -15,12 +15,17 @@
 		buildContactPrefill,
 		calculatePriceEstimate,
 		getContextualEstimateQuestion,
-		isEstimateQuestionVisible
+		isEstimateQuestionVisible,
+		sanitizeEstimateAnswers
 	} from '$lib/utils/estimate';
 
 	const i18n = getLocaleContext();
 	const copy = $derived(i18n.content.estimateCopy);
-	let answers = $state<EstimateAnswers>({ ...emptyEstimateAnswers });
+	let answers = $state<EstimateAnswers>({
+		...emptyEstimateAnswers,
+		providedFiles: [],
+		ugcAssets: []
+	});
 	let currentIndex = $state(0);
 	let error = $state('');
 	let estimate = $state<PriceEstimate>();
@@ -41,7 +46,13 @@
 
 	const setAnswer = (value: string | string[]) => {
 		if (!currentQuestion) return;
-		(answers as unknown as Record<string, string | string[]>)[currentQuestion.id] = value;
+		const updatedAnswers = {
+			...answers,
+			providedFiles: [...answers.providedFiles],
+			ugcAssets: [...answers.ugcAssets]
+		};
+		(updatedAnswers as unknown as Record<string, string | string[]>)[currentQuestion.id] = value;
+		answers = sanitizeEstimateAnswers(updatedAnswers, copy.questions, copy.contextualQuestions);
 		error = '';
 	};
 
@@ -76,6 +87,7 @@
 	const next = () => {
 		if (!validateCurrent()) return;
 		if (currentIndex >= visibleQuestions.length - 1) {
+			answers = sanitizeEstimateAnswers(answers, copy.questions, copy.contextualQuestions);
 			estimate = calculatePriceEstimate(answers);
 			window.scrollTo({ top: 0, behavior: 'smooth' });
 			return;
@@ -91,7 +103,7 @@
 	};
 
 	const restart = () => {
-		answers = { ...emptyEstimateAnswers };
+		answers = { ...emptyEstimateAnswers, providedFiles: [], ugcAssets: [] };
 		currentIndex = 0;
 		error = '';
 		estimate = undefined;
@@ -100,7 +112,12 @@
 
 	const prefillContact = async () => {
 		if (!estimate) return;
-		const prefill = buildContactPrefill(answers, estimate, copy.questions, i18n.locale);
+		const sanitizedAnswers = sanitizeEstimateAnswers(
+			answers,
+			copy.questions,
+			copy.contextualQuestions
+		);
+		const prefill = buildContactPrefill(sanitizedAnswers, estimate, copy.questions, i18n.locale);
 		sessionStorage.setItem(ESTIMATE_PREFILL_STORAGE_KEY, JSON.stringify(prefill));
 		await goto(resolve('/contact'));
 	};

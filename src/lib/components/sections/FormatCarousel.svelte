@@ -16,6 +16,7 @@
 		selectRandomCategoryAutoplayPreviews
 	} from '$lib/content/autoplay-previews';
 	import { getLocaleContext } from '$lib/i18n/context';
+	import { formatProjectPrice } from '$lib/utils/pricing';
 	import type { ProjectCategory, ProjectChoice } from '$lib/types/project';
 
 	type Props = {
@@ -40,13 +41,32 @@
 	let selectedCategoryPreviews = $state(initialCategoryAutoplayPreviews);
 	let previewUpdateFrame = 0;
 
-	const choices = $derived([
-		...i18n.content.editingFormats,
-		{
-			id: 'custom' as const,
-			...i18n.content.customFormatChoice
-		}
-	]);
+	const getPreviewProject = (choice: ProjectChoice) =>
+		choice === 'custom'
+			? undefined
+			: i18n.content.projects.find(
+					(project) => project.slug === selectedCategoryPreviews[choice].projectSlug
+				);
+
+	const getChoicePrice = (choice: ProjectChoice) =>
+		getPreviewProject(choice)?.pricing.amount ?? Number.POSITIVE_INFINITY;
+
+	const choices = $derived(
+		[
+			...i18n.content.editingFormats,
+			{
+				id: 'custom' as const,
+				...i18n.content.customFormatChoice
+			}
+		]
+			.map((choice, index) => ({ choice, index }))
+			.sort(
+				(left, right) =>
+					getChoicePrice(left.choice.id) - getChoicePrice(right.choice.id) ||
+					left.index - right.index
+			)
+			.map(({ choice }) => choice)
+	);
 
 	const getSegmentWidth = () => middleGroup?.offsetWidth ?? 0;
 
@@ -303,6 +323,7 @@
 					{@const previewIsActive = Boolean(
 						preview && activePreviewGroupIndex === groupIndex && activePreviewChoice === choice.id
 					)}
+					{@const previewProject = getPreviewProject(choice.id)}
 					<button
 						data-choice={choice.id}
 						data-group={groupIndex}
@@ -345,6 +366,20 @@
 									previewIsActive ? 'preview-focus-ring-active' : ''
 								]}
 							></span>
+						{/if}
+
+						{#if previewProject}
+							<span
+								class={[
+									'absolute z-20 rounded-full border border-cyan-200/25 bg-slate-950/70 font-mono font-semibold text-cyan-100 shadow-lg backdrop-blur',
+									prominent
+										? 'right-8 top-8 px-3 py-1.5 text-sm'
+										: 'right-6 top-6 px-2.5 py-1 text-xs'
+								]}
+								aria-label={`${i18n.content.ui.media.priceLabel} : ${formatProjectPrice(previewProject.pricing, i18n.locale)}`}
+							>
+								{formatProjectPrice(previewProject.pricing, i18n.locale)}
+							</span>
 						{/if}
 
 						<span

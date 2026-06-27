@@ -1,6 +1,7 @@
 import type { ProjectCategory } from '$lib/types/project';
 
 export type AutoplayPreview = {
+	projectSlug: string;
 	src: string;
 	poster: string;
 	aspect: 'video' | 'vertical';
@@ -11,8 +12,10 @@ export type SelectedCategoryAutoplayPreviews = Record<ProjectCategory, AutoplayP
 const definePreview = (
 	name: string,
 	posterDirectory: 'business' | 'explainer' | 'gaming' | 'other',
-	aspect: AutoplayPreview['aspect']
+	aspect: AutoplayPreview['aspect'],
+	projectSlug: string = name
 ): AutoplayPreview => ({
+	projectSlug,
 	src: `/videos/previews/${name}-preview.mp4`,
 	poster: `/images/posters/${posterDirectory}/${name}.webp`,
 	aspect
@@ -35,16 +38,18 @@ export const categoryAutoplayPreviews: Record<ProjectCategory, AutoplayPreview[]
 		definePreview('cs2-peur-short', 'gaming', 'vertical'),
 		definePreview('cs2-type-bizarre-short', 'gaming', 'vertical')
 	],
-	'explainer-short-form': [definePreview('rant-explicatif', 'explainer', 'vertical')],
+	'explainer-short-form': [
+		definePreview('rant-explicatif', 'explainer', 'vertical', 'rant-explicatif-drive')
+	],
 	'business-promo': [
-		definePreview('ugc', 'business', 'vertical'),
-		definePreview('boursin', 'business', 'vertical'),
-		definePreview('cheese-naan', 'business', 'vertical'),
-		definePreview('humour-promo', 'business', 'vertical'),
-		definePreview('naan', 'business', 'vertical'),
-		definePreview('poulet', 'business', 'vertical'),
-		definePreview('smash', 'business', 'vertical'),
-		definePreview('tacos', 'business', 'vertical')
+		definePreview('ugc', 'business', 'vertical', 'business-ugc-short'),
+		definePreview('boursin', 'business', 'vertical', 'business-boursin-short'),
+		definePreview('cheese-naan', 'business', 'vertical', 'business-cheese-naan-short'),
+		definePreview('humour-promo', 'business', 'vertical', 'business-humour-short'),
+		definePreview('naan', 'business', 'vertical', 'business-naan-short'),
+		definePreview('poulet', 'business', 'vertical', 'business-poulet-short'),
+		definePreview('smash', 'business', 'vertical', 'business-smash-short'),
+		definePreview('tacos', 'business', 'vertical', 'business-tacos-short')
 	],
 	'other-format': [definePreview('funky-live-cuisine-other', 'other', 'video')]
 };

@@ -3,6 +3,7 @@
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import { getLocaleContext } from '$lib/i18n/context';
 	import { getPublishedVideo } from '$lib/utils/media';
+	import { formatProjectPrice } from '$lib/utils/pricing';
 	import type { Project } from '$lib/types/project';
 
 	type Props = {
@@ -17,6 +18,7 @@
 	const mediaAspect = $derived(project.format === '9:16' ? 'vertical' : 'video');
 	const publishedVideo = $derived(getPublishedVideo(project.externalUrl));
 	const inlineVideoSrc = $derived(project.previewVideo ?? publishedVideo?.directUrl);
+	const price = $derived(formatProjectPrice(project.pricing, i18n.locale));
 </script>
 
 <article
@@ -35,6 +37,12 @@
 		<div
 			class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent"
 		></div>
+		<span
+			class="absolute right-4 top-4 z-20 rounded-full border border-cyan-200/25 bg-slate-950/75 px-3 py-1 font-mono text-xs font-semibold text-cyan-100 shadow-lg backdrop-blur"
+			aria-label={`${i18n.content.ui.media.priceLabel} : ${price}`}
+		>
+			{price}
+		</span>
 		{#if !minimal}
 			<span
 				class="absolute left-4 top-4 rounded-full border border-white/15 bg-black/45 px-3 py-1 font-mono text-xs text-white backdrop-blur"

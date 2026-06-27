@@ -5,7 +5,10 @@
 		src: string;
 		poster: string;
 		active?: boolean;
+		loop?: boolean;
 		class?: string;
+		onDurationChange?: (duration: number) => void;
+		onEnded?: () => void;
 		onPlaybackChange?: (playing: boolean) => void;
 	};
 
@@ -18,7 +21,16 @@
 		connection?: NetworkInformation;
 	};
 
-	let { src, poster, active = true, class: className = '', onPlaybackChange }: Props = $props();
+	let {
+		src,
+		poster,
+		active = true,
+		loop = true,
+		class: className = '',
+		onDurationChange,
+		onEnded,
+		onPlaybackChange
+	}: Props = $props();
 
 	let videoElement = $state<HTMLVideoElement>();
 	let isNearViewport = $state(false);
@@ -31,6 +43,16 @@
 	const requestPlayback = () => {
 		if (!videoElement || !shouldPlay) return;
 		void videoElement.play().catch(() => undefined);
+	};
+
+	const reportDuration = () => {
+		if (!videoElement || !Number.isFinite(videoElement.duration)) return;
+		onDurationChange?.(videoElement.duration);
+	};
+
+	const handleEnded = () => {
+		onPlaybackChange?.(false);
+		onEnded?.();
 	};
 
 	$effect(() => {
@@ -95,11 +117,14 @@
 	{poster}
 	preload="none"
 	muted
-	loop
+	{loop}
 	playsinline
 	tabindex="-1"
 	aria-hidden="true"
 	oncanplay={requestPlayback}
-	onplay={() => onPlaybackChange?.(true)}
+	onloadedmetadata={reportDuration}
+	onplaying={() => onPlaybackChange?.(true)}
 	onpause={() => onPlaybackChange?.(false)}
+	onwaiting={() => onPlaybackChange?.(false)}
+	onended={handleEnded}
 ></video>

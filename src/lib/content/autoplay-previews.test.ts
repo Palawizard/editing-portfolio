@@ -25,4 +25,12 @@ describe('autoplay previews', () => {
 	it('selects a random horizontal preview for the hero', () => {
 		expect(selectRandomHeroAutoplayPreview(() => 0.999)).toBe(heroAutoplayPreviews.at(-1));
 	});
+
+	it('does not repeat the current hero preview', () => {
+		const currentPreview = heroAutoplayPreviews[0];
+		const nextPreview = selectRandomHeroAutoplayPreview(() => 0, currentPreview.src);
+
+		expect(nextPreview).not.toBe(currentPreview);
+		expect(heroAutoplayPreviews).toContain(nextPreview);
+	});
 });

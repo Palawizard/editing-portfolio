@@ -11,11 +11,18 @@
 	import { getLocaleContext } from '$lib/i18n/context';
 
 	let isPreviewPlaying = $state(false);
+	let previewDuration = $state(8);
 	let heroPreview = $state(heroAutoplayPreviews[0]);
 	const i18n = getLocaleContext();
 
+	const switchPreview = () => {
+		isPreviewPlaying = false;
+		previewDuration = 8;
+		heroPreview = selectRandomHeroAutoplayPreview(Math.random, heroPreview.src);
+	};
+
 	onMount(() => {
-		heroPreview = selectRandomHeroAutoplayPreview();
+		switchPreview();
 	});
 </script>
 
@@ -74,6 +81,9 @@
 						<LazyAutoplayVideo
 							src={heroPreview.src}
 							poster={heroPreview.poster}
+							loop={false}
+							onDurationChange={(duration) => (previewDuration = duration)}
+							onEnded={switchPreview}
 							onPlaybackChange={(playing) => (isPreviewPlaying = playing)}
 							class="absolute inset-0 size-full object-cover"
 						/>
@@ -103,8 +113,15 @@
 								<span class="w-[22%] rounded bg-cyan-200/25"></span>
 								<span class="flex-1 rounded bg-white/8"></span>
 							</div>
-							<span class="timeline-cursor absolute top-0 h-14 w-px bg-white shadow-[0_0_8px_white]"
-							></span>
+							{#key heroPreview.src}
+								<span
+									class={[
+										'timeline-cursor absolute top-0 h-14 w-px bg-white shadow-[0_0_8px_white]',
+										isPreviewPlaying ? 'timeline-cursor-playing' : ''
+									]}
+									style={`--preview-duration: ${previewDuration}s`}
+								></span>
+							{/key}
 						</div>
 					</div>
 				</div>
@@ -123,7 +140,12 @@
 		}
 	}
 	.timeline-cursor {
-		animation: timeline-scrub 20s linear infinite;
+		left: 6%;
+		animation: timeline-scrub var(--preview-duration, 8s) linear 1 both;
+		animation-play-state: paused;
+	}
+	.timeline-cursor-playing {
+		animation-play-state: running;
 	}
 	@media (prefers-reduced-motion: reduce) {
 		.timeline-cursor {

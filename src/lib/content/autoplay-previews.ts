@@ -69,5 +69,12 @@ export const heroAutoplayPreviews = [
 ];
 
 export const selectRandomHeroAutoplayPreview = (
-	random: () => number = Math.random
-): AutoplayPreview => heroAutoplayPreviews[Math.floor(random() * heroAutoplayPreviews.length)];
+	random: () => number = Math.random,
+	excludedSrc?: string
+): AutoplayPreview => {
+	const candidates = excludedSrc
+		? heroAutoplayPreviews.filter((preview) => preview.src !== excludedSrc)
+		: heroAutoplayPreviews;
+
+	return candidates[Math.floor(random() * candidates.length)];
+};

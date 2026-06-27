@@ -29,6 +29,4 @@ vite.config.ts.timestamp-*
 /static/videos/explainer/
 /static/videos/business/
 /static/videos/showreel/
-/static/videos/previews/*
-!/static/videos/previews/.gitkeep
-!/static/videos/previews/*-preview.mp4
+/static/videos/previews/

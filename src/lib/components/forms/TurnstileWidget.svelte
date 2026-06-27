@@ -61,5 +61,6 @@
 <div
 	bind:this={container}
 	class="min-h-[65px]"
+	role="group"
 	aria-label={i18n.content.ui.turnstileAriaLabel}
 ></div>

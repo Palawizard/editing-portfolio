@@ -1,27 +1,4 @@
-import type { BeforeAfterSection, ProcessStep, Service } from '$lib/types/site';
-
-export const services: Service[] = [
-	{
-		category: 'gaming-long-form',
-		title: 'Long-form editing',
-		description: 'Turn long raw footage into a structured, smooth and easy-to-follow video.'
-	},
-	{
-		category: 'gaming-short-form',
-		title: 'Short vertical edits',
-		description: 'Create fast clips with subtitles, built for short-form platforms.'
-	},
-	{
-		category: 'explainer-short-form',
-		title: 'Explainer editing',
-		description: 'Make an idea clearer with visuals, pacing and readable storytelling.'
-	},
-	{
-		category: 'business-promo',
-		title: 'Promo content',
-		description: 'Present a business, offer or service in a clean short-form video.'
-	}
-];
+import type { ProcessStep } from '$lib/types/site';
 
 export const processSteps: ProcessStep[] = [
 	{
@@ -60,16 +37,8 @@ export const tools = [
 	}
 ];
 
-export const beforeAfterSection: BeforeAfterSection = {
-	enabled: false,
-	title: 'Before / after',
-	description: 'Comparison available when clean raw and edited clips are ready.'
-};
-
 export const servicesBundle = {
-	services,
 	processSteps,
 	skills,
-	tools,
-	beforeAfterSection
+	tools
 };

@@ -320,142 +320,144 @@
 			aria-label={i18n.content.ui.formatCarousel.chooseAriaLabel}
 			onscroll={handleCarouselScroll}
 		>
-		{#each [0, 1, 2] as groupIndex (groupIndex)}
-			<div
-				use:captureMiddleGroup={groupIndex}
-				class={['flex shrink-0 pr-6', prominent ? 'gap-6' : 'gap-4']}
-			>
-				{#each choices as choice (choice.id)}
-					{@const preview =
-						choice.id === 'custom' ? undefined : selectedCategoryPreviews[choice.id]}
-					{@const previewIsActive = Boolean(
-						preview && activePreviewGroupIndex === groupIndex && activePreviewChoice === choice.id
-					)}
-					{@const startingPrice =
-						choice.id === 'custom' ? undefined : categoryStartingPrices[choice.id]}
-					{@const startingPriceLabel = startingPrice
-						? `${i18n.content.ui.media.startingPriceLabel} ${formatProjectPrice(startingPrice, i18n.locale)}`
-						: undefined}
-					<button
-						data-choice={choice.id}
-						data-group={groupIndex}
-						class={[
-							'group relative shrink-0 snap-center overflow-hidden border text-left transition-[transform,border-color,background-color,box-shadow] duration-500',
-							getCardSizeClass(choice.id, prominent),
-							prominent ? 'rounded-[1.75rem] p-8' : 'rounded-[1.4rem] p-6',
-							locked && activeGroupIndex === groupIndex && selected === choice.id
-								? 'z-10 scale-[1.05] border-violet-200 bg-violet-300/[0.14] shadow-[0_14px_48px_rgb(81_49_150/0.28)]'
-								: 'border-white/10 bg-white/[0.035] hover:border-white/25 hover:bg-white/[0.065]'
-						]}
-						type="button"
-						aria-pressed={locked && activeGroupIndex === groupIndex && selected === choice.id}
-						tabindex={groupIndex === 1 ? 0 : -1}
-						onclick={(event) => selectChoice(choice.id, event.currentTarget, groupIndex)}
-					>
-						{#if preview}
+			{#each [0, 1, 2] as groupIndex (groupIndex)}
+				<div
+					use:captureMiddleGroup={groupIndex}
+					class={['flex shrink-0 pr-6', prominent ? 'gap-6' : 'gap-4']}
+				>
+					{#each choices as choice (choice.id)}
+						{@const preview =
+							choice.id === 'custom' ? undefined : selectedCategoryPreviews[choice.id]}
+						{@const previewIsActive = Boolean(
+							preview && activePreviewGroupIndex === groupIndex && activePreviewChoice === choice.id
+						)}
+						{@const startingPrice =
+							choice.id === 'custom' ? undefined : categoryStartingPrices[choice.id]}
+						{@const startingPriceLabel = startingPrice
+							? `${i18n.content.ui.media.startingPriceLabel} ${formatProjectPrice(startingPrice, i18n.locale)}`
+							: undefined}
+						<button
+							data-choice={choice.id}
+							data-group={groupIndex}
+							class={[
+								'group relative shrink-0 snap-center overflow-hidden border text-left transition-[transform,border-color,background-color,box-shadow] duration-500',
+								getCardSizeClass(choice.id, prominent),
+								prominent ? 'rounded-[1.75rem] p-8' : 'rounded-[1.4rem] p-6',
+								locked && activeGroupIndex === groupIndex && selected === choice.id
+									? 'z-10 scale-[1.05] border-violet-200 bg-violet-300/[0.14] shadow-[0_14px_48px_rgb(81_49_150/0.28)]'
+									: 'border-white/10 bg-white/[0.035] hover:border-white/25 hover:bg-white/[0.065]'
+							]}
+							type="button"
+							aria-pressed={locked && activeGroupIndex === groupIndex && selected === choice.id}
+							tabindex={groupIndex === 1 ? 0 : -1}
+							onclick={(event) => selectChoice(choice.id, event.currentTarget, groupIndex)}
+						>
+							{#if preview}
+								<span
+									class={[
+										'preview-media pointer-events-none absolute inset-0 block overflow-hidden',
+										previewIsActive ? 'preview-media-active' : ''
+									]}
+								>
+									<LazyAutoplayVideo
+										class={`size-full object-cover saturate-[0.85] ${previewIsActive ? 'opacity-70' : 'opacity-45'}`}
+										src={preview.src}
+										poster={preview.poster}
+										active={previewIsActive}
+									/>
+								</span>
+								<span
+									class="pointer-events-none absolute inset-0 block bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/20 transition-opacity duration-300 group-hover:opacity-80"
+								></span>
+								<span
+									class="pointer-events-none absolute inset-0 block bg-[radial-gradient(circle_at_30%_20%,rgb(155_124_255/0.22),transparent_34%)]"
+								></span>
+								<span
+									class={[
+										'preview-focus-ring pointer-events-none absolute inset-0 block rounded-[inherit] border border-violet-200/45',
+										previewIsActive ? 'preview-focus-ring-active' : ''
+									]}
+								></span>
+							{/if}
+
+							{#if startingPriceLabel}
+								<PriceBadge
+									price={startingPriceLabel}
+									ariaLabel={startingPriceLabel}
+									size={prominent ? 'md' : 'sm'}
+									class={prominent
+										? 'absolute right-3 top-3 z-20'
+										: 'absolute right-2.5 top-2.5 z-20'}
+								/>
+							{/if}
+
 							<span
 								class={[
-									'preview-media pointer-events-none absolute inset-0 block overflow-hidden',
-									previewIsActive ? 'preview-media-active' : ''
+									'pointer-events-none absolute -right-8 -top-8 size-40 rounded-full transition-opacity duration-300',
+									choice.id === 'custom'
+										? 'bg-[radial-gradient(circle,rgb(103_232_249/0.16),transparent_70%)]'
+										: 'bg-[radial-gradient(circle,rgb(167_139_250/0.18),transparent_70%)]',
+									locked && activeGroupIndex === groupIndex && selected === choice.id
+										? 'opacity-90'
+										: 'opacity-35 group-hover:opacity-55'
+								]}
+							></span>
+
+							<span class="relative flex items-start">
+								<span
+									class={[
+										'grid place-items-center rounded-2xl border',
+										prominent ? 'size-16' : 'size-12',
+										locked && activeGroupIndex === groupIndex && selected === choice.id
+											? 'border-violet-200/40 bg-violet-200/15 text-violet-100'
+											: 'border-white/10 bg-black/20 text-slate-200'
+									]}
+								>
+									{#if choice.id === 'gaming-long-form'}
+										<MonitorPlay size={prominent ? 29 : 23} aria-hidden="true" />
+									{:else if choice.id === 'gaming-short-form'}
+										<Gamepad2 size={prominent ? 29 : 23} aria-hidden="true" />
+									{:else if choice.id === 'explainer-short-form'}
+										<MessageSquareText size={prominent ? 29 : 23} aria-hidden="true" />
+									{:else if choice.id === 'business-promo'}
+										<Store size={prominent ? 29 : 23} aria-hidden="true" />
+									{:else}
+										<WandSparkles size={prominent ? 29 : 23} aria-hidden="true" />
+									{/if}
+								</span>
+							</span>
+
+							<span class={['relative block', prominent ? 'mt-16' : 'mt-10']}>
+								<span
+									class={[
+										'block font-bold text-balance text-white',
+										prominent ? 'text-4xl leading-[1.08]' : 'text-2xl leading-tight'
+									]}>{choice.title}</span
+								>
+								<span
+									class={[
+										'mt-4 block text-slate-300',
+										prominent ? 'text-base leading-7' : 'text-sm leading-6'
+									]}>{choice.promise}</span
+								>
+							</span>
+
+							<span
+								class={[
+									'absolute flex items-center justify-end border-t border-white/10 text-white',
+									prominent ? 'bottom-8 left-8 right-8 pt-7' : 'bottom-6 left-6 right-6 pt-5'
 								]}
 							>
-								<LazyAutoplayVideo
-									class={`size-full object-cover saturate-[0.85] ${previewIsActive ? 'opacity-70' : 'opacity-45'}`}
-									src={preview.src}
-									poster={preview.poster}
-									active={previewIsActive}
+								<ArrowRight
+									class="transition group-hover:translate-x-1"
+									size={18}
+									aria-hidden="true"
 								/>
 							</span>
-							<span
-								class="pointer-events-none absolute inset-0 block bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/20 transition-opacity duration-300 group-hover:opacity-80"
-							></span>
-							<span
-								class="pointer-events-none absolute inset-0 block bg-[radial-gradient(circle_at_30%_20%,rgb(155_124_255/0.22),transparent_34%)]"
-							></span>
-							<span
-								class={[
-									'preview-focus-ring pointer-events-none absolute inset-0 block rounded-[inherit] border border-violet-200/45',
-									previewIsActive ? 'preview-focus-ring-active' : ''
-								]}
-							></span>
-						{/if}
-
-						{#if startingPriceLabel}
-							<PriceBadge
-								price={startingPriceLabel}
-								ariaLabel={startingPriceLabel}
-								size={prominent ? 'md' : 'sm'}
-								class={prominent ? 'absolute right-3 top-3 z-20' : 'absolute right-2.5 top-2.5 z-20'}
-							/>
-						{/if}
-
-						<span
-							class={[
-								'pointer-events-none absolute -right-8 -top-8 size-40 rounded-full transition-opacity duration-300',
-								choice.id === 'custom'
-									? 'bg-[radial-gradient(circle,rgb(103_232_249/0.16),transparent_70%)]'
-									: 'bg-[radial-gradient(circle,rgb(167_139_250/0.18),transparent_70%)]',
-								locked && activeGroupIndex === groupIndex && selected === choice.id
-									? 'opacity-90'
-									: 'opacity-35 group-hover:opacity-55'
-							]}
-						></span>
-
-						<span class="relative flex items-start">
-							<span
-								class={[
-									'grid place-items-center rounded-2xl border',
-									prominent ? 'size-16' : 'size-12',
-									locked && activeGroupIndex === groupIndex && selected === choice.id
-										? 'border-violet-200/40 bg-violet-200/15 text-violet-100'
-										: 'border-white/10 bg-black/20 text-slate-200'
-								]}
-							>
-								{#if choice.id === 'gaming-long-form'}
-									<MonitorPlay size={prominent ? 29 : 23} aria-hidden="true" />
-								{:else if choice.id === 'gaming-short-form'}
-									<Gamepad2 size={prominent ? 29 : 23} aria-hidden="true" />
-								{:else if choice.id === 'explainer-short-form'}
-									<MessageSquareText size={prominent ? 29 : 23} aria-hidden="true" />
-								{:else if choice.id === 'business-promo'}
-									<Store size={prominent ? 29 : 23} aria-hidden="true" />
-								{:else}
-									<WandSparkles size={prominent ? 29 : 23} aria-hidden="true" />
-								{/if}
-							</span>
-						</span>
-
-						<span class={['relative block', prominent ? 'mt-16' : 'mt-10']}>
-							<span
-								class={[
-									'block font-bold text-balance text-white',
-									prominent ? 'text-4xl leading-[1.08]' : 'text-2xl leading-tight'
-								]}>{choice.title}</span
-							>
-							<span
-								class={[
-									'mt-4 block text-slate-300',
-									prominent ? 'text-base leading-7' : 'text-sm leading-6'
-								]}>{choice.promise}</span
-							>
-						</span>
-
-						<span
-							class={[
-								'absolute flex items-center justify-end border-t border-white/10 text-white',
-								prominent ? 'bottom-8 left-8 right-8 pt-7' : 'bottom-6 left-6 right-6 pt-5'
-							]}
-						>
-							<ArrowRight
-								class="transition group-hover:translate-x-1"
-								size={18}
-								aria-hidden="true"
-							/>
-						</span>
-					</button>
-				{/each}
-			</div>
-		{/each}
+						</button>
+					{/each}
+				</div>
+			{/each}
 		</div>
 		<div class="carousel-edge-fade carousel-edge-fade-left" aria-hidden="true"></div>
 		<div class="carousel-edge-fade carousel-edge-fade-right" aria-hidden="true"></div>

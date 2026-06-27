@@ -39,7 +39,7 @@
 			class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent"
 		></div>
 		<PriceBadge
-			price={price}
+			{price}
 			ariaLabel={`${i18n.content.ui.media.priceLabel} : ${price}`}
 			class="absolute right-4 top-4 z-20"
 		/>

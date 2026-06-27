@@ -26,7 +26,12 @@
 			aria-label={i18n.content.ui.navigation.secondaryAriaLabel}
 		>
 			{#each i18n.content.navigationLinks as link (link.href)}
-				<a class="transition hover:text-white" href={resolve(link.href)}>{link.label}</a>
+				<a
+					class="inline-flex min-h-11 items-center transition hover:text-white"
+					href={resolve(link.href)}
+				>
+					{link.label}
+				</a>
 			{/each}
 		</nav>
 	</div>

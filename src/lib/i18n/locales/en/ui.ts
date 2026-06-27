@@ -32,10 +32,6 @@ export const uiBundle = {
 		priceLabel: 'Indicative price',
 		startingPriceLabel: 'From'
 	},
-	showreel: {
-		title: 'Recent edit highlights',
-		description: 'A short preview of pacing, formats and finishing level across recent edits.'
-	},
 	formatsSection: {
 		eyebrow: 'Find your format',
 		title: 'A different style for every goal',
@@ -53,12 +49,6 @@ export const uiBundle = {
 		chooseAriaLabel: 'Choose an editing style',
 		previousAriaLabel: 'View previous formats',
 		nextAriaLabel: 'View next formats'
-	},
-	projectsSection: {
-		eyebrow: 'Projects',
-		title: 'Editing is judged on screen',
-		description: 'Concrete examples with the format, goal and work behind each video.',
-		viewAll: 'View all projects'
 	},
 	processSection: {
 		eyebrow: 'Process',
@@ -135,6 +125,16 @@ export const uiBundle = {
 		contactDescription:
 			'Send your format, references and project details for a personalised reply.',
 		contactCta: 'Send my request'
+	},
+	errorPage: {
+		notFoundMetaTitle: 'Page not found | Portfolio',
+		notFoundTitle: 'This page does not exist.',
+		notFoundDescription:
+			'The link may be incorrect or the page may have moved. Return home to continue.',
+		genericMetaTitle: 'Error | Portfolio',
+		genericTitle: 'Something went wrong.',
+		genericDescription: 'The page cannot be displayed right now.',
+		backHome: 'Back to home'
 	},
 	turnstileAriaLabel: 'Spam verification'
 } satisfies LocaleBundle['ui'];

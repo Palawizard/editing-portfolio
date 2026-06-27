@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ArrowRight, Calculator, Send, Sparkles } from '@lucide/svelte';
+	import { resolve } from '$app/paths';
 	import Container from '$lib/components/ui/Container.svelte';
 	import { getLocaleContext } from '$lib/i18n/context';
 
@@ -58,13 +59,15 @@
 				{#each options as option (option.href)}
 					{@const Icon = option.icon}
 					<a
-						href={option.href}
+						href={resolve(option.href)}
 						class="group relative flex min-h-[18rem] flex-col overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.035] p-7 shadow-[var(--shadow-premium)] transition duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.055] md:p-9"
 					>
 						<span
 							class={[
 								'pointer-events-none absolute -right-16 -top-16 size-48 rounded-full blur-3xl transition duration-300 group-hover:opacity-100',
-								option.accent === 'violet' ? 'bg-violet-400/16 opacity-70' : 'bg-cyan-300/12 opacity-60'
+								option.accent === 'violet'
+									? 'bg-violet-400/16 opacity-70'
+									: 'bg-cyan-300/12 opacity-60'
 							]}
 						></span>
 						<span

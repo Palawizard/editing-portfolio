@@ -1,72 +1,75 @@
 # Portfolio de montage vidéo
 
-Portfolio statique construit avec SvelteKit, TypeScript et Tailwind CSS.
+Portfolio statique de Palawi construit avec SvelteKit 2, Svelte 5, TypeScript et Tailwind CSS v4.
 
-La stratégie recommandée pour les demandes de montage est documentée dans [`docs/CONTACT_STRATEGY.md`](docs/CONTACT_STRATEGY.md).
+## Parcours disponibles
 
-## Ajouter un montage déjà publié
+- `/` : présentation, formats, méthode, compétences et contact ;
+- `/projets` : sélection d'un style puis affichage des exemples correspondants ;
+- `/estimation` : questionnaire adaptatif et fourchette indicative ;
+- `/demarrer` : choix entre estimation et contact direct ;
+- `/contact` : brief, Formspree et Cloudflare Turnstile.
 
-L'ajout se fait uniquement dans `src/lib/content/projects.ts`.
-
-1. Copier un bloc `defineProject(...)` existant.
-2. Remplacer son contenu et ajouter `externalUrl` avec le lien public de la vidéo.
-3. Lancer `pnpm check` puis `pnpm dev`.
-
-Exemple minimal :
-
-```ts
-defineProject({
-	slug: 'nom-court-et-unique',
-	title: 'Titre visible du montage',
-	category: 'gaming-short-form',
-	summary: 'Une phrase qui présente le résultat.',
-	objective: 'Ce que le montage devait accomplir.',
-	result: 'Le rendu obtenu ou son intention.',
-	work: ['Cuts', 'Sous-titres', 'Sound design'],
-	duration: '35 secondes',
-	externalUrl: 'https://www.youtube.com/shorts/VIDEO_ID',
-	featured: true
-});
-```
-
-Liens pris en charge :
-
-- YouTube et YouTube Shorts ;
-- Vimeo ;
-- TikTok avec une URL contenant `/video/` ;
-- Instagram Reels et publications vidéo.
-
-Pour YouTube, la miniature est récupérée automatiquement. Pour TikTok, Instagram et Vimeo, ajouter une image dans `static/images/posters`, puis renseigner :
-
-```ts
-poster: '/images/posters/nom-du-projet.webp';
-```
-
-Les valeurs `platform` et `format` sont déduites de `category`. Elles peuvent être remplacées au besoin :
-
-```ts
-platform: ['Instagram'],
-format: '9:16'
-```
-
-Catégories disponibles :
-
-- `gaming-long-form`
-- `gaming-short-form`
-- `explainer-short-form`
-- `business-promo`
-- `other-format`
-
-Le lien publié est intégré sur la fiche projet et reste accessible avec un bouton externe.
+Les vidéos sont présentées directement dans la grille de `/projets`. Il n'existe pas de page détail `/projets/[slug]`.
 
 ## Développement
+
+Prérequis : Node.js 22 et pnpm 10.
 
 ```sh
 pnpm install
 pnpm dev
 ```
 
-## Configurer le formulaire de contact
+## Ajouter un projet
+
+Les projets sont centralisés dans `src/lib/content/projects.ts` et leurs prix dans `src/lib/content/project-pricing.ts`.
+
+Pour chaque projet :
+
+1. ajouter le contenu français et anglais dans `projects.ts` ;
+2. renseigner une catégorie, un poster, une vidéo locale et le prix d'origine ;
+3. déposer la vidéo complète dans `static/videos/<categorie>/` ;
+4. générer ou déposer sa preview dans `static/videos/previews/` ;
+5. exécuter les vérifications locales.
+
+Catégories disponibles :
+
+- `gaming-long-form` ;
+- `gaming-short-form` ;
+- `explainer-short-form` ;
+- `business-promo` ;
+- `other-format`.
+
+## Médias vidéo
+
+Les vidéos complètes et les previews optimisées sont volontairement ignorées par Git. Elles restent dans le projet local et sont provisionnées directement sur le serveur aux mêmes chemins :
+
+```txt
+static/videos/business/
+static/videos/explainer/
+static/videos/gaming/
+static/videos/other/
+static/videos/previews/
+```
+
+Le contrôle suivant vérifie que chaque vidéo déclarée possède sa source complète et sa preview :
+
+```sh
+pnpm check:media
+```
+
+Il est aussi exécuté automatiquement avant `pnpm build`. Un build échoue donc clairement si les médias n'ont pas été provisionnés.
+
+Les previews de huit secondes peuvent être régénérées avec FFmpeg :
+
+```powershell
+./scripts/generate-video-previews.ps1
+```
+
+Les posters WebP restent suivis par Git et servent de fallback lorsque l'autoplay est désactivé ou qu'une vidéo est indisponible.
+
+## Formulaire de contact
 
 Créer un fichier `.env` à partir de `.env.example`, puis renseigner :
 
@@ -76,17 +79,9 @@ PUBLIC_TURNSTILE_SITE_KEY=turnstile_site_key
 PUBLIC_CONTACT_EMAIL=contact@example.com
 ```
 
-Configuration externe nécessaire :
+La clé secrète Turnstile reste uniquement dans Formspree. Les variables publiques sont intégrées pendant le build statique : toute modification nécessite un nouveau build.
 
-1. Créer un formulaire Formspree et récupérer son identifiant.
-2. Créer un widget Cloudflare Turnstile avec le domaine public et `localhost` autorisés.
-3. Dans Formspree, activer la protection CAPTCHA, choisir Cloudflare Turnstile et renseigner la clé secrète.
-4. Restreindre le formulaire Formspree au domaine public du portfolio.
-5. Faire une soumission réelle et vérifier la notification email ainsi que le dossier spam.
-
-La clé secrète Turnstile reste uniquement dans Formspree. Elle ne doit jamais être ajoutée aux fichiers `.env` du portfolio.
-
-Les variables publiques sont intégrées pendant le build statique. Après une modification, reconstruire le site ou l’image Docker.
+La soumission Formspree, la réception email, le domaine Turnstile et les restrictions Formspree doivent être validés manuellement sur le domaine public.
 
 ## Vérifications
 
@@ -94,12 +89,13 @@ Les variables publiques sont intégrées pendant le build statique. Après une m
 pnpm format
 pnpm lint
 pnpm check
+pnpm test
 pnpm build
 ```
 
 ## Docker Compose
 
-La conteneurisation génère le site statique avec Node, puis le sert avec Nginx sur le port `8080`.
+Le build multi-stage génère le site avec Node 22 puis le sert avec Nginx sur le port interne `8080`.
 
 ### Lancement local
 
@@ -107,38 +103,13 @@ La conteneurisation génère le site statique avec Node, puis le sert avec Nginx
 docker compose --env-file .env.example -f docker/docker-compose.yml up -d --build
 ```
 
-Le site est disponible sur `http://127.0.0.1:8080`.
+Le site est ensuite disponible sur `http://127.0.0.1:8080` et le healthcheck sur `/healthz`.
 
-Vérification :
+### Production
 
-```sh
-docker compose --env-file .env.example -f docker/docker-compose.yml ps
-curl http://127.0.0.1:8080/healthz
-```
+Le serveur doit conserver les dossiers ignorés `static/videos/*` dans le checkout avant le build. Les mises à jour Git ne les suppriment pas. Le contrôle média bloque le déploiement si un fichier attendu manque.
 
-Arrêt :
-
-```sh
-docker compose --env-file .env.example -f docker/docker-compose.yml down
-```
-
-### Production derrière un reverse proxy
-
-La production reprend le modèle du projet EasyForumGo :
-
-- stack clonée dans `/opt/dockpanel/stacks/editing-portfolio` ;
-- réseau Docker externe `web` ;
-- TLS géré par le reverse proxy ;
-- conteneur accessible sur le port interne `8080` ;
-- healthcheck Docker et contrôle HTTP après déploiement.
-
-Créer le réseau une fois sur le serveur :
-
-```sh
-docker network create web
-```
-
-Créer le fichier local `.env.prod` depuis `.env.prod.example` :
+Configuration minimale dans `.env.prod` :
 
 ```env
 HOST_BIND=127.0.0.1
@@ -149,20 +120,7 @@ PUBLIC_TURNSTILE_SITE_KEY=turnstile_site_key
 PUBLIC_CONTACT_EMAIL=contact@example.com
 ```
 
-Valider la configuration :
-
-```sh
-docker compose --env-file .env.prod \
-  -f docker/docker-compose.yml \
-  -f docker/docker-compose.prod.yml \
-  config
-```
-
-Le reverse proxy doit router le domaine public vers le service `portfolio` sur le réseau `web`, port `8080`.
-
-### Déploiement SSH
-
-Depuis PowerShell :
+Déploiement depuis PowerShell :
 
 ```powershell
 ./scripts/deploy.ps1 `
@@ -170,21 +128,4 @@ Depuis PowerShell :
   -SshUser "deploy"
 ```
 
-Options utiles :
-
-```powershell
--SshPort 22
--RemoteStack "/opt/dockpanel/stacks/editing-portfolio"
--Branch "dev"
--EnvFile ".env.prod"
--SkipPublicCheck
-```
-
-Le script :
-
-1. vérifie SSH, Git, Docker Compose et le réseau `web` ;
-2. clone ou met à jour la branche demandée ;
-3. installe `.env.prod` avec des permissions restrictives ;
-4. reconstruit et redémarre le conteneur ;
-5. vérifie `/healthz` dans le conteneur ;
-6. vérifie ensuite l'URL publique.
+Le script met à jour la branche demandée, reconstruit le conteneur, vérifie `/healthz` puis contrôle l'URL publique sauf si `-SkipPublicCheck` est utilisé. Aucun média local n'est envoyé automatiquement par ce script.

@@ -24,7 +24,7 @@
 			>
 				<img
 					class="size-full object-cover"
-					src={i18n.content.siteMetadata.image}
+					src="/favicon.png"
 					alt=""
 					width="40"
 					height="40"
@@ -36,7 +36,7 @@
 			</span>
 		</a>
 
-		<div class="hidden items-center gap-4 md:flex">
+		<div class="hidden items-center gap-4 lg:flex">
 			<div class="rounded-full border border-white/8 bg-white/[0.025] px-3">
 				<Navigation links={i18n.content.navigationLinks} />
 			</div>
@@ -44,7 +44,7 @@
 			<Button href="/demarrer" size="sm">{i18n.content.ui.header.contactCta}</Button>
 		</div>
 
-		<div class="flex items-center gap-2 md:hidden">
+		<div class="flex items-center gap-2 lg:hidden">
 			<LanguageSwitcher />
 			<button
 				class="grid size-11 place-items-center rounded-full border border-white/10 bg-white/[0.04] text-white"
@@ -64,7 +64,7 @@
 	</div>
 
 	{#if menuOpen}
-		<div id="mobile-navigation" class="border-t border-white/10 bg-slate-950 px-5 py-4 md:hidden">
+		<div id="mobile-navigation" class="border-t border-white/10 bg-slate-950 px-5 py-4 lg:hidden">
 			<Navigation
 				links={i18n.content.navigationLinks}
 				direction="column"

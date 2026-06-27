@@ -1,14 +1,7 @@
 import type { ContactOption } from '$lib/types/contact';
 import type { EstimateCopy } from '$lib/types/estimate';
 import type { EditingFormat, ProjectCategory, ProjectChoice } from '$lib/types/project';
-import type {
-	BeforeAfterSection,
-	CallToAction,
-	NavigationLink,
-	ProcessStep,
-	Service,
-	SiteMetadata
-} from '$lib/types/site';
+import type { CallToAction, NavigationLink, ProcessStep, SiteMetadata } from '$lib/types/site';
 
 export type ContactFormCopy = {
 	eyebrow: string;
@@ -95,10 +88,6 @@ export type UiCopy = {
 		priceLabel: string;
 		startingPriceLabel: string;
 	};
-	showreel: {
-		title: string;
-		description: string;
-	};
 	formatsSection: {
 		eyebrow: string;
 		title: string;
@@ -115,12 +104,6 @@ export type UiCopy = {
 		chooseAriaLabel: string;
 		previousAriaLabel: string;
 		nextAriaLabel: string;
-	};
-	projectsSection: {
-		eyebrow: string;
-		title: string;
-		description: string;
-		viewAll: string;
 	};
 	processSection: {
 		eyebrow: string;
@@ -176,6 +159,15 @@ export type UiCopy = {
 		contactDescription: string;
 		contactCta: string;
 	};
+	errorPage: {
+		notFoundMetaTitle: string;
+		notFoundTitle: string;
+		notFoundDescription: string;
+		genericMetaTitle: string;
+		genericTitle: string;
+		genericDescription: string;
+		backHome: string;
+	};
 	turnstileAriaLabel: string;
 };
 
@@ -202,10 +194,8 @@ export type LocaleBundle = {
 	contactStyleOptions: ContactOption<ProjectChoice>[];
 	contactFormCopy: ContactFormCopy;
 	estimateCopy: EstimateCopy;
-	services: Service[];
 	processSteps: ProcessStep[];
 	skills: string[];
 	tools: Array<{ name: string; note: string }>;
-	beforeAfterSection: BeforeAfterSection;
 	ui: UiCopy;
 };

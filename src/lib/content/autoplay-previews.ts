@@ -50,7 +50,9 @@ export const categoryAutoplayPreviews: Record<ProjectCategory, AutoplayPreview[]
 		definePreview('smash', 'business-smash-short', 'business', 'vertical'),
 		definePreview('tacos', 'business-tacos-short', 'business', 'vertical')
 	],
-	'other-format': [definePreview('funky-live-cuisine-other', 'funky-live-cuisine-other', 'other', 'video')]
+	'other-format': [
+		definePreview('funky-live-cuisine-other', 'funky-live-cuisine-other', 'other', 'video')
+	]
 };
 
 export const initialCategoryAutoplayPreviews = Object.fromEntries(

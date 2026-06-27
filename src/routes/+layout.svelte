@@ -40,7 +40,7 @@
 	<meta property="og:image" content={content.siteMetadata.image} />
 	<meta property="og:locale" content={ogLocales[locale]} />
 	<meta property="og:type" content="website" />
-	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:card" content="summary" />
 	<meta name="twitter:title" content={content.siteMetadata.title} />
 	<meta name="twitter:description" content={content.siteMetadata.description} />
 	<meta name="twitter:image" content={content.siteMetadata.image} />

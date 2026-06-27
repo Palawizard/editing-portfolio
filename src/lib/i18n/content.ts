@@ -34,11 +34,9 @@ const bundles: Record<Locale, LocaleBundle> = {
 		contactStyleOptions: contactBundleFr.contactStyleOptions,
 		contactFormCopy: contactBundleFr.contactFormCopy,
 		estimateCopy: estimateCopyFr,
-		services: servicesBundleFr.services,
 		processSteps: servicesBundleFr.processSteps,
 		skills: servicesBundleFr.skills,
 		tools: servicesBundleFr.tools,
-		beforeAfterSection: servicesBundleFr.beforeAfterSection,
 		ui: uiBundleFr
 	},
 	en: {
@@ -52,11 +50,9 @@ const bundles: Record<Locale, LocaleBundle> = {
 		contactStyleOptions: contactBundleEn.contactStyleOptions,
 		contactFormCopy: contactBundleEn.contactFormCopy,
 		estimateCopy: estimateCopyEn,
-		services: servicesBundleEn.services,
 		processSteps: servicesBundleEn.processSteps,
 		skills: servicesBundleEn.skills,
 		tools: servicesBundleEn.tools,
-		beforeAfterSection: servicesBundleEn.beforeAfterSection,
 		ui: uiBundleEn
 	}
 };

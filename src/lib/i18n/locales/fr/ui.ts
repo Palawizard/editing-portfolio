@@ -32,11 +32,6 @@ export const uiBundle = {
 		priceLabel: 'Prix indicatif',
 		startingPriceLabel: 'À partir de'
 	},
-	showreel: {
-		title: 'Sélection de montages récents',
-		description:
-			'Un aperçu court pour montrer le rythme, les formats et le niveau de finition des montages.'
-	},
 	formatsSection: {
 		eyebrow: 'Trouve ton format',
 		title: 'Un style différent pour chaque objectif',
@@ -55,13 +50,6 @@ export const uiBundle = {
 		chooseAriaLabel: 'Choisir un style de montage',
 		previousAriaLabel: 'Voir les formats précédents',
 		nextAriaLabel: 'Voir les formats suivants'
-	},
-	projectsSection: {
-		eyebrow: 'Projets',
-		title: 'Le montage se juge à l’écran',
-		description:
-			'Des exemples concrets, avec le format, l’objectif et le travail réalisé derrière chaque vidéo.',
-		viewAll: 'Voir tous les projets'
 	},
 	processSection: {
 		eyebrow: 'Méthode',
@@ -138,6 +126,16 @@ export const uiBundle = {
 		contactDescription:
 			'Envoie ton format, tes références et les détails de ton projet pour une réponse personnalisée.',
 		contactCta: 'Envoyer ma demande'
+	},
+	errorPage: {
+		notFoundMetaTitle: 'Page introuvable | Portfolio',
+		notFoundTitle: 'Cette page n’existe pas.',
+		notFoundDescription:
+			'Le lien est peut-être incorrect ou la page a été déplacée. Reviens à l’accueil pour poursuivre.',
+		genericMetaTitle: 'Erreur | Portfolio',
+		genericTitle: 'Une erreur est survenue.',
+		genericDescription: 'La page ne peut pas être affichée pour le moment.',
+		backHome: 'Retour à l’accueil'
 	},
 	turnstileAriaLabel: 'Vérification anti-spam'
 } satisfies LocaleBundle['ui'];

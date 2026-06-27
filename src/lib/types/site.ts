@@ -1,11 +1,17 @@
-import type { ProjectCategory, ProjectChoice } from './project';
+import type { ProjectChoice } from './project';
 
 export type ContactHref =
 	| '/contact'
 	| `/contact?style=${ProjectChoice}`
 	| `/contact?project=${string}`;
 
-export type InternalHref = '/' | '/#formats' | '/projets' | '/demarrer' | '/estimation' | ContactHref;
+export type InternalHref =
+	| '/'
+	| '/#formats'
+	| '/projets'
+	| '/demarrer'
+	| '/estimation'
+	| ContactHref;
 
 export type NavigationLink = {
 	label: string;
@@ -27,18 +33,6 @@ export type SiteMetadata = {
 };
 
 export type ProcessStep = {
-	title: string;
-	description: string;
-};
-
-export type Service = {
-	category: ProjectCategory;
-	title: string;
-	description: string;
-};
-
-export type BeforeAfterSection = {
-	enabled: boolean;
 	title: string;
 	description: string;
 };

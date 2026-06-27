@@ -183,7 +183,7 @@
 			</button>
 		</div>
 
-		<p class="mt-5 flex items-center justify-center gap-2 text-center text-xs text-slate-500">
+		<p class="mt-5 flex items-center justify-center gap-2 text-center text-xs text-slate-400">
 			<LockKeyhole size={14} aria-hidden="true" />
 			{copy.privacy}
 		</p>

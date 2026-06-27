@@ -1,27 +1,4 @@
-import type { BeforeAfterSection, ProcessStep, Service } from '$lib/types/site';
-
-export const services: Service[] = [
-	{
-		category: 'gaming-long-form',
-		title: 'Montage long format',
-		description: 'Transformer des rushs longs en vidéo structurée, fluide et agréable à suivre.'
-	},
-	{
-		category: 'gaming-short-form',
-		title: 'Montage vertical court',
-		description: 'Créer des extraits rapides, sous-titrés et adaptés aux plateformes courtes.'
-	},
-	{
-		category: 'explainer-short-form',
-		title: 'Montage explicatif',
-		description: 'Rendre une idée plus claire avec des visuels, du rythme et une narration lisible.'
-	},
-	{
-		category: 'business-promo',
-		title: 'Contenu promo',
-		description: 'Présenter une activité, une offre ou un service dans un format court et propre.'
-	}
-];
+import type { ProcessStep } from '$lib/types/site';
 
 export const processSteps: ProcessStep[] = [
 	{
@@ -61,16 +38,8 @@ export const tools = [
 	}
 ];
 
-export const beforeAfterSection: BeforeAfterSection = {
-	enabled: false,
-	title: 'Avant / après',
-	description: 'Comparaison disponible quand des extraits bruts et montés propres sont prêts.'
-};
-
 export const servicesBundle = {
-	services,
 	processSteps,
 	skills,
-	tools,
-	beforeAfterSection
+	tools
 };

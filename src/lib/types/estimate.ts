@@ -104,6 +104,12 @@ export type EstimateCopy = {
 	requiredError: string;
 	minimumError: string;
 	multiHint: string;
+	contextualQuestions: {
+		longFinalDuration: string;
+		shortFinalDuration: string;
+		longShortsCount: string;
+		gamingShortsSource: string;
+	};
 	result: {
 		eyebrow: string;
 		title: string;

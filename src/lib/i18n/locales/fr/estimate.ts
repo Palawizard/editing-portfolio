@@ -360,6 +360,12 @@ export const estimateCopy: EstimateCopy = {
 	requiredError: 'Choisis ou saisis une réponse pour continuer.',
 	minimumError: 'Ajoute un peu plus de détails pour continuer.',
 	multiHint: 'Tu peux sélectionner plusieurs réponses.',
+	contextualQuestions: {
+		longFinalDuration: 'Quelle est la durée souhaitée de la vidéo longue finale ?',
+		shortFinalDuration: 'Quelle durée moyenne souhaites-tu pour chaque short ?',
+		longShortsCount: 'Combien de shorts veux-tu extraire de la vidéo longue ?',
+		gamingShortsSource: 'Sous quelle forme vas-tu fournir les extraits gaming ?'
+	},
 	result: {
 		eyebrow: 'Estimation terminée',
 		title: 'Fourchette estimée pour ce projet',

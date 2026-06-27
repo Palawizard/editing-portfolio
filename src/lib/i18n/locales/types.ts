@@ -162,6 +162,19 @@ export type UiCopy = {
 		reviewStyles: string;
 		estimateCta: string;
 	};
+	startPage: {
+		metaTitle: string;
+		metaDescription: string;
+		eyebrow: string;
+		title: string;
+		description: string;
+		estimateTitle: string;
+		estimateDescription: string;
+		estimateCta: string;
+		contactTitle: string;
+		contactDescription: string;
+		contactCta: string;
+	};
 	turnstileAriaLabel: string;
 };
 

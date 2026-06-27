@@ -41,7 +41,7 @@
 				<Navigation links={i18n.content.navigationLinks} />
 			</div>
 			<LanguageSwitcher />
-			<Button href="/contact" size="sm">{i18n.content.ui.header.contactCta}</Button>
+			<Button href="/demarrer" size="sm">{i18n.content.ui.header.contactCta}</Button>
 		</div>
 
 		<div class="flex items-center gap-2 md:hidden">
@@ -70,7 +70,7 @@
 				direction="column"
 				onNavigate={() => (menuOpen = false)}
 			/>
-			<Button href="/contact" class="mt-4 w-full" label={i18n.content.ui.header.contactCta}>
+			<Button href="/demarrer" class="mt-4 w-full" label={i18n.content.ui.header.contactCta}>
 				{i18n.content.ui.header.contactCta}
 			</Button>
 		</div>

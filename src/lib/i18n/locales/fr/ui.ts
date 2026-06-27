@@ -120,5 +120,22 @@ export const uiBundle = {
 		reviewStyles: 'Revoir les styles',
 		estimateCta: 'Estimer mon projet'
 	},
+	startPage: {
+		metaTitle: 'Estimation ou contact | Montage vidéo',
+		metaDescription:
+			'Choisis entre une estimation rapide de ton projet ou un message direct pour présenter ton montage.',
+		eyebrow: 'Prochaine étape',
+		title: 'Comment veux-tu avancer ?',
+		description:
+			'Une estimation te donne une fourchette indicative en quelques questions. Le contact te permet d’envoyer directement ton brief.',
+		estimateTitle: 'Estimation',
+		estimateDescription:
+			'Réponds à quelques questions sur ton format, tes rushs et ton objectif pour obtenir une fourchette indicative.',
+		estimateCta: 'Estimer mon projet',
+		contactTitle: 'Contact',
+		contactDescription:
+			'Envoie ton format, tes références et les détails de ton projet pour une réponse personnalisée.',
+		contactCta: 'Envoyer ma demande'
+	},
 	turnstileAriaLabel: 'Vérification anti-spam'
 } satisfies LocaleBundle['ui'];

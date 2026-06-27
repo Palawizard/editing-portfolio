@@ -27,5 +27,6 @@ vite.config.ts.timestamp-*
 /static/videos/gaming/
 /static/videos/other/
 /static/videos/explainer/
+/static/videos/business/
 /static/videos/showreel/
 /static/videos/previews/

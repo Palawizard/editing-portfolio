@@ -88,7 +88,7 @@
 			values.email = typeof prefill.email === 'string' ? prefill.email.slice(0, 160) : '';
 			values.projectDescription =
 				typeof prefill.projectDescription === 'string'
-					? prefill.projectDescription.slice(0, 2000)
+					? prefill.projectDescription.slice(0, 4000)
 					: '';
 			values.footageDetails =
 				typeof prefill.footageDetails === 'string' ? prefill.footageDetails.slice(0, 600) : '';

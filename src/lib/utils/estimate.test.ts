@@ -38,8 +38,7 @@ describe('calculatePriceEstimate', () => {
 	it('keeps a simple short in a low entry-level range', () => {
 		const result = calculatePriceEstimate(completeAnswers());
 
-		expect(result.minimum).toBeGreaterThanOrEqual(10);
-		expect(result.maximum).toBeLessThanOrEqual(25);
+		expect([result.minimum, result.maximum]).toEqual([5, 10]);
 	});
 
 	it('keeps a standard long-form edit below a professional price range', () => {
@@ -53,30 +52,32 @@ describe('calculatePriceEstimate', () => {
 			})
 		);
 
-		expect(result.minimum).toBeGreaterThanOrEqual(25);
-		expect(result.maximum).toBeLessThanOrEqual(80);
+		expect([result.minimum, result.maximum]).toEqual([25, 30]);
 	});
 
 	it('raises the estimate for workload, finish and urgency', () => {
 		const simple = calculatePriceEstimate(completeAnswers());
-		const complex = calculatePriceEstimate(
-			completeAnswers({
-				projectType: 'gaming-long-shorts',
-				footageDuration: '2-4',
-				finalDuration: '15-30m',
-				shortsCount: '6-10',
-				sources: '3',
-				editingLevel: 'premium',
-				subtitles: 'word',
-				moments: 'find',
-				deadline: '24-48h',
-				resolution: '4k',
-				projectFiles: 'yes'
-			})
-		);
+		const complexAnswers = completeAnswers({
+			projectType: 'gaming-long-shorts',
+			footageDuration: '2-4',
+			finalDuration: '15-30m',
+			shortsCount: '6-10',
+			sources: '3',
+			editingLevel: 'premium',
+			subtitles: 'word',
+			moments: 'find',
+			deadline: '24-48h',
+			resolution: '4k',
+			projectFiles: 'yes'
+		});
+		const complex = calculatePriceEstimate(complexAnswers);
+		const relaxedDeadline = calculatePriceEstimate({
+			...complexAnswers,
+			deadline: '1-2-weeks'
+		});
 
 		expect(complex.minimum).toBeGreaterThan(simple.maximum * 5);
-		expect(complex.drivers).toContain('deadline');
+		expect(complex.maximum).toBeGreaterThan(relaxedDeadline.maximum);
 	});
 
 	it('widens uncertainty when key values are unknown', () => {
@@ -91,7 +92,7 @@ describe('calculatePriceEstimate', () => {
 		);
 
 		expect(result.uncertainty).toBe('high');
-		expect(result.maximum - result.minimum).toBeGreaterThanOrEqual(20);
+		expect(result.maximum - result.minimum).toBeGreaterThanOrEqual(10);
 	});
 
 	it('ignores stale answers from questions that became hidden', () => {
@@ -139,6 +140,41 @@ describe('questionnaire flow and prefill', () => {
 		expect(isEstimateQuestionVisible(moments, longWithShorts)).toBe(true);
 		expect(isEstimateQuestionVisible(shortsSource, scriptedShorts)).toBe(false);
 		expect(isEstimateQuestionVisible(moments, scriptedShorts)).toBe(false);
+	});
+
+	it('does not ask about a script for clip-based or already scripted projects', () => {
+		const structure = estimateCopy.questions.find((question) => question.id === 'structure')!;
+
+		for (const projectType of [
+			'gaming-clip',
+			'shorts-from-long',
+			'scripted-rush-shorts'
+		] as const) {
+			expect(isEstimateQuestionVisible(structure, completeAnswers({ projectType }))).toBe(false);
+		}
+		expect(
+			isEstimateQuestionVisible(structure, completeAnswers({ projectType: 'gaming-long-shorts' }))
+		).toBe(true);
+	});
+
+	it('uses the provided project or script instead of asking for the shorts source again', () => {
+		const shortsSource = estimateCopy.questions.find((question) => question.id === 'shortsSource')!;
+
+		expect(
+			isEstimateQuestionVisible(
+				shortsSource,
+				completeAnswers({ projectType: 'gaming-clip', providedFiles: ['editing-project'] })
+			)
+		).toBe(false);
+		expect(
+			isEstimateQuestionVisible(
+				shortsSource,
+				completeAnswers({
+					projectType: 'explainer-shorts',
+					providedFiles: ['script', 'voice-over']
+				})
+			)
+		).toBe(false);
 	});
 
 	it('asks for best moments only when a selectable video source needs reviewing', () => {
@@ -191,6 +227,36 @@ describe('questionnaire flow and prefill', () => {
 		expect(values).not.toContain('from-scratch');
 	});
 
+	it('asks for the status rather than the existence of an already provided script', () => {
+		const structure = estimateCopy.questions.find((question) => question.id === 'structure')!;
+		const contextualQuestion = getContextualEstimateQuestion(
+			structure,
+			completeAnswers({ projectType: 'explainer-shorts', providedFiles: ['script'] }),
+			estimateCopy.contextualQuestions
+		);
+		const values = contextualQuestion.options?.map((option) => option.value);
+
+		expect(contextualQuestion.title).toContain('script fourni');
+		expect(values).toEqual(['complete', 'idea']);
+	});
+
+	it('does not ask for UGC assets that were already declared', () => {
+		const ugcAssets = estimateCopy.questions.find((question) => question.id === 'ugcAssets')!;
+		const contextualQuestion = getContextualEstimateQuestion(
+			ugcAssets,
+			completeAnswers({
+				projectType: 'ugc-shorts',
+				providedFiles: ['script', 'voice-over']
+			}),
+			estimateCopy.contextualQuestions
+		);
+		const values = contextualQuestion.options?.map((option) => option.value);
+
+		expect(contextualQuestion.title).toContain('autres éléments');
+		expect(values).not.toContain('script');
+		expect(values).not.toContain('voice-over');
+	});
+
 	it('keeps a non-email contact method in the request description', () => {
 		const answers = completeAnswers({ contact: 'Discord : alex-video' });
 		const estimate = calculatePriceEstimate(answers);
@@ -213,5 +279,22 @@ describe('questionnaire flow and prefill', () => {
 
 		expect(prefill.usefulLinks).toBe('');
 		expect(prefill.budget).not.toContain('500 €');
+	});
+
+	it('transfers the relevant delivery and short details to the contact form', () => {
+		const answers = completeAnswers({
+			projectType: 'shorts-from-long',
+			moments: 'find',
+			deadline: '3-5-days',
+			resolution: '4k',
+			projectFiles: 'yes'
+		});
+		const estimate = calculatePriceEstimate(answers);
+		const prefill = buildContactPrefill(answers, estimate, estimateCopy.questions, 'fr');
+
+		expect(prefill.projectDescription).toContain('Sélection des meilleurs moments');
+		expect(prefill.projectDescription).toContain('3 à 5 jours');
+		expect(prefill.projectDescription).toContain('4K');
+		expect(prefill.projectDescription).toContain('Fichiers de projet à livrer: Oui');
 	});
 });

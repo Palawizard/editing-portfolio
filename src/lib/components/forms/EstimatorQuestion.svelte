@@ -34,8 +34,15 @@
 			return;
 		}
 
+		const incompatibleValue =
+			question.id === 'providedFiles' && value === 'raw'
+				? 'derushed'
+				: question.id === 'providedFiles' && value === 'derushed'
+					? 'raw'
+					: '';
+
 		const withoutExclusive = selectedValues.filter(
-			(item) => !exclusiveValues.includes(item) && item !== value
+			(item) => !exclusiveValues.includes(item) && item !== value && item !== incompatibleValue
 		);
 		onAnswer(selectedValues.includes(value) ? withoutExclusive : [...withoutExclusive, value]);
 	};

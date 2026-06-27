@@ -109,6 +109,8 @@ export type EstimateCopy = {
 		shortFinalDuration: string;
 		longShortsCount: string;
 		gamingShortsSource: string;
+		providedScriptStatus: string;
+		remainingUgcAssets: string;
 	};
 	result: {
 		eyebrow: string;

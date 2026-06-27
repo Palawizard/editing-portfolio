@@ -68,8 +68,8 @@ const questions: EstimateQuestion[] = [
 			{ value: 'derushed', label: 'Pre-selected footage' },
 			{ value: 'edited-project', label: 'Edited video + project files' },
 			{ value: 'editing-project', label: 'Editing project provided' },
-			{ value: 'script', label: 'Script only' },
-			{ value: 'voice-over', label: 'Voice-over only' },
+			{ value: 'script', label: 'Script' },
+			{ value: 'voice-over', label: 'Voice-over' },
 			{ value: 'assets', label: 'Images / B-roll / assets' },
 			{ value: 'unknown', label: 'I do not know yet' }
 		]
@@ -354,7 +354,9 @@ export const estimateCopy: EstimateCopy = {
 		longFinalDuration: 'What final length do you want for the long-form video?',
 		shortFinalDuration: 'What average length do you want for each short?',
 		longShortsCount: 'How many shorts do you want extracted from the long-form video?',
-		gamingShortsSource: 'How will you provide the gaming clips?'
+		gamingShortsSource: 'How will you provide the gaming clips?',
+		providedScriptStatus: 'What is the status of the provided script?',
+		remainingUgcAssets: 'Which other elements are already provided for this project?'
 	},
 	result: {
 		eyebrow: 'Estimate complete',

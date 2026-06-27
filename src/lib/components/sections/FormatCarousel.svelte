@@ -10,8 +10,9 @@
 		Store,
 		WandSparkles
 	} from '@lucide/svelte';
+	import LazyAutoplayVideo from '$lib/components/media/LazyAutoplayVideo.svelte';
+	import { categoryAutoplayPreviews } from '$lib/content/autoplay-previews';
 	import { getLocaleContext } from '$lib/i18n/context';
-	import { getPublishedVideo } from '$lib/utils/media';
 	import type { ProjectCategory, ProjectChoice } from '$lib/types/project';
 
 	type Props = {
@@ -31,13 +32,9 @@
 	let centering = false;
 	let centeringTimeout: ReturnType<typeof setTimeout> | undefined;
 	let activeGroupIndex = $state<number | undefined>();
-	let categoryPreviews = $state<Partial<Record<ProjectCategory, CarouselPreview>>>({});
-
-	type CarouselPreview = {
-		src: string;
-		title: string;
-		poster?: string;
-	};
+	let activePreviewGroupIndex = $state(1);
+	let activePreviewChoice = $state<ProjectCategory | undefined>('gaming-long-form');
+	let previewUpdateFrame = 0;
 
 	const choices = $derived([
 		...i18n.content.editingFormats,
@@ -63,55 +60,6 @@
 		return isProminent
 			? 'aspect-[9/16] w-[52vw] max-w-[18rem] sm:w-[17rem]'
 			: 'aspect-[9/16] w-[46vw] max-w-[15rem] sm:w-[14rem]';
-	};
-
-	const randomItem = <T,>(items: T[]) => items[Math.floor(Math.random() * items.length)];
-
-	const getRandomStart = (category: ProjectCategory) => {
-		const maxStartByCategory: Record<ProjectCategory, number> = {
-			'gaming-long-form': 420,
-			'gaming-short-form': 24,
-			'explainer-short-form': 24,
-			'business-promo': 18,
-			'other-format': 300
-		};
-
-		return Math.floor(Math.random() * maxStartByCategory[category]);
-	};
-
-	const getCategoryPreview = (category: ProjectCategory): CarouselPreview | undefined => {
-		const candidates = i18n.content.projects
-			.filter((project) => project.category === category)
-			.flatMap((project) => {
-				const video = getPublishedVideo(project.externalUrl);
-				const src = project.previewVideo ?? video?.directUrl;
-				if (!src) return [];
-
-				return [
-					{
-						project,
-						poster: project.poster || video?.poster,
-						src
-					}
-				];
-			});
-
-		const candidate = randomItem(candidates);
-		if (!candidate) return undefined;
-
-		const start = getRandomStart(category);
-
-		return {
-			title: candidate.project.title,
-			poster: candidate.poster,
-			src: `${candidate.src}#t=${start}`
-		};
-	};
-
-	const buildCategoryPreviews = () => {
-		categoryPreviews = Object.fromEntries(
-			i18n.content.editingFormats.map((format) => [format.id, getCategoryPreview(format.id)])
-		);
 	};
 
 	const captureMiddleGroup = (node: HTMLDivElement, groupIndex: number) => {
@@ -171,6 +119,30 @@
 			},
 			{ index: 0, distance: Number.POSITIVE_INFINITY }
 		).index;
+	};
+
+	const updateActivePreview = () => {
+		const cards = getCards();
+		if (!cards.length) return;
+
+		const activeCard = cards[getNearestCardIndex(cards)];
+		const groupIndex = Number(activeCard.dataset.group);
+		const choice = activeCard.dataset.choice as ProjectChoice | undefined;
+
+		if (!Number.isFinite(groupIndex) || !choice) return;
+
+		activePreviewGroupIndex = groupIndex;
+		activePreviewChoice = choice === 'custom' ? undefined : choice;
+	};
+
+	const scheduleActivePreviewUpdate = () => {
+		cancelAnimationFrame(previewUpdateFrame);
+		previewUpdateFrame = requestAnimationFrame(updateActivePreview);
+	};
+
+	const handleCarouselScroll = () => {
+		keepInLoop();
+		scheduleActivePreviewUpdate();
 	};
 
 	const rebaseCardToMiddleGroup = (card: HTMLElement) => {
@@ -240,6 +212,8 @@
 	const selectChoice = (choice: ProjectChoice, target: HTMLElement, groupIndex: number) => {
 		locked = true;
 		activeGroupIndex = groupIndex;
+		activePreviewGroupIndex = groupIndex;
+		activePreviewChoice = choice === 'custom' ? undefined : choice;
 		onSelect(choice);
 		centering = true;
 		if (centeringTimeout) clearTimeout(centeringTimeout);
@@ -256,8 +230,8 @@
 
 	onMount(() => {
 		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		buildCategoryPreviews();
 		carousel.scrollLeft = getSegmentWidth();
+		scheduleActivePreviewUpdate();
 
 		if (!reduceMotion) {
 			animationFrame = requestAnimationFrame(animate);
@@ -273,6 +247,7 @@
 
 		return () => {
 			cancelAnimationFrame(animationFrame);
+			cancelAnimationFrame(previewUpdateFrame);
 			if (centeringTimeout) clearTimeout(centeringTimeout);
 			window.removeEventListener('resize', handleResize);
 		};
@@ -310,7 +285,7 @@
 			locked ? 'snap-x snap-mandatory' : ''
 		]}
 		aria-label={i18n.content.ui.formatCarousel.chooseAriaLabel}
-		onscroll={keepInLoop}
+		onscroll={handleCarouselScroll}
 	>
 		{#each [0, 1, 2] as groupIndex (groupIndex)}
 			<div
@@ -318,7 +293,8 @@
 				class={['flex shrink-0 pr-6', prominent ? 'gap-6' : 'gap-4']}
 			>
 				{#each choices as choice (choice.id)}
-					{@const preview = choice.id === 'custom' ? undefined : categoryPreviews[choice.id]}
+					{@const preview =
+						choice.id === 'custom' ? undefined : categoryAutoplayPreviews[choice.id]}
 					<button
 						data-choice={choice.id}
 						data-group={groupIndex}
@@ -337,17 +313,13 @@
 					>
 						{#if preview}
 							<span class="pointer-events-none absolute inset-0 block overflow-hidden">
-								<video
+								<LazyAutoplayVideo
 									class="size-full object-cover opacity-45 saturate-[0.85] transition duration-500 group-hover:opacity-65"
 									src={preview.src}
 									poster={preview.poster}
-									aria-label={preview.title}
-									autoplay
-									muted
-									loop
-									playsinline
-									preload="metadata"
-								></video>
+									active={activePreviewGroupIndex === groupIndex &&
+										activePreviewChoice === choice.id}
+								/>
 							</span>
 							<span
 								class="pointer-events-none absolute inset-0 block bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/20"

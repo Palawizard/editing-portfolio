@@ -57,7 +57,7 @@ export type EstimateQuestion = {
 	options?: EstimateQuestionOption[];
 	required: boolean;
 	minLength?: number;
-	autocomplete?: string;
+	autocomplete?: 'name' | 'email' | 'off';
 };
 
 export type EstimateDriver =

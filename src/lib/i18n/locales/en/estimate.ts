@@ -350,6 +350,12 @@ export const estimateCopy: EstimateCopy = {
 	requiredError: 'Choose or enter an answer to continue.',
 	minimumError: 'Add a little more detail to continue.',
 	multiHint: 'You can select more than one answer.',
+	contextualQuestions: {
+		longFinalDuration: 'What final length do you want for the long-form video?',
+		shortFinalDuration: 'What average length do you want for each short?',
+		longShortsCount: 'How many shorts do you want extracted from the long-form video?',
+		gamingShortsSource: 'How will you provide the gaming clips?'
+	},
 	result: {
 		eyebrow: 'Estimate complete',
 		title: 'Estimated range for this project',

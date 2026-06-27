@@ -14,6 +14,7 @@
 		ESTIMATE_PREFILL_STORAGE_KEY,
 		buildContactPrefill,
 		calculatePriceEstimate,
+		getContextualEstimateQuestion,
 		isEstimateQuestionVisible
 	} from '$lib/utils/estimate';
 
@@ -27,7 +28,12 @@
 	const visibleQuestions = $derived(
 		copy.questions.filter((question) => isEstimateQuestionVisible(question, answers))
 	);
-	const currentQuestion = $derived(visibleQuestions[currentIndex]);
+	const rawCurrentQuestion = $derived(visibleQuestions[currentIndex]);
+	const currentQuestion = $derived(
+		rawCurrentQuestion
+			? getContextualEstimateQuestion(rawCurrentQuestion, answers, copy.contextualQuestions)
+			: undefined
+	);
 	const currentAnswer = $derived(currentQuestion ? answers[currentQuestion.id] : '');
 	const progress = $derived(
 		visibleQuestions.length > 0 ? ((currentIndex + 1) / visibleQuestions.length) * 100 : 0

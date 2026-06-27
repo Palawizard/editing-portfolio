@@ -1,6 +1,7 @@
 import type {
 	EstimateAnswers,
 	EstimateContactPrefill,
+	EstimateCopy,
 	EstimateDriver,
 	EstimateProjectType,
 	EstimateQuestion,
@@ -10,7 +11,7 @@ import type { ProjectChoice } from '$lib/types/project';
 
 export const ESTIMATE_PREFILL_STORAGE_KEY = 'portfolio-estimate-prefill';
 
-const hourlyRate = 13;
+const hourlyRate = 7;
 
 const longProjects = new Set<EstimateProjectType>([
 	'gaming-long',
@@ -61,12 +62,69 @@ export const projectIncludesShorts = (projectType: EstimateProjectType | '') =>
 
 export const isUgcProject = (projectType: EstimateProjectType | '') => projectType === 'ugc-shorts';
 
+const projectDefinesShortsSource = (projectType: EstimateProjectType | '') =>
+	projectType === 'gaming-long-shorts' ||
+	projectType === 'other-long-shorts' ||
+	projectType === 'shorts-from-long' ||
+	projectType === 'scripted-rush-shorts';
+
+const sourceNeedsMomentSelection = (source: string) =>
+	source === 'long-video' || source === 'short-rushes' || source === 'long-rushes';
+
+export const shouldAskShortsSource = (answers: EstimateAnswers) =>
+	projectIncludesShorts(answers.projectType) && !projectDefinesShortsSource(answers.projectType);
+
+export const shouldAskMoments = (answers: EstimateAnswers) => {
+	if (
+		answers.projectType === 'gaming-long-shorts' ||
+		answers.projectType === 'other-long-shorts' ||
+		answers.projectType === 'shorts-from-long'
+	) {
+		return true;
+	}
+
+	return shouldAskShortsSource(answers) && sourceNeedsMomentSelection(answers.shortsSource);
+};
+
+export const getContextualEstimateQuestion = (
+	question: EstimateQuestion,
+	answers: EstimateAnswers,
+	copy: EstimateCopy['contextualQuestions']
+): EstimateQuestion => {
+	if (question.id === 'finalDuration') {
+		if (longProjects.has(answers.projectType || 'other')) {
+			return { ...question, title: copy.longFinalDuration };
+		}
+		if (shortProjects.has(answers.projectType || 'other')) {
+			return { ...question, title: copy.shortFinalDuration };
+		}
+	}
+
+	if (question.id === 'shortsCount' && longProjects.has(answers.projectType || 'other')) {
+		return { ...question, title: copy.longShortsCount };
+	}
+
+	if (question.id === 'shortsSource' && answers.projectType === 'gaming-clip') {
+		return {
+			...question,
+			title: copy.gamingShortsSource,
+			options: question.options?.filter(
+				(option) => option.value !== 'script-voice' && option.value !== 'from-scratch'
+			)
+		};
+	}
+
+	return question;
+};
+
 export const isEstimateQuestionVisible = (question: EstimateQuestion, answers: EstimateAnswers) => {
 	switch (question.id) {
 		case 'shortsCount':
-		case 'shortsSource':
-		case 'moments':
 			return projectIncludesShorts(answers.projectType);
+		case 'shortsSource':
+			return shouldAskShortsSource(answers);
+		case 'moments':
+			return shouldAskMoments(answers);
 		case 'ugcAssets':
 			return isUgcProject(answers.projectType);
 		case 'referenceLink':
@@ -145,10 +203,10 @@ export const calculatePriceEstimate = (answers: EstimateAnswers): PriceEstimate 
 			? shortEditHours
 			: longEditHours;
 
-	const levelMultiplier = optionValue(answers.editingLevel, 1.1, {
-		simple: 0.8,
-		advanced: 1.1,
-		premium: 1.6
+	const levelMultiplier = optionValue(answers.editingLevel, 0.9, {
+		simple: 0.65,
+		advanced: 0.9,
+		premium: 1.25
 	});
 
 	const sourceMultiplier = optionValue(answers.sources, 1.12, {
@@ -174,15 +232,17 @@ export const calculatePriceEstimate = (answers: EstimateAnswers): PriceEstimate 
 	});
 
 	if (hasShorts) {
-		hours += optionValue(answers.moments, 0.75, {
-			precise: 0,
-			approximate: 0.35,
-			find: 1.25,
-			unknown: 0.75
-		});
+		if (shouldAskMoments(answers)) {
+			hours += optionValue(answers.moments, 0.75, {
+				precise: 0,
+				approximate: 0.35,
+				find: 1.25,
+				unknown: 0.75
+			});
+		}
 
-		if (answers.shortsSource === 'from-scratch') hours += 2;
-		if (answers.shortsSource === 'script-voice') hours += 0.75;
+		if (shouldAskShortsSource(answers) && answers.shortsSource === 'from-scratch') hours += 1.25;
+		if (shouldAskShortsSource(answers) && answers.shortsSource === 'script-voice') hours += 0.5;
 	}
 
 	const subtitleHoursPerOutput = optionValue(answers.subtitles, 0.15, {
@@ -199,36 +259,40 @@ export const calculatePriceEstimate = (answers: EstimateAnswers): PriceEstimate 
 		else if (!answers.ugcAssets.includes('script')) hours += 0.75;
 	}
 
-	const resolutionMultiplier = optionValue(answers.resolution, 1.03, {
+	const resolutionMultiplier = optionValue(answers.resolution, 1.01, {
 		'1080p': 1,
-		'1440p': 1.05,
-		'4k': 1.12,
-		unknown: 1.03
+		'1440p': 1.02,
+		'4k': 1.05,
+		unknown: 1.01
 	});
-	const projectFilesMultiplier = answers.projectFiles === 'yes' ? 1.15 : 1;
+	const projectFilesMultiplier = answers.projectFiles === 'yes' ? 1.08 : 1;
 	const deadlineMultiplier = optionValue(answers.deadline, 1, {
-		'not-urgent': 0.95,
+		'not-urgent': 0.9,
 		'1-2-weeks': 1,
-		'3-5-days': 1.12,
-		'24-48h': 1.35,
-		'very-urgent': 1.55
+		'3-5-days': 1.08,
+		'24-48h': 1.2,
+		'very-urgent': 1.3
 	});
 	hours *= resolutionMultiplier * projectFilesMultiplier * deadlineMultiplier;
 
-	const minimumPrice = isLong ? 45 : isShort ? 20 : 35;
+	const minimumPrice = isLong ? 25 : isShort ? 10 : 20;
 	const centralPrice = Math.max(minimumPrice, hours * hourlyRate);
 
-	const unknownValues = [
+	const valuesThatCanBeUnknown = [
 		answers.footageDuration,
-		answers.shortsCount,
 		answers.sources,
 		answers.resolution,
-		answers.moments
-	].filter((value) => value === 'unknown').length;
+		...(hasShorts ? [answers.shortsCount] : []),
+		...(shouldAskMoments(answers) ? [answers.moments] : [])
+	];
+	const unknownValues = valuesThatCanBeUnknown.filter((value) => value === 'unknown').length;
 	let uncertaintyRate = 0.12 + Math.min(0.12, unknownValues * 0.03);
 	if (projectType === 'other') uncertaintyRate += 0.05;
 	if (answers.specificRequests.trim()) uncertaintyRate += 0.02;
-	if (answers.ugcAssets.includes('none') || answers.ugcAssets.includes('unknown')) {
+	if (
+		projectType === 'ugc-shorts' &&
+		(answers.ugcAssets.includes('none') || answers.ugcAssets.includes('unknown'))
+	) {
 		uncertaintyRate += 0.04;
 	}
 	uncertaintyRate = Math.min(0.3, uncertaintyRate);
@@ -246,7 +310,7 @@ export const calculatePriceEstimate = (answers: EstimateAnswers): PriceEstimate 
 		['structure', answers.structure === 'none' ? 2 : answers.structure === 'idea' ? 0.75 : 0],
 		['deadline', Math.abs(deadlineMultiplier - 1) * hours],
 		['resolution', (resolutionMultiplier - 1) * hours],
-		['project-files', answers.projectFiles === 'yes' ? hours * 0.15 : 0]
+		['project-files', answers.projectFiles === 'yes' ? hours * 0.08 : 0]
 	];
 
 	return {
@@ -351,12 +415,12 @@ export const buildContactPrefill = (
 		footageDetails: footageLines.join('\n'),
 		budget: [
 			`${localized.estimate}: ${estimate.minimum}–${estimate.maximum} €`,
-			answers.budgetAmount.trim()
+			answers.budgetPreference === 'yes' && answers.budgetAmount.trim()
 				? `${localized.providedBudget}: ${answers.budgetAmount.trim()}`
 				: ''
 		]
 			.filter(Boolean)
 			.join(' · '),
-		usefulLinks: answers.referenceLink.trim()
+		usefulLinks: answers.styleReference === 'example' ? answers.referenceLink.trim() : ''
 	};
 };

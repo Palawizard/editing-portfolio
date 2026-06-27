@@ -45,6 +45,8 @@ export const contactFormCopy = {
 	contextPrefix: 'Tu demandes un montage de type',
 	contextReference: 'Projet de référence :',
 	contextHint: 'Tu peux modifier ce choix dans le formulaire.',
+	estimateContextTitle: 'Les informations de ton estimation ont été ajoutées.',
+	estimateContextHint: 'Relis-les et complète ton adresse email avant d’envoyer la demande.',
 	successFields: {
 		contact: 'Contact',
 		email: 'Email',

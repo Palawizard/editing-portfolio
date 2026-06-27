@@ -44,6 +44,8 @@ export const contactFormCopy = {
 	contextPrefix: 'You are requesting an edit in the',
 	contextReference: 'Reference project:',
 	contextHint: 'You can change this choice in the form.',
+	estimateContextTitle: 'The details from your estimate have been added.',
+	estimateContextHint: 'Review them and complete your email address before sending the request.',
 	successFields: {
 		contact: 'Contact',
 		email: 'Email',

@@ -98,7 +98,7 @@
 			name="project_description"
 			required
 			minlength="20"
-			maxlength="2000"
+			maxlength="4000"
 			bind:value={values.projectDescription}
 			aria-invalid={errors.projectDescription ? 'true' : undefined}
 			aria-describedby={[

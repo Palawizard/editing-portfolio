@@ -22,6 +22,17 @@ describe('autoplay previews', () => {
 		}
 	});
 
+	it('uses the Miyuna best-of preview in other formats', () => {
+		const bestOfSource = '/videos/previews/miyuna-model-reveal-best-of-preview.mp4';
+
+		expect(categoryAutoplayPreviews['other-format'].some(({ src }) => src === bestOfSource)).toBe(
+			true
+		);
+		expect(
+			categoryAutoplayPreviews['gaming-long-form'].some(({ src }) => src === bestOfSource)
+		).toBe(false);
+	});
+
 	it('selects a random horizontal preview for the hero', () => {
 		expect(selectRandomHeroAutoplayPreview(() => 0.999)).toBe(heroAutoplayPreviews.at(-1));
 	});

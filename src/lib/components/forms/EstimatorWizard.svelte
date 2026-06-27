@@ -87,7 +87,7 @@
 		if (!estimate) return;
 		const prefill = buildContactPrefill(answers, estimate, copy.questions, i18n.locale);
 		sessionStorage.setItem(ESTIMATE_PREFILL_STORAGE_KEY, JSON.stringify(prefill));
-		await goto(`${resolve('/contact')}?estimate=1`);
+		await goto(resolve('/contact'));
 	};
 </script>
 

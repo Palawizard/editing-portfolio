@@ -2,6 +2,8 @@ import { projectCategoryLabels as projectCategoryLabelsEn } from '$lib/i18n/loca
 import { projectCategoryLabels as projectCategoryLabelsFr } from '$lib/i18n/locales/fr/formats';
 import { contactBundle as contactBundleEn } from '$lib/i18n/locales/en/contact';
 import { contactBundle as contactBundleFr } from '$lib/i18n/locales/fr/contact';
+import { estimateCopy as estimateCopyEn } from '$lib/i18n/locales/en/estimate';
+import { estimateCopy as estimateCopyFr } from '$lib/i18n/locales/fr/estimate';
 import { formatsBundle as formatsBundleEn } from '$lib/i18n/locales/en/formats';
 import { formatsBundle as formatsBundleFr } from '$lib/i18n/locales/fr/formats';
 import { servicesBundle as servicesBundleEn } from '$lib/i18n/locales/en/services';
@@ -31,6 +33,7 @@ const bundles: Record<Locale, LocaleBundle> = {
 		customFormatChoice: formatsBundleFr.customFormatChoice,
 		contactStyleOptions: contactBundleFr.contactStyleOptions,
 		contactFormCopy: contactBundleFr.contactFormCopy,
+		estimateCopy: estimateCopyFr,
 		services: servicesBundleFr.services,
 		processSteps: servicesBundleFr.processSteps,
 		skills: servicesBundleFr.skills,
@@ -48,6 +51,7 @@ const bundles: Record<Locale, LocaleBundle> = {
 		customFormatChoice: formatsBundleEn.customFormatChoice,
 		contactStyleOptions: contactBundleEn.contactStyleOptions,
 		contactFormCopy: contactBundleEn.contactFormCopy,
+		estimateCopy: estimateCopyEn,
 		services: servicesBundleEn.services,
 		processSteps: servicesBundleEn.processSteps,
 		skills: servicesBundleEn.skills,

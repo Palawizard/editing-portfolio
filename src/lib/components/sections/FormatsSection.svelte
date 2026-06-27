@@ -34,7 +34,11 @@
 		/>
 
 		<div class="mt-12">
-			<FormatCarousel selected={selectedChoice} onSelect={(choice) => (selectedChoice = choice)} />
+			<FormatCarousel
+				selected={selectedChoice}
+				onSelect={(choice) => (selectedChoice = choice)}
+				fadeFrom="var(--color-bg-soft)"
+			/>
 		</div>
 
 		{#if selectedChoice}

@@ -25,9 +25,10 @@
 		selected?: ProjectChoice;
 		onSelect: (choice: ProjectChoice) => void;
 		prominent?: boolean;
+		fadeFrom?: string;
 	};
 
-	let { selected, onSelect, prominent = false }: Props = $props();
+	let { selected, onSelect, prominent = false, fadeFrom = 'var(--color-bg)' }: Props = $props();
 	const i18n = getLocaleContext();
 	let carousel: HTMLDivElement;
 	let middleGroup: HTMLDivElement | undefined;
@@ -41,7 +42,7 @@
 	let activePreviewGroupIndex = $state(1);
 	let activePreviewChoice = $state<ProjectCategory | undefined>('gaming-long-form');
 	let selectedCategoryPreviews = $state(initialCategoryAutoplayPreviews);
-	let previewUpdateFrame = 0;
+	let previewScrollTimeout: ReturnType<typeof setTimeout> | undefined;
 
 	const getChoicePrice = (choice: ProjectChoice) =>
 		choice === 'custom' ? Number.POSITIVE_INFINITY : categoryStartingPrices[choice].minimum;
@@ -154,9 +155,21 @@
 		activePreviewChoice = choice === 'custom' ? undefined : choice;
 	};
 
-	const scheduleActivePreviewUpdate = () => {
-		cancelAnimationFrame(previewUpdateFrame);
-		previewUpdateFrame = requestAnimationFrame(updateActivePreview);
+	const scheduleActivePreviewUpdate = (immediate = false) => {
+		if (previewScrollTimeout) {
+			clearTimeout(previewScrollTimeout);
+			previewScrollTimeout = undefined;
+		}
+
+		if (immediate) {
+			updateActivePreview();
+			return;
+		}
+
+		previewScrollTimeout = setTimeout(() => {
+			previewScrollTimeout = undefined;
+			updateActivePreview();
+		}, 140);
 	};
 
 	const handleCarouselScroll = () => {
@@ -213,6 +226,7 @@
 		centeringTimeout = setTimeout(() => {
 			rebaseCardToMiddleGroup(target);
 			centering = false;
+			scheduleActivePreviewUpdate(true);
 		}, 500);
 	};
 
@@ -244,6 +258,7 @@
 		centeringTimeout = setTimeout(() => {
 			centering = false;
 			keepInLoop();
+			scheduleActivePreviewUpdate(true);
 		}, 650);
 	};
 
@@ -251,7 +266,7 @@
 		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 		selectedCategoryPreviews = selectRandomCategoryAutoplayPreviews();
 		carousel.scrollLeft = getSegmentWidth();
-		scheduleActivePreviewUpdate();
+		scheduleActivePreviewUpdate(true);
 
 		if (!reduceMotion) {
 			animationFrame = requestAnimationFrame(animate);
@@ -267,7 +282,7 @@
 
 		return () => {
 			cancelAnimationFrame(animationFrame);
-			cancelAnimationFrame(previewUpdateFrame);
+			if (previewScrollTimeout) clearTimeout(previewScrollTimeout);
 			if (centeringTimeout) clearTimeout(centeringTimeout);
 			window.removeEventListener('resize', handleResize);
 		};
@@ -298,15 +313,16 @@
 		</button>
 	</div>
 
-	<div
-		bind:this={carousel}
-		class={[
-			'carousel-fade scrollbar-hidden -mx-5 flex overflow-x-auto px-5 pb-36 pt-8 -mb-28 sm:mx-0 sm:px-0',
-			locked ? 'snap-x snap-mandatory' : ''
-		]}
-		aria-label={i18n.content.ui.formatCarousel.chooseAriaLabel}
-		onscroll={handleCarouselScroll}
-	>
+	<div class="carousel-shell relative overflow-x-clip" style={`--carousel-fade-from: ${fadeFrom}`}>
+		<div
+			bind:this={carousel}
+			class={[
+				'carousel-track scrollbar-hidden -mx-5 flex overflow-x-auto px-5 pb-36 pt-8 -mb-28 sm:mx-0 sm:px-0',
+				locked ? 'snap-x snap-mandatory' : ''
+			]}
+			aria-label={i18n.content.ui.formatCarousel.chooseAriaLabel}
+			onscroll={handleCarouselScroll}
+		>
 		{#each [0, 1, 2] as groupIndex (groupIndex)}
 			<div
 				use:captureMiddleGroup={groupIndex}
@@ -327,7 +343,7 @@
 						data-choice={choice.id}
 						data-group={groupIndex}
 						class={[
-							'group relative shrink-0 snap-center overflow-hidden border text-left transition duration-500',
+							'group relative shrink-0 snap-center overflow-hidden border text-left transition-[transform,border-color,background-color,box-shadow] duration-500',
 							getCardSizeClass(choice.id, prominent),
 							prominent ? 'rounded-[1.75rem] p-8' : 'rounded-[1.4rem] p-6',
 							locked && activeGroupIndex === groupIndex && selected === choice.id
@@ -347,14 +363,14 @@
 								]}
 							>
 								<LazyAutoplayVideo
-									class={`size-full object-cover saturate-[0.85] transition duration-500 group-hover:opacity-65 ${previewIsActive ? 'opacity-70' : 'opacity-45'}`}
+									class={`size-full object-cover saturate-[0.85] ${previewIsActive ? 'opacity-70' : 'opacity-45'}`}
 									src={preview.src}
 									poster={preview.poster}
 									active={previewIsActive}
 								/>
 							</span>
 							<span
-								class="pointer-events-none absolute inset-0 block bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/20"
+								class="pointer-events-none absolute inset-0 block bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/20 transition-opacity duration-300 group-hover:opacity-80"
 							></span>
 							<span
 								class="pointer-events-none absolute inset-0 block bg-[radial-gradient(circle_at_30%_20%,rgb(155_124_255/0.22),transparent_34%)]"
@@ -378,11 +394,13 @@
 
 						<span
 							class={[
-								'absolute -right-16 -top-16 size-48 rounded-full blur-3xl transition',
-								choice.id === 'custom' ? 'bg-cyan-300/14' : 'bg-violet-400/16',
+								'pointer-events-none absolute -right-12 -top-12 size-56 rounded-full transition-opacity duration-300',
+								choice.id === 'custom'
+									? 'bg-[radial-gradient(circle,rgb(103_232_249/0.22),transparent_68%)]'
+									: 'bg-[radial-gradient(circle,rgb(167_139_250/0.24),transparent_68%)]',
 								locked && activeGroupIndex === groupIndex && selected === choice.id
 									? 'opacity-100'
-									: 'opacity-40 group-hover:opacity-80'
+									: 'opacity-40 group-hover:opacity-70'
 							]}
 						></span>
 
@@ -441,10 +459,36 @@
 				{/each}
 			</div>
 		{/each}
+		</div>
+		<div class="carousel-edge-fade carousel-edge-fade-left" aria-hidden="true"></div>
+		<div class="carousel-edge-fade carousel-edge-fade-right" aria-hidden="true"></div>
 	</div>
 </div>
 
 <style>
+	.carousel-shell {
+		--carousel-fade-width: clamp(3rem, 8vw, 7rem);
+	}
+
+	.carousel-edge-fade {
+		position: absolute;
+		top: 2rem;
+		bottom: 7rem;
+		z-index: 20;
+		width: var(--carousel-fade-width);
+		pointer-events: none;
+	}
+
+	.carousel-edge-fade-left {
+		left: 0;
+		background: linear-gradient(to right, var(--carousel-fade-from), transparent);
+	}
+
+	.carousel-edge-fade-right {
+		right: 0;
+		background: linear-gradient(to left, var(--carousel-fade-from), transparent);
+	}
+
 	@keyframes preview-media-focus {
 		0% {
 			filter: brightness(1);
@@ -483,6 +527,11 @@
 		transition:
 			filter 240ms ease,
 			transform 240ms ease;
+	}
+
+	.carousel-track {
+		-webkit-backface-visibility: hidden;
+		backface-visibility: hidden;
 	}
 
 	.preview-media-active {

@@ -11,7 +11,10 @@
 		WandSparkles
 	} from '@lucide/svelte';
 	import LazyAutoplayVideo from '$lib/components/media/LazyAutoplayVideo.svelte';
-	import { categoryAutoplayPreviews } from '$lib/content/autoplay-previews';
+	import {
+		initialCategoryAutoplayPreviews,
+		selectRandomCategoryAutoplayPreviews
+	} from '$lib/content/autoplay-previews';
 	import { getLocaleContext } from '$lib/i18n/context';
 	import type { ProjectCategory, ProjectChoice } from '$lib/types/project';
 
@@ -34,6 +37,7 @@
 	let activeGroupIndex = $state<number | undefined>();
 	let activePreviewGroupIndex = $state(1);
 	let activePreviewChoice = $state<ProjectCategory | undefined>('gaming-long-form');
+	let selectedCategoryPreviews = $state(initialCategoryAutoplayPreviews);
 	let previewUpdateFrame = 0;
 
 	const choices = $derived([
@@ -230,6 +234,7 @@
 
 	onMount(() => {
 		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		selectedCategoryPreviews = selectRandomCategoryAutoplayPreviews();
 		carousel.scrollLeft = getSegmentWidth();
 		scheduleActivePreviewUpdate();
 
@@ -294,7 +299,7 @@
 			>
 				{#each choices as choice (choice.id)}
 					{@const preview =
-						choice.id === 'custom' ? undefined : categoryAutoplayPreviews[choice.id]}
+						choice.id === 'custom' ? undefined : selectedCategoryPreviews[choice.id]}
 					<button
 						data-choice={choice.id}
 						data-group={groupIndex}

@@ -1,13 +1,22 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { ArrowDownRight } from '@lucide/svelte';
 	import LazyAutoplayVideo from '$lib/components/media/LazyAutoplayVideo.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import Container from '$lib/components/ui/Container.svelte';
-	import { heroAutoplayPreview } from '$lib/content/autoplay-previews';
+	import {
+		heroAutoplayPreviews,
+		selectRandomHeroAutoplayPreview
+	} from '$lib/content/autoplay-previews';
 	import { getLocaleContext } from '$lib/i18n/context';
 
 	let isPreviewPlaying = $state(false);
+	let heroPreview = $state(heroAutoplayPreviews[0]);
 	const i18n = getLocaleContext();
+
+	onMount(() => {
+		heroPreview = selectRandomHeroAutoplayPreview();
+	});
 </script>
 
 <section class="relative overflow-hidden pb-14 pt-14 md:pb-18 md:pt-20">
@@ -63,8 +72,8 @@
 						class="relative grid aspect-[4/3] place-items-center overflow-hidden rounded-[1.1rem] border border-white/8 bg-[radial-gradient(circle_at_30%_20%,rgb(155_124_255/0.34),transparent_28%),linear-gradient(145deg,#15172a,#07080d_65%)]"
 					>
 						<LazyAutoplayVideo
-							src={heroAutoplayPreview.src}
-							poster={heroAutoplayPreview.poster}
+							src={heroPreview.src}
+							poster={heroPreview.poster}
 							onPlaybackChange={(playing) => (isPreviewPlaying = playing)}
 							class="absolute inset-0 size-full object-cover"
 						/>

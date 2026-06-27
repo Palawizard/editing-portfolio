@@ -39,6 +39,7 @@
 
 	const shouldLoad = $derived(active && isNearViewport && playbackAllowed);
 	const shouldPlay = $derived(shouldLoad && pageVisible);
+	const activeSrc = $derived(shouldLoad ? src : undefined);
 
 	const requestPlayback = () => {
 		if (!videoElement || !shouldPlay) return;
@@ -58,7 +59,7 @@
 	$effect(() => {
 		if (!videoElement) return;
 
-		if (shouldPlay) {
+		if (shouldPlay && activeSrc) {
 			requestPlayback();
 		} else {
 			videoElement.pause();
@@ -113,7 +114,7 @@
 <video
 	bind:this={videoElement}
 	class={className}
-	src={shouldLoad ? src : undefined}
+	src={activeSrc}
 	{poster}
 	preload="none"
 	muted

@@ -90,6 +90,9 @@ export type UiCopy = {
 		description: string;
 		playingLabel: string;
 	};
+	media: {
+		playLabel: string;
+	};
 	showreel: {
 		title: string;
 		description: string;

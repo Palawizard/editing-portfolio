@@ -77,8 +77,8 @@ const questions: EstimateQuestion[] = [
 			{ value: 'derushed', label: 'Rushs déjà dérushés' },
 			{ value: 'edited-project', label: 'Vidéo déjà montée + fichiers de projet' },
 			{ value: 'editing-project', label: 'Projet de montage fourni' },
-			{ value: 'script', label: 'Script uniquement' },
-			{ value: 'voice-over', label: 'Voix off uniquement' },
+			{ value: 'script', label: 'Script' },
+			{ value: 'voice-over', label: 'Voix off' },
 			{ value: 'assets', label: 'Images / B-roll / assets' },
 			{ value: 'unknown', label: 'Je ne sais pas encore' }
 		]
@@ -364,7 +364,9 @@ export const estimateCopy: EstimateCopy = {
 		longFinalDuration: 'Quelle est la durée souhaitée de la vidéo longue finale ?',
 		shortFinalDuration: 'Quelle durée moyenne souhaites-tu pour chaque short ?',
 		longShortsCount: 'Combien de shorts veux-tu extraire de la vidéo longue ?',
-		gamingShortsSource: 'Sous quelle forme vas-tu fournir les extraits gaming ?'
+		gamingShortsSource: 'Sous quelle forme vas-tu fournir les extraits gaming ?',
+		providedScriptStatus: 'Quel est l’état du script fourni ?',
+		remainingUgcAssets: 'Quels autres éléments sont déjà fournis pour ce projet ?'
 	},
 	result: {
 		eyebrow: 'Estimation terminée',

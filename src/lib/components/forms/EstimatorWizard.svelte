@@ -54,6 +54,15 @@
 			return false;
 		}
 		if (
+			currentQuestion.type === 'single' &&
+			!Array.isArray(value) &&
+			currentQuestion.options &&
+			!currentQuestion.options.some((option) => option.value === value)
+		) {
+			error = copy.requiredError;
+			return false;
+		}
+		if (
 			!Array.isArray(value) &&
 			currentQuestion.minLength &&
 			value.trim().length < currentQuestion.minLength

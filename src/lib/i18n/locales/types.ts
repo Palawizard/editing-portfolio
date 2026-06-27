@@ -1,4 +1,5 @@
 import type { ContactOption } from '$lib/types/contact';
+import type { EstimateCopy } from '$lib/types/estimate';
 import type { EditingFormat, ProjectCategory, ProjectChoice } from '$lib/types/project';
 import type {
 	BeforeAfterSection,
@@ -177,6 +178,7 @@ export type LocaleBundle = {
 	customFormatChoice: CustomFormatChoice;
 	contactStyleOptions: ContactOption<ProjectChoice>[];
 	contactFormCopy: ContactFormCopy;
+	estimateCopy: EstimateCopy;
 	services: Service[];
 	processSteps: ProcessStep[];
 	skills: string[];

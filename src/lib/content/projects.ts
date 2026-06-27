@@ -1,4 +1,5 @@
 import { projectCopyEn } from '$lib/i18n/locales/en/project-copy';
+import { getProjectPricing } from '$lib/content/project-pricing';
 import type { Locale } from '$lib/i18n/types';
 import type { Project, ProjectCategory, ProjectInput } from '$lib/types/project';
 import { getLocalPosterFromPreview, getPublishedVideo } from '$lib/utils/media';
@@ -50,6 +51,7 @@ const defineProject = (input: ProjectInput): Project => {
 		format: input.format ?? defaults.format,
 		platform: input.platform ?? defaults.platform,
 		poster: resolveProjectPoster(input, publishedVideo, localPoster),
+		pricing: input.pricing ?? getProjectPricing(input.slug),
 		featured: input.featured ?? false
 	};
 };

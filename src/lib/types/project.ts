@@ -24,15 +24,15 @@ export type Project = {
 	externalUrl?: string;
 	supplementalMedia?: ProjectMedia[];
 	beforeAfter?: ProjectBeforeAfter;
-	pricing?: ProjectPricing;
+	pricing: ProjectPricing;
 	featured: boolean;
 };
 
 export type ProjectInput = Omit<
 	Project,
-	'featured' | 'format' | 'platform' | 'poster' | 'referenceId'
+	'featured' | 'format' | 'platform' | 'poster' | 'pricing' | 'referenceId'
 > &
-	Partial<Pick<Project, 'featured' | 'format' | 'platform' | 'poster' | 'referenceId'>>;
+	Partial<Pick<Project, 'featured' | 'format' | 'platform' | 'poster' | 'pricing' | 'referenceId'>>;
 
 export type ProjectMedia = {
 	title: string;
@@ -52,9 +52,10 @@ export type ProjectBeforeAfter = {
 };
 
 export type ProjectPricing = {
-	qualityTier?: 'simple' | 'standard' | 'premium';
-	price?: string;
-	notes?: string;
+	amount: number;
+	currency: 'EUR';
+	approximate: boolean;
+	temporary: boolean;
 };
 
 export type EditingFormat = {

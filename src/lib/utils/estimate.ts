@@ -296,6 +296,7 @@ export const buildContactPrefill = (
 					contact: 'Moyen de contact indiqué',
 					constraints: 'Contraintes',
 					estimate: 'Estimation indicative',
+					providedBudget: 'Budget indiqué',
 					footage: 'Rushs à traiter',
 					final: 'Durée finale',
 					shorts: 'Nombre de shorts',
@@ -309,6 +310,7 @@ export const buildContactPrefill = (
 					contact: 'Provided contact method',
 					constraints: 'Constraints',
 					estimate: 'Indicative estimate',
+					providedBudget: 'Provided budget',
 					footage: 'Footage to review',
 					final: 'Final length',
 					shorts: 'Number of shorts',
@@ -347,7 +349,14 @@ export const buildContactPrefill = (
 		style: answers.projectType ? projectStyleMap[answers.projectType] : '',
 		projectDescription: descriptionLines.filter(Boolean).join('\n'),
 		footageDetails: footageLines.join('\n'),
-		budget: `${localized.estimate}: ${estimate.minimum}–${estimate.maximum} €`,
+		budget: [
+			`${localized.estimate}: ${estimate.minimum}–${estimate.maximum} €`,
+			answers.budgetAmount.trim()
+				? `${localized.providedBudget}: ${answers.budgetAmount.trim()}`
+				: ''
+		]
+			.filter(Boolean)
+			.join('\n'),
 		usefulLinks: answers.referenceLink.trim()
 	};
 };

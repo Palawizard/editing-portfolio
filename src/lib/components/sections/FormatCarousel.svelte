@@ -327,7 +327,7 @@
 								]}
 							>
 								<LazyAutoplayVideo
-									class="size-full object-cover opacity-45 saturate-[0.85] transition duration-500 group-hover:opacity-65"
+									class={`size-full object-cover saturate-[0.85] transition duration-500 group-hover:opacity-65 ${previewIsActive ? 'opacity-70' : 'opacity-45'}`}
 									src={preview.src}
 									poster={preview.poster}
 									active={previewIsActive}
@@ -426,8 +426,8 @@
 			transform: scale(1.035);
 		}
 		100% {
-			filter: brightness(1.04);
-			transform: scale(1.01);
+			filter: brightness(1.12) saturate(1.06);
+			transform: scale(1.025);
 		}
 	}
 
@@ -443,8 +443,10 @@
 				0 0 24px rgb(139 92 246 / 0.22);
 		}
 		100% {
-			opacity: 0.28;
-			box-shadow: inset 0 0 16px rgb(196 181 253 / 0.08);
+			opacity: 0.62;
+			box-shadow:
+				inset 0 0 24px rgb(196 181 253 / 0.12),
+				0 0 20px rgb(139 92 246 / 0.16);
 		}
 	}
 
@@ -455,6 +457,8 @@
 	}
 
 	.preview-media-active {
+		filter: brightness(1.12) saturate(1.06);
+		transform: scale(1.025);
 		animation: preview-media-focus 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
 	}
 
@@ -463,6 +467,10 @@
 	}
 
 	.preview-focus-ring-active {
+		opacity: 0.62;
+		box-shadow:
+			inset 0 0 24px rgb(196 181 253 / 0.12),
+			0 0 20px rgb(139 92 246 / 0.16);
 		animation: preview-ring-focus 620ms ease-out both;
 	}
 
@@ -477,7 +485,7 @@
 
 		.preview-focus-ring-active {
 			animation: none;
-			opacity: 0.28;
+			opacity: 0.62;
 		}
 	}
 </style>

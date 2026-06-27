@@ -11,6 +11,7 @@
 		WandSparkles
 	} from '@lucide/svelte';
 	import LazyAutoplayVideo from '$lib/components/media/LazyAutoplayVideo.svelte';
+	import { categoryStartingPrices } from '$lib/content/project-pricing';
 	import {
 		initialCategoryAutoplayPreviews,
 		selectRandomCategoryAutoplayPreviews
@@ -41,15 +42,8 @@
 	let selectedCategoryPreviews = $state(initialCategoryAutoplayPreviews);
 	let previewUpdateFrame = 0;
 
-	const getPreviewProject = (choice: ProjectChoice) =>
-		choice === 'custom'
-			? undefined
-			: i18n.content.projects.find(
-					(project) => project.slug === selectedCategoryPreviews[choice].projectSlug
-				);
-
 	const getChoicePrice = (choice: ProjectChoice) =>
-		getPreviewProject(choice)?.pricing.amount ?? Number.POSITIVE_INFINITY;
+		choice === 'custom' ? Number.POSITIVE_INFINITY : categoryStartingPrices[choice].amount;
 
 	const choices = $derived(
 		[
@@ -323,7 +317,8 @@
 					{@const previewIsActive = Boolean(
 						preview && activePreviewGroupIndex === groupIndex && activePreviewChoice === choice.id
 					)}
-					{@const previewProject = getPreviewProject(choice.id)}
+					{@const startingPrice =
+						choice.id === 'custom' ? undefined : categoryStartingPrices[choice.id]}
 					<button
 						data-choice={choice.id}
 						data-group={groupIndex}
@@ -368,7 +363,7 @@
 							></span>
 						{/if}
 
-						{#if previewProject}
+						{#if startingPrice}
 							<span
 								class={[
 									'absolute z-20 rounded-full border border-cyan-200/25 bg-slate-950/70 font-mono font-semibold text-cyan-100 shadow-lg backdrop-blur',
@@ -376,9 +371,10 @@
 										? 'right-8 top-8 px-3 py-1.5 text-sm'
 										: 'right-6 top-6 px-2.5 py-1 text-xs'
 								]}
-								aria-label={`${i18n.content.ui.media.priceLabel} : ${formatProjectPrice(previewProject.pricing, i18n.locale)}`}
+								aria-label={`${i18n.content.ui.media.startingPriceLabel} ${formatProjectPrice(startingPrice, i18n.locale)}`}
 							>
-								{formatProjectPrice(previewProject.pricing, i18n.locale)}
+								{i18n.content.ui.media.startingPriceLabel}
+								{formatProjectPrice(startingPrice, i18n.locale)}
 							</span>
 						{/if}
 

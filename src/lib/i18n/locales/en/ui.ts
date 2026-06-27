@@ -29,7 +29,8 @@ export const uiBundle = {
 	},
 	media: {
 		playLabel: 'Play video',
-		priceLabel: 'Indicative price'
+		priceLabel: 'Indicative price',
+		startingPriceLabel: 'From'
 	},
 	showreel: {
 		title: 'Recent edit highlights',

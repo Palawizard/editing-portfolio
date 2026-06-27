@@ -29,7 +29,8 @@ export const uiBundle = {
 	},
 	media: {
 		playLabel: 'Lire la vidéo',
-		priceLabel: 'Prix indicatif'
+		priceLabel: 'Prix indicatif',
+		startingPriceLabel: 'À partir de'
 	},
 	showreel: {
 		title: 'Sélection de montages récents',

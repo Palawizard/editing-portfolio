@@ -2,7 +2,6 @@
 	import { Clapperboard, FileText, Link2, WandSparkles } from '@lucide/svelte';
 	import { env } from '$env/dynamic/public';
 	import ContactForm from '$lib/components/forms/ContactForm.svelte';
-	import Badge from '$lib/components/ui/Badge.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import Container from '$lib/components/ui/Container.svelte';
 	import { getLocaleContext } from '$lib/i18n/context';
@@ -87,24 +86,6 @@
 								</article>
 							{/each}
 						</div>
-					</div>
-
-					<div class="rounded-[1.5rem] border border-white/10 bg-white/[0.025] p-6 md:p-9">
-						<p class="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-200">
-							{i18n.content.ui.contactPage.formatsEyebrow}
-						</p>
-						<h2 class="mt-4 text-2xl font-bold text-white">
-							{i18n.content.ui.contactPage.formatsTitle}
-						</h2>
-						<div class="mt-6 flex flex-wrap gap-2">
-							{#each i18n.content.editingFormats as format (format.id)}
-								<Badge>{format.title}</Badge>
-							{/each}
-							<Badge tone="cyan">{i18n.content.ui.contactPage.customBadge}</Badge>
-						</div>
-						<Button href="/projets" variant="secondary" class="mt-7">
-							{i18n.content.ui.contactPage.reviewStyles}
-						</Button>
 					</div>
 				</div>
 

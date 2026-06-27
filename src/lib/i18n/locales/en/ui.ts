@@ -117,5 +117,22 @@ export const uiBundle = {
 		reviewStyles: 'Review styles',
 		estimateCta: 'Estimate my project'
 	},
+	startPage: {
+		metaTitle: 'Estimate or contact | Video editing',
+		metaDescription:
+			'Choose between a quick project estimate or a direct message to present your editing request.',
+		eyebrow: 'Next step',
+		title: 'How would you like to proceed?',
+		description:
+			'An estimate gives you an indicative range in a few questions. Contact lets you send your brief directly.',
+		estimateTitle: 'Estimate',
+		estimateDescription:
+			'Answer a few questions about your format, footage and goal to get an indicative price range.',
+		estimateCta: 'Estimate my project',
+		contactTitle: 'Contact',
+		contactDescription:
+			'Send your format, references and project details for a personalised reply.',
+		contactCta: 'Send my request'
+	},
 	turnstileAriaLabel: 'Spam verification'
 } satisfies LocaleBundle['ui'];

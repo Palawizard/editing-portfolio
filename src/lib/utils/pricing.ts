@@ -1,14 +1,30 @@
 import type { Locale } from '$lib/i18n/types';
 import type { Project, ProjectPricing } from '$lib/types/project';
 
-export const formatProjectPrice = (pricing: ProjectPricing, locale: Locale): string => {
+export const formatCurrencyAmount = (
+	amount: number,
+	currency: ProjectPricing['currency'],
+	locale: Locale
+): string => {
 	const formattedAmount = new Intl.NumberFormat(locale === 'fr' ? 'fr-FR' : 'en-GB', {
-		style: 'currency',
-		currency: pricing.currency,
 		maximumFractionDigits: 0
-	}).format(pricing.amount);
+	}).format(amount);
 
-	return pricing.approximate ? `≈ ${formattedAmount}` : formattedAmount;
+	return locale === 'fr'
+		? `${formattedAmount} ${currency === 'EUR' ? '€' : currency}`
+		: `€${formattedAmount}`;
+};
+
+export const formatProjectPrice = (pricing: ProjectPricing, locale: Locale): string => {
+	const minimum = formatCurrencyAmount(pricing.minimum, pricing.currency, locale);
+	const formattedPrice =
+		pricing.minimum === pricing.maximum
+			? minimum
+			: locale === 'fr'
+				? `${new Intl.NumberFormat('fr-FR').format(pricing.minimum)}–${new Intl.NumberFormat('fr-FR').format(pricing.maximum)} €`
+				: `€${new Intl.NumberFormat('en-GB').format(pricing.minimum)}–${new Intl.NumberFormat('en-GB').format(pricing.maximum)}`;
+
+	return pricing.approximate ? `≈ ${formattedPrice}` : formattedPrice;
 };
 
 export const sortProjectsByPrice = <T extends Pick<Project, 'pricing'>>(
@@ -18,6 +34,6 @@ export const sortProjectsByPrice = <T extends Pick<Project, 'pricing'>>(
 		.map((project, index) => ({ project, index }))
 		.sort(
 			(left, right) =>
-				left.project.pricing.amount - right.project.pricing.amount || left.index - right.index
+				left.project.pricing.minimum - right.project.pricing.minimum || left.index - right.index
 		)
 		.map(({ project }) => project);

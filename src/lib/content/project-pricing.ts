@@ -10,10 +10,43 @@ export const restaurantPromotionProjectSlugs = [
 	'business-tacos-short'
 ] as const;
 
-const restaurantPromotionProjects = new Set<string>(restaurantPromotionProjectSlugs);
+const pricingGroups: Array<{
+	slugs: readonly string[];
+	minimum: number;
+	maximum: number;
+}> = [
+	{
+		slugs: [
+			'flare-mort-short',
+			'cs2-random-short',
+			'cs2-habitude-short',
+			'cs2-totem-short',
+			'cs2-peur-short',
+			'cs2-type-bizarre-short'
+		],
+		minimum: 10,
+		maximum: 15
+	},
+	{ slugs: restaurantPromotionProjectSlugs, minimum: 20, maximum: 20 },
+	{ slugs: ['business-ugc-short'], minimum: 5, maximum: 10 },
+	{ slugs: ['rant-explicatif-drive'], minimum: 10, maximum: 15 },
+	{ slugs: ['funky-live-cuisine-other'], minimum: 40, maximum: 50 },
+	{
+		slugs: ['miyuna-retour-gaming-long', 'genshin-whale-accident-long'],
+		minimum: 45,
+		maximum: 55
+	},
+	{ slugs: ['miyuna-model-reveal-best-of'], minimum: 35, maximum: 45 },
+	{ slugs: ['funky-beau-fils-long'], minimum: 20, maximum: 25 },
+	{ slugs: ['palawi-fireball-long'], minimum: 30, maximum: 30 },
+	{ slugs: ['carry-the-glass-long'], minimum: 45, maximum: 55 }
+];
+
+export const pricedProjectSlugs = pricingGroups.flatMap(({ slugs }) => slugs);
 
 const defineStartingPrice = (amount: number): ProjectPricing => ({
-	amount,
+	minimum: amount,
+	maximum: amount,
 	currency: 'EUR',
 	approximate: false,
 	temporary: false
@@ -27,17 +60,22 @@ export const categoryStartingPrices: Record<ProjectCategory, ProjectPricing> = {
 	'other-format': defineStartingPrice(25)
 };
 
-export const getProjectPricing = (slug: string): ProjectPricing =>
-	restaurantPromotionProjects.has(slug)
+export const getProjectPricing = (slug: string): ProjectPricing => {
+	const pricing = pricingGroups.find(({ slugs }) => slugs.includes(slug));
+
+	return pricing
 		? {
-				amount: 20,
+				minimum: pricing.minimum,
+				maximum: pricing.maximum,
 				currency: 'EUR',
 				approximate: true,
 				temporary: false
 			}
 		: {
-				amount: 0,
+				minimum: 0,
+				maximum: 0,
 				currency: 'EUR',
 				approximate: false,
 				temporary: true
 			};
+};

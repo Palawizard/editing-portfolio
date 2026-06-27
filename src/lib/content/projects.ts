@@ -4,6 +4,8 @@ import type { Locale } from '$lib/i18n/types';
 import type { Project, ProjectCategory, ProjectInput } from '$lib/types/project';
 import { getLocalPosterFromPreview, getPublishedVideo } from '$lib/utils/media';
 
+const noBackgroundMusicDisclaimer = 'Cette vidéo a été demandée sans musique de fond.';
+
 const categoryDefaults: Record<ProjectCategory, Pick<Project, 'format' | 'platform'>> = {
 	'gaming-long-form': {
 		format: '16:9',
@@ -310,7 +312,8 @@ export const projects: Project[] = [
 		],
 		duration: 'Court',
 		format: '9:16',
-		previewVideo: '/videos/explainer/rant-explicatif.mp4'
+		previewVideo: '/videos/explainer/rant-explicatif.mp4',
+		disclaimer: noBackgroundMusicDisclaimer
 	}),
 	defineProject({
 		slug: 'business-ugc-short',
@@ -348,7 +351,8 @@ export const projects: Project[] = [
 		],
 		duration: 'Short',
 		format: '9:16',
-		previewVideo: '/videos/business/boursin.mp4'
+		previewVideo: '/videos/business/boursin.mp4',
+		disclaimer: noBackgroundMusicDisclaimer
 	}),
 	defineProject({
 		slug: 'business-cheese-naan-short',
@@ -367,7 +371,8 @@ export const projects: Project[] = [
 		],
 		duration: 'Short',
 		format: '9:16',
-		previewVideo: '/videos/business/cheese-naan.mp4'
+		previewVideo: '/videos/business/cheese-naan.mp4',
+		disclaimer: noBackgroundMusicDisclaimer
 	}),
 	defineProject({
 		slug: 'business-humour-short',
@@ -405,7 +410,8 @@ export const projects: Project[] = [
 		],
 		duration: 'Short',
 		format: '9:16',
-		previewVideo: '/videos/business/naan.mp4'
+		previewVideo: '/videos/business/naan.mp4',
+		disclaimer: noBackgroundMusicDisclaimer
 	}),
 	defineProject({
 		slug: 'business-poulet-short',
@@ -424,7 +430,8 @@ export const projects: Project[] = [
 		],
 		duration: 'Short',
 		format: '9:16',
-		previewVideo: '/videos/business/poulet.mp4'
+		previewVideo: '/videos/business/poulet.mp4',
+		disclaimer: noBackgroundMusicDisclaimer
 	}),
 	defineProject({
 		slug: 'business-smash-short',
@@ -443,7 +450,8 @@ export const projects: Project[] = [
 		],
 		duration: 'Short',
 		format: '9:16',
-		previewVideo: '/videos/business/smash.mp4'
+		previewVideo: '/videos/business/smash.mp4',
+		disclaimer: noBackgroundMusicDisclaimer
 	}),
 	defineProject({
 		slug: 'business-tacos-short',
@@ -462,7 +470,8 @@ export const projects: Project[] = [
 		],
 		duration: 'Short',
 		format: '9:16',
-		previewVideo: '/videos/business/tacos.mp4'
+		previewVideo: '/videos/business/tacos.mp4',
+		disclaimer: noBackgroundMusicDisclaimer
 	}),
 	defineProject({
 		slug: 'funky-live-cuisine-other',

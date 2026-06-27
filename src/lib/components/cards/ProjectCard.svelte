@@ -63,6 +63,9 @@
 		<h3 class={[minimal ? '' : 'mt-5', 'text-2xl font-bold text-balance text-white']}>
 			{project.title}
 		</h3>
+		{#if project.disclaimer}
+			<p class="mt-2 text-xs leading-5 text-slate-400" role="note">{project.disclaimer}</p>
+		{/if}
 		{#if !minimal}
 			<p class="mt-3 text-sm leading-6 text-slate-300">{project.summary}</p>
 		{/if}

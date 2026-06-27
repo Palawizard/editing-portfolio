@@ -36,6 +36,8 @@ export type ContactFormCopy = {
 	contextPrefix: string;
 	contextReference: string;
 	contextHint: string;
+	estimateContextTitle: string;
+	estimateContextHint: string;
 	successFields: {
 		contact: string;
 		email: string;

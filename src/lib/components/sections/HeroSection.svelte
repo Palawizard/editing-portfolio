@@ -1,25 +1,28 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { ArrowDownRight } from '@lucide/svelte';
+	import LazyAutoplayVideo from '$lib/components/media/LazyAutoplayVideo.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import Container from '$lib/components/ui/Container.svelte';
+	import {
+		heroAutoplayPreviews,
+		selectRandomHeroAutoplayPreview
+	} from '$lib/content/autoplay-previews';
 	import { getLocaleContext } from '$lib/i18n/context';
-	import { getPublishedVideo } from '$lib/utils/media';
 
-	let previewSrc = $state<string | undefined>();
-	let previewPoster = $state<string | undefined>();
+	let isPreviewPlaying = $state(false);
+	let previewDuration = $state(8);
+	let heroPreview = $state(heroAutoplayPreviews[0]);
 	const i18n = getLocaleContext();
 
+	const switchPreview = () => {
+		isPreviewPlaying = false;
+		previewDuration = 8;
+		heroPreview = selectRandomHeroAutoplayPreview(Math.random, heroPreview.src);
+	};
+
 	onMount(() => {
-		const candidates = i18n.content.projects.filter((project) => {
-			const src = project.previewVideo ?? getPublishedVideo(project.externalUrl)?.directUrl;
-			return Boolean(src) && project.format === '16:9';
-		});
-		if (!candidates.length) return;
-		const pick = candidates[Math.floor(Math.random() * candidates.length)];
-		const published = getPublishedVideo(pick.externalUrl);
-		previewSrc = pick.previewVideo ?? published?.directUrl;
-		previewPoster = pick.poster || published?.poster || undefined;
+		switchPreview();
 	});
 </script>
 
@@ -75,32 +78,27 @@
 					<div
 						class="relative grid aspect-[4/3] place-items-center overflow-hidden rounded-[1.1rem] border border-white/8 bg-[radial-gradient(circle_at_30%_20%,rgb(155_124_255/0.34),transparent_28%),linear-gradient(145deg,#15172a,#07080d_65%)]"
 					>
-						{#if previewSrc}
-							<video
+						{#key heroPreview.src}
+							<LazyAutoplayVideo
+								src={heroPreview.src}
+								poster={heroPreview.poster}
+								loop={false}
+								onDurationChange={(duration) => (previewDuration = duration)}
+								onEnded={switchPreview}
+								onPlaybackChange={(playing) => (isPreviewPlaying = playing)}
 								class="absolute inset-0 size-full object-cover"
-								src={previewSrc}
-								poster={previewPoster}
-								autoplay
-								muted
-								loop
-								playsinline
-								preload="metadata"
-								aria-hidden="true"
-							></video>
-							<div
-								class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"
-							></div>
+							/>
+						{/key}
+						<div
+							class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"
+						></div>
+						{#if isPreviewPlaying}
 							<span
 								class="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full border border-white/15 bg-black/40 px-2.5 py-1 text-xs text-white/70 backdrop-blur"
 							>
 								<span class="size-1.5 animate-pulse rounded-full bg-red-400"></span>
 								{i18n.content.ui.hero.playingLabel}
 							</span>
-						{:else}
-							<div class="absolute inset-0 opacity-40">
-								<div class="absolute left-[12%] top-[18%] h-px w-[76%] bg-white/10"></div>
-								<div class="absolute left-[12%] top-[34%] h-px w-[52%] bg-white/10"></div>
-							</div>
 						{/if}
 					</div>
 
@@ -117,8 +115,15 @@
 								<span class="w-[22%] rounded bg-cyan-200/25"></span>
 								<span class="flex-1 rounded bg-white/8"></span>
 							</div>
-							<span class="timeline-cursor absolute top-0 h-14 w-px bg-white shadow-[0_0_8px_white]"
-							></span>
+							{#key heroPreview.src}
+								<span
+									class={[
+										'timeline-cursor absolute top-0 h-14 w-px bg-white shadow-[0_0_8px_white]',
+										isPreviewPlaying ? 'timeline-cursor-playing' : ''
+									]}
+									style={`--preview-duration: ${previewDuration}s`}
+								></span>
+							{/key}
 						</div>
 					</div>
 				</div>
@@ -137,7 +142,12 @@
 		}
 	}
 	.timeline-cursor {
-		animation: timeline-scrub 20s linear infinite;
+		left: 6%;
+		animation: timeline-scrub var(--preview-duration, 8s) linear 1 both;
+		animation-play-state: paused;
+	}
+	.timeline-cursor-playing {
+		animation-play-state: running;
 	}
 	@media (prefers-reduced-motion: reduce) {
 		.timeline-cursor {

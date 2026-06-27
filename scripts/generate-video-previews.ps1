@@ -22,12 +22,6 @@ $previews = @(
         Scale = "960:-2"
     },
     @{
-        Name = "miyuna-model-reveal-best-of-preview.mp4"
-        Source = "static/videos/gaming/miyuna-model-reveal-best-of.mp4"
-        Start = "00:00:45"
-        Scale = "960:-2"
-    },
-    @{
         Name = "palawi-fireball-long-preview.mp4"
         Source = "static/videos/gaming/palawi-fireball-long.mp4"
         Start = "00:00:30"

@@ -10,8 +10,8 @@ describe('autoplay previews', () => {
 	it('defines one unique preview for every project video', () => {
 		const previews = Object.values(categoryAutoplayPreviews).flat();
 
-		expect(previews).toHaveLength(22);
-		expect(new Set(previews.map((preview) => preview.src)).size).toBe(22);
+		expect(previews).toHaveLength(21);
+		expect(new Set(previews.map((preview) => preview.src)).size).toBe(21);
 	});
 
 	it('selects one preview from each category', () => {
@@ -22,15 +22,9 @@ describe('autoplay previews', () => {
 		}
 	});
 
-	it('uses the Miyuna best-of preview in other formats', () => {
-		const bestOfSource = '/videos/previews/miyuna-model-reveal-best-of-preview.mp4';
-
-		expect(categoryAutoplayPreviews['other-format'].some(({ src }) => src === bestOfSource)).toBe(
-			true
-		);
-		expect(
-			categoryAutoplayPreviews['gaming-long-form'].some(({ src }) => src === bestOfSource)
-		).toBe(false);
+	it('keeps other formats limited to the live cuisine preview', () => {
+		expect(categoryAutoplayPreviews['other-format']).toHaveLength(1);
+		expect(categoryAutoplayPreviews['other-format'][0]?.slug).toBe('funky-live-cuisine-other');
 	});
 
 	it('selects a random horizontal preview for the hero', () => {

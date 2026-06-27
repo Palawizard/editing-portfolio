@@ -2,18 +2,24 @@
 	import { onMount } from 'svelte';
 	import { ArrowDownRight } from '@lucide/svelte';
 	import LazyAutoplayVideo from '$lib/components/media/LazyAutoplayVideo.svelte';
+	import PriceBadge from '$lib/components/ui/PriceBadge.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import Container from '$lib/components/ui/Container.svelte';
 	import {
 		heroAutoplayPreviews,
 		selectRandomHeroAutoplayPreview
 	} from '$lib/content/autoplay-previews';
+	import { getProjectPricing } from '$lib/content/project-pricing';
 	import { getLocaleContext } from '$lib/i18n/context';
+	import { formatProjectPrice } from '$lib/utils/pricing';
 
 	let isPreviewPlaying = $state(false);
 	let previewDuration = $state(8);
 	let heroPreview = $state(heroAutoplayPreviews[0]);
 	const i18n = getLocaleContext();
+	const heroPreviewPrice = $derived(
+		formatProjectPrice(getProjectPricing(heroPreview.slug), i18n.locale)
+	);
 
 	const switchPreview = () => {
 		isPreviewPlaying = false;
@@ -92,6 +98,11 @@
 						<div
 							class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"
 						></div>
+						<PriceBadge
+							price={heroPreviewPrice}
+							ariaLabel={`${i18n.content.ui.media.priceLabel} : ${heroPreviewPrice}`}
+							class="absolute right-3 top-3 z-20"
+						/>
 						{#if isPreviewPlaying}
 							<span
 								class="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full border border-white/15 bg-black/40 px-2.5 py-1 text-xs text-white/70 backdrop-blur"

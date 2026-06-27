@@ -11,7 +11,8 @@
 		WandSparkles
 	} from '@lucide/svelte';
 	import LazyAutoplayVideo from '$lib/components/media/LazyAutoplayVideo.svelte';
-	import { categoryStartingPrices } from '$lib/content/project-pricing';
+	import PriceBadge from '$lib/components/ui/PriceBadge.svelte';
+	import { categoryStartingPrices, getProjectPricing } from '$lib/content/project-pricing';
 	import {
 		initialCategoryAutoplayPreviews,
 		selectRandomCategoryAutoplayPreviews
@@ -317,8 +318,9 @@
 					{@const previewIsActive = Boolean(
 						preview && activePreviewGroupIndex === groupIndex && activePreviewChoice === choice.id
 					)}
-					{@const startingPrice =
-						choice.id === 'custom' ? undefined : categoryStartingPrices[choice.id]}
+					{@const previewPrice = preview
+						? formatProjectPrice(getProjectPricing(preview.slug), i18n.locale)
+						: undefined}
 					<button
 						data-choice={choice.id}
 						data-group={groupIndex}
@@ -363,19 +365,13 @@
 							></span>
 						{/if}
 
-						{#if startingPrice}
-							<span
-								class={[
-									'absolute z-20 rounded-full border border-cyan-200/25 bg-slate-950/70 font-mono font-semibold text-cyan-100 shadow-lg backdrop-blur',
-									prominent
-										? 'right-8 top-8 px-3 py-1.5 text-sm'
-										: 'right-6 top-6 px-2.5 py-1 text-xs'
-								]}
-								aria-label={`${i18n.content.ui.media.startingPriceLabel} ${formatProjectPrice(startingPrice, i18n.locale)}`}
-							>
-								{i18n.content.ui.media.startingPriceLabel}
-								{formatProjectPrice(startingPrice, i18n.locale)}
-							</span>
+						{#if previewPrice}
+							<PriceBadge
+								price={previewPrice}
+								ariaLabel={`${i18n.content.ui.media.priceLabel} : ${previewPrice}`}
+								size={prominent ? 'md' : 'sm'}
+								class={prominent ? 'absolute right-3 top-3 z-20' : 'absolute right-2.5 top-2.5 z-20'}
+							/>
 						{/if}
 
 						<span

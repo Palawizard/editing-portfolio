@@ -5,6 +5,7 @@
 	import LanguageSwitcher from './LanguageSwitcher.svelte';
 	import Navigation from './Navigation.svelte';
 	import { getLocaleContext } from '$lib/i18n/context';
+	import { resolveAssetPath } from '$lib/utils/paths';
 
 	let menuOpen = $state(false);
 	const i18n = getLocaleContext();
@@ -24,7 +25,7 @@
 			>
 				<img
 					class="size-full object-cover"
-					src="/favicon.png"
+					src={resolveAssetPath('/favicon.png')}
 					alt=""
 					width="40"
 					height="40"

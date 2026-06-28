@@ -3,6 +3,7 @@
 .svelte-kit
 build
 node_modules
+static/videos
 .env
 .env.*
 !.env.example

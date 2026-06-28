@@ -7,11 +7,14 @@
 	import { LOCALE_CONTEXT_KEY, type LocaleContext } from '$lib/i18n/context';
 	import { persistLocale, resolveInitialLocale } from '$lib/i18n/locale';
 	import { defaultLocale, ogLocales, type Locale } from '$lib/i18n/types';
+	import { resolveAssetPath } from '$lib/utils/paths';
 
 	let { children } = $props();
 
 	let locale = $state<Locale>(browser ? resolveInitialLocale() : defaultLocale);
 	const content = $derived(getContent(locale));
+	const favicon = resolveAssetPath('/favicon.png');
+	const metadataImage = $derived(resolveAssetPath(content.siteMetadata.image));
 
 	const i18n: LocaleContext = {
 		get locale() {
@@ -30,20 +33,20 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" type="image/png" href="/favicon.png" />
-	<link rel="apple-touch-icon" href="/favicon.png" />
+	<link rel="icon" type="image/png" href={favicon} />
+	<link rel="apple-touch-icon" href={favicon} />
 	<title>{content.siteMetadata.title}</title>
 	<meta name="description" content={content.siteMetadata.description} />
 	<meta property="og:site_name" content={content.siteMetadata.name} />
 	<meta property="og:title" content={content.siteMetadata.title} />
 	<meta property="og:description" content={content.siteMetadata.description} />
-	<meta property="og:image" content={content.siteMetadata.image} />
+	<meta property="og:image" content={metadataImage} />
 	<meta property="og:locale" content={ogLocales[locale]} />
 	<meta property="og:type" content="website" />
 	<meta name="twitter:card" content="summary" />
 	<meta name="twitter:title" content={content.siteMetadata.title} />
 	<meta name="twitter:description" content={content.siteMetadata.description} />
-	<meta name="twitter:image" content={content.siteMetadata.image} />
+	<meta name="twitter:image" content={metadataImage} />
 </svelte:head>
 
 <PageShell>

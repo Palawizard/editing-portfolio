@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { resolveAssetPath } from '$lib/utils/paths';
 
 	type Props = {
 		src: string;
@@ -39,7 +40,8 @@
 
 	const shouldLoad = $derived(active && isNearViewport && playbackAllowed);
 	const shouldPlay = $derived(shouldLoad && pageVisible);
-	const activeSrc = $derived(shouldLoad ? src : undefined);
+	const activeSrc = $derived(shouldLoad ? resolveAssetPath(src) : undefined);
+	const resolvedPoster = $derived(resolveAssetPath(poster));
 
 	const requestPlayback = () => {
 		if (!videoElement || !shouldPlay) return;
@@ -115,7 +117,7 @@
 	bind:this={videoElement}
 	class={className}
 	src={activeSrc}
-	{poster}
+	poster={resolvedPoster}
 	preload="none"
 	muted
 	{loop}

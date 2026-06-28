@@ -12,12 +12,17 @@ COPY . .
 ARG PUBLIC_FORMSPREE_FORM_ID
 ARG PUBLIC_TURNSTILE_SITE_KEY
 ARG PUBLIC_CONTACT_EMAIL
+ARG BASE_PATH=""
 
 ENV PUBLIC_FORMSPREE_FORM_ID=$PUBLIC_FORMSPREE_FORM_ID
 ENV PUBLIC_TURNSTILE_SITE_KEY=$PUBLIC_TURNSTILE_SITE_KEY
 ENV PUBLIC_CONTACT_EMAIL=$PUBLIC_CONTACT_EMAIL
+ENV BASE_PATH=$BASE_PATH
 
-RUN pnpm build
+# Production videos are mounted at runtime and are intentionally excluded from
+# the build context. Run Vite directly so the local prebuild media check does
+# not require the runtime media volume inside the builder.
+RUN pnpm exec vite build
 
 FROM nginx:1.29-alpine
 

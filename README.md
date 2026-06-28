@@ -43,7 +43,7 @@ Catégories disponibles :
 
 ## Médias vidéo
 
-Les vidéos complètes et les previews optimisées sont volontairement ignorées par Git. Elles restent dans le projet local et sont provisionnées directement sur le serveur aux mêmes chemins :
+Les vidéos complètes et les previews optimisées sont volontairement ignorées par Git. Elles restent dans le projet local. En production, elles sont provisionnées dans un répertoire persistant du serveur puis montées en lecture seule dans le conteneur Nginx :
 
 ```txt
 static/videos/business/
@@ -107,14 +107,18 @@ Le site est ensuite disponible sur `http://127.0.0.1:8080` et le healthcheck sur
 
 ### Production
 
-Le serveur doit conserver les dossiers ignorés `static/videos/*` dans le checkout avant le build. Les mises à jour Git ne les suppriment pas. Le contrôle média bloque le déploiement si un fichier attendu manque.
+La production utilise le réseau Docker externe `web`. Aucun port hôte n'est publié. `palawi-gateway` retire le préfixe `/editing-portfolio` puis joint directement le service `portfolio:8080` ; Caddy continue de transmettre `palawi.fr` au gateway.
+
+Les médias ne sont pas inclus dans le contexte de build ou dans l'image Docker. Le serveur les conserve sous `MEDIA_ROOT`. Le script compare les empreintes SHA-256 locales et distantes, envoie en une seule commande SCP les dossiers contenant des MP4 absents ou modifiés, puis vérifie les 22 vidéos complètes et les 22 previews avant le build.
+
+`BASE_PATH` définit le sous-chemin SvelteKit et doit correspondre exactement au chemin de `APP_PUBLIC_URL`. Les routes et les assets sont ainsi générés sous `/editing-portfolio` sans interférer avec les autres pages de `palawi.fr`.
 
 Configuration minimale dans `.env.prod` :
 
 ```env
-HOST_BIND=127.0.0.1
-HOST_PORT=8080
-APP_PUBLIC_URL=https://portfolio.example.com
+APP_PUBLIC_URL=https://palawi.fr/editing-portfolio
+BASE_PATH=/editing-portfolio
+MEDIA_ROOT=/opt/dockpanel/media/editing-portfolio
 PUBLIC_FORMSPREE_FORM_ID=form_id
 PUBLIC_TURNSTILE_SITE_KEY=turnstile_site_key
 PUBLIC_CONTACT_EMAIL=contact@example.com
@@ -128,4 +132,6 @@ Déploiement depuis PowerShell :
   -SshUser "deploy"
 ```
 
-Le script met à jour la branche demandée, reconstruit le conteneur, vérifie `/healthz` puis contrôle l'URL publique sauf si `-SkipPublicCheck` est utilisé. Aucun média local n'est envoyé automatiquement par ce script.
+Le script exige une branche locale propre et synchronisée avec `origin`, synchronise les médias, met à jour la branche distante, vérifie le réseau `web` et l'espace disque, reconstruit le conteneur, vérifie `/healthz` puis contrôle l'URL publique sauf si `-SkipPublicCheck` est utilisé. Le fichier d'environnement transite dans un répertoire temporaire distant privé avant d'être installé avec le mode `600`.
+
+Le répertoire `MEDIA_ROOT` doit être créé une seule fois avec les droits de l'utilisateur SSH. Le routage `/editing-portfolio` est versionné dans le dépôt `palawi-gateway` et doit être déployé avec son script serveur. Le Public Hostname Cloudflare Tunnel existant pour `palawi.fr` reste inchangé.

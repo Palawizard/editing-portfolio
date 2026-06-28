@@ -1,8 +1,34 @@
 services:
   portfolio:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      args:
+        PUBLIC_FORMSPREE_FORM_ID: ${PUBLIC_FORMSPREE_FORM_ID:?PUBLIC_FORMSPREE_FORM_ID must be set}
+        PUBLIC_TURNSTILE_SITE_KEY: ${PUBLIC_TURNSTILE_SITE_KEY:?PUBLIC_TURNSTILE_SITE_KEY must be set}
+        PUBLIC_CONTACT_EMAIL: ${PUBLIC_CONTACT_EMAIL:?PUBLIC_CONTACT_EMAIL must be set}
+        BASE_PATH: ${BASE_PATH:?BASE_PATH must be set}
+    expose:
+      - '8080'
+    volumes:
+      - type: bind
+        source: ${MEDIA_ROOT:?MEDIA_ROOT must be set}
+        target: /usr/share/nginx/html/videos
+        read_only: true
+    restart: unless-stopped
+    networks:
+      - web
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
     labels:
       app.public-url: ${APP_PUBLIC_URL:?APP_PUBLIC_URL must be set}
 
 networks:
   web:
+    name: web
     external: true

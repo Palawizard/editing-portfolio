@@ -2,6 +2,7 @@
 	import { tick } from 'svelte';
 	import { Play } from '@lucide/svelte';
 	import { getLocaleContext } from '$lib/i18n/context';
+	import { resolveAssetPath } from '$lib/utils/paths';
 
 	type Props = {
 		title: string;
@@ -15,6 +16,8 @@
 	const i18n = getLocaleContext();
 	let videoElement = $state<HTMLVideoElement>();
 	let loaded = $state(false);
+	const resolvedPoster = $derived(resolveAssetPath(poster));
+	const resolvedSrc = $derived(resolveAssetPath(src));
 
 	const aspectClasses = {
 		video: 'aspect-video',
@@ -44,12 +47,12 @@
 		className
 	]}
 >
-	{#if src && loaded}
+	{#if resolvedSrc && loaded}
 		<video
 			bind:this={videoElement}
 			class="absolute inset-0 size-full object-cover object-center"
-			poster={poster || undefined}
-			{src}
+			poster={resolvedPoster || undefined}
+			src={resolvedSrc}
 			preload="metadata"
 			muted
 			playsinline
@@ -57,10 +60,10 @@
 			aria-label={title}
 			onloadeddata={showFirstFrame}
 		></video>
-	{:else if poster}
+	{:else if resolvedPoster}
 		<img
 			class="absolute inset-0 size-full object-cover object-center"
-			src={poster}
+			src={resolvedPoster}
 			alt={title}
 			loading="lazy"
 		/>
@@ -75,7 +78,7 @@
 		</div>
 	{/if}
 
-	{#if src && !loaded}
+	{#if resolvedSrc && !loaded}
 		<button
 			class="absolute inset-0 z-10 grid place-items-center bg-black/10 transition hover:bg-black/25 focus-visible:bg-black/25"
 			type="button"

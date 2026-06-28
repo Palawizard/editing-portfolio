@@ -379,6 +379,7 @@ fi
 sudo install -o root -g root -m 600 "$SOURCE_ENV" "$STACK/.env.prod"
 
 cd "$STACK"
+mkdir -p static/videos
 sudo docker run --rm \
   --volume "$STACK:/app:ro" \
   --volume "$MEDIA_ROOT:/app/static/videos:ro" \

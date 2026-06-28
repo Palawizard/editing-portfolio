@@ -70,16 +70,16 @@
 		if (id === 'custom') {
 			return isProminent
 				? 'min-h-[17.5rem] w-[70vw] max-w-[18rem] md:min-h-[29rem] md:w-[26rem] md:max-w-[27rem]'
-				: 'min-h-[22rem] w-[82vw] max-w-[22rem] sm:w-[21rem]';
+				: 'min-h-[17.5rem] w-[70vw] max-w-[18rem] md:min-h-[22rem] md:w-[21rem] md:max-w-[22rem]';
 		}
 		if (id === 'gaming-long-form' || id === 'other-format') {
 			return isProminent
 				? 'aspect-video w-[70vw] max-w-[18rem] md:w-[30rem] md:max-w-[32rem]'
-				: 'aspect-video w-[82vw] max-w-[28rem] sm:w-[26rem]';
+				: 'aspect-video w-[70vw] max-w-[18rem] md:w-[26rem] md:max-w-[28rem]';
 		}
 		return isProminent
 			? 'aspect-[9/16] w-[40vw] max-w-[10.5rem] md:w-[17rem] md:max-w-[18rem]'
-			: 'aspect-[9/16] w-[46vw] max-w-[15rem] sm:w-[14rem]';
+			: 'aspect-[9/16] w-[40vw] max-w-[10.5rem] md:w-[14rem] md:max-w-[15rem]';
 	};
 
 	const captureMiddleGroup = (node: HTMLDivElement, groupIndex: number) => {
@@ -314,8 +314,7 @@
 		<div
 			bind:this={carousel}
 			class={[
-				'carousel-track scrollbar-hidden -mx-5 flex items-center overflow-x-auto px-5 pb-14 pt-6 -mb-10 sm:mx-0 sm:px-0',
-				prominent ? 'md:pb-20 md:pt-8 md:-mb-12' : 'sm:pb-20 sm:pt-8 sm:-mb-12',
+				'carousel-track scrollbar-hidden -mx-5 flex items-center overflow-x-auto px-5 pb-14 pt-6 -mb-10 sm:mx-0 sm:px-0 md:pb-20 md:pt-8 md:-mb-12',
 				locked ? 'snap-x snap-mandatory' : ''
 			]}
 			aria-label={i18n.content.ui.formatCarousel.chooseAriaLabel}
@@ -345,11 +344,9 @@
 								getCardSizeClass(choice.id, prominent),
 								prominent
 									? 'rounded-[1.35rem] p-5 md:rounded-[1.75rem] md:p-8'
-									: 'rounded-[1.4rem] p-6',
+									: 'rounded-[1.25rem] p-5 md:rounded-[1.4rem] md:p-6',
 								locked && activeGroupIndex === groupIndex && selected === choice.id
-									? prominent
-										? 'z-10 scale-[1.02] border-violet-200 bg-violet-300/[0.14] shadow-[0_14px_48px_rgb(81_49_150/0.28)] md:scale-[1.05]'
-										: 'z-10 scale-[1.05] border-violet-200 bg-violet-300/[0.14] shadow-[0_14px_48px_rgb(81_49_150/0.28)]'
+									? 'z-10 scale-[1.02] border-violet-200 bg-violet-300/[0.14] shadow-[0_14px_48px_rgb(81_49_150/0.28)] md:scale-[1.05]'
 									: 'border-white/10 bg-white/[0.035] hover:border-white/25 hover:bg-white/[0.065]'
 							]}
 							type="button"
@@ -412,7 +409,7 @@
 								<span
 									class={[
 										'grid place-items-center rounded-2xl border',
-										prominent ? 'size-11 md:size-16' : 'size-12',
+										prominent ? 'size-11 md:size-16' : 'size-11 md:size-12',
 										locked && activeGroupIndex === groupIndex && selected === choice.id
 											? 'border-violet-200/40 bg-violet-200/15 text-violet-100'
 											: 'border-white/10 bg-black/20 text-slate-200'
@@ -420,39 +417,34 @@
 								>
 									{#if choice.id === 'gaming-long-form'}
 										<MonitorPlay
-											class={prominent ? 'size-5 md:size-7' : undefined}
-											size={prominent ? undefined : 23}
+											class={prominent ? 'size-5 md:size-7' : 'size-5 md:size-6'}
 											aria-hidden="true"
 										/>
 									{:else if choice.id === 'gaming-short-form'}
 										<Gamepad2
-											class={prominent ? 'size-5 md:size-7' : undefined}
-											size={prominent ? undefined : 23}
+											class={prominent ? 'size-5 md:size-7' : 'size-5 md:size-6'}
 											aria-hidden="true"
 										/>
 									{:else if choice.id === 'explainer-short-form'}
 										<MessageSquareText
-											class={prominent ? 'size-5 md:size-7' : undefined}
-											size={prominent ? undefined : 23}
+											class={prominent ? 'size-5 md:size-7' : 'size-5 md:size-6'}
 											aria-hidden="true"
 										/>
 									{:else if choice.id === 'business-promo'}
 										<Store
-											class={prominent ? 'size-5 md:size-7' : undefined}
-											size={prominent ? undefined : 23}
+											class={prominent ? 'size-5 md:size-7' : 'size-5 md:size-6'}
 											aria-hidden="true"
 										/>
 									{:else}
 										<WandSparkles
-											class={prominent ? 'size-5 md:size-7' : undefined}
-											size={prominent ? undefined : 23}
+											class={prominent ? 'size-5 md:size-7' : 'size-5 md:size-6'}
 											aria-hidden="true"
 										/>
 									{/if}
 								</span>
 							</span>
 
-							<span class={['relative block', prominent ? 'mt-8 md:mt-16' : 'mt-10']}>
+							<span class={['relative block', prominent ? 'mt-8 md:mt-16' : 'mt-8 md:mt-10']}>
 								<span
 									class={[
 										'block font-bold text-balance text-white',
@@ -474,7 +466,7 @@
 									'absolute flex items-center justify-end border-t border-white/10 text-white',
 									prominent
 										? 'bottom-5 left-5 right-5 pt-4 md:bottom-8 md:left-8 md:right-8 md:pt-7'
-										: 'bottom-6 left-6 right-6 pt-5'
+										: 'bottom-5 left-5 right-5 pt-4 md:bottom-6 md:left-6 md:right-6 md:pt-5'
 								]}
 							>
 								<ArrowRight

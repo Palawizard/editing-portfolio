@@ -69,7 +69,8 @@ function Send-TextFile {
 
     $localTemp = Join-Path ([IO.Path]::GetTempPath()) "editing-portfolio-$([Guid]::NewGuid().ToString('N')).tmp"
     try {
-        [IO.File]::WriteAllText($localTemp, $Content, [Text.UTF8Encoding]::new($false))
+        $unixContent = $Content.Replace("`r`n", "`n").Replace("`r", "`n")
+        [IO.File]::WriteAllText($localTemp, $unixContent, [Text.UTF8Encoding]::new($false))
         & scp -P $Port $localTemp "${Target}:$RemotePath"
         if ($LASTEXITCODE -ne 0) {
             throw "Failed to upload $RemotePath."

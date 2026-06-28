@@ -17,9 +17,19 @@
 	let { project, compact = false, index = 0, minimal = false }: Props = $props();
 	const i18n = getLocaleContext();
 	const mediaAspect = $derived(project.format === '9:16' ? 'vertical' : 'video');
+	const isVertical = $derived(mediaAspect === 'vertical');
 	const publishedVideo = $derived(getPublishedVideo(project.externalUrl));
 	const inlineVideoSrc = $derived(project.previewVideo ?? publishedVideo?.directUrl);
 	const price = $derived(formatProjectPrice(project.pricing, i18n.locale));
+	const videoClass = $derived(
+		[
+			'rounded-none border-0 shadow-none',
+			compact && !isVertical ? 'max-h-72' : '',
+			isVertical && compact ? 'max-h-72' : ''
+		]
+			.filter(Boolean)
+			.join(' ')
+	);
 </script>
 
 <article
@@ -31,9 +41,7 @@
 			poster={(publishedVideo?.poster ?? project.poster) || undefined}
 			src={inlineVideoSrc}
 			aspect={mediaAspect}
-			class={compact
-				? 'max-h-72 rounded-none border-0 shadow-none'
-				: 'rounded-none border-0 shadow-none'}
+			class={videoClass}
 		/>
 		<div
 			class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent"
@@ -41,7 +49,7 @@
 		<PriceBadge
 			{price}
 			ariaLabel={`${i18n.content.ui.media.priceLabel} : ${price}`}
-			class="absolute right-4 top-4 z-20"
+			class={minimal ? 'absolute right-2 top-2 z-20' : 'absolute right-4 top-4 z-20'}
 		/>
 		{#if !minimal}
 			<span
@@ -52,7 +60,7 @@
 		{/if}
 	</div>
 
-	<div class="p-6">
+	<div class={minimal ? 'p-4 sm:p-6' : 'p-6'}>
 		{#if !minimal}
 			<div class="flex flex-wrap items-center gap-2">
 				<Badge tone="accent">{i18n.content.projectCategoryLabels[project.category]}</Badge>
@@ -60,7 +68,14 @@
 			</div>
 		{/if}
 
-		<h3 class={[minimal ? '' : 'mt-5', 'text-2xl font-bold text-balance text-white']}>
+		<h3
+			class={[
+				minimal ? '' : 'mt-5',
+				minimal
+					? 'text-xl font-bold text-balance text-white sm:text-2xl'
+					: 'text-2xl font-bold text-balance text-white'
+			]}
+		>
 			{project.title}
 		</h3>
 		{#if project.disclaimer}

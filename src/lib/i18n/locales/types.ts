@@ -21,7 +21,17 @@ export type ContactFormCopy = {
 		name: string;
 		email: string;
 		style: string;
+		objective: string;
+		providedFiles: string;
+		finalDuration: string;
+		editingLevel: string;
+		deadline: string;
 		projectDescription: string;
+	};
+	estimateCta: {
+		title: string;
+		description: string;
+		action: string;
 	};
 	turnstilePending: string;
 	turnstileDomainError: string;
@@ -48,6 +58,20 @@ export type ContactFormCopy = {
 		email: string;
 		style: string;
 		stylePlaceholder: string;
+		objective: string;
+		objectivePlaceholder: string;
+		providedFiles: string;
+		providedFilesPlaceholder: string;
+		footageDuration: string;
+		footageDurationPlaceholder: string;
+		finalDuration: string;
+		finalDurationPlaceholder: string;
+		editingLevel: string;
+		editingLevelPlaceholder: string;
+		deadline: string;
+		deadlinePlaceholder: string;
+		subtitles: string;
+		subtitlesPlaceholder: string;
 		projectDescription: string;
 		projectDescriptionHelp: string;
 		footageDetails: string;
@@ -56,7 +80,20 @@ export type ContactFormCopy = {
 		budget: string;
 		budgetHelp: string;
 		budgetPlaceholder: string;
+		referenceLink: string;
+		referenceLinkHelp: string;
+		specificRequests: string;
+		constraints: string;
 		usefulLinks: string;
+	};
+	options: {
+		objective: ContactOption<string>[];
+		providedFiles: ContactOption<string>[];
+		footageDuration: ContactOption<string>[];
+		finalDuration: ContactOption<string>[];
+		editingLevel: ContactOption<string>[];
+		deadline: ContactOption<string>[];
+		subtitles: ContactOption<string>[];
 	};
 };
 

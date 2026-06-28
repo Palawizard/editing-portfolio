@@ -27,6 +27,15 @@
 				? i18n.content.projectCategoryLabels[selectedChoice]
 				: ''
 	);
+
+	const isVerticalExamplesGrid = $derived(
+		Boolean(
+			selectedChoice &&
+			selectedChoice !== 'custom' &&
+			filteredProjects.length > 0 &&
+			filteredProjects.every((project) => project.format === '9:16')
+		)
+	);
 </script>
 
 <svelte:head>
@@ -103,14 +112,21 @@
 						</Button>
 					</div>
 
-					<div class="mt-10 grid min-w-0 gap-6 md:grid-cols-2 xl:grid-cols-3">
+					<div
+						class={[
+							'mt-10 grid min-w-0',
+							isVerticalExamplesGrid
+								? 'grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 md:gap-6 xl:grid-cols-4'
+								: 'grid-cols-2 gap-4 sm:gap-5 md:gap-6 xl:grid-cols-3'
+						]}
+					>
 						{#if filteredProjects.length}
 							{#each filteredProjects as project, index (project.slug)}
 								<ProjectCard {project} {index} minimal />
 							{/each}
 						{:else}
 							<p
-								class="rounded-[1.25rem] border border-white/10 bg-white/[0.035] p-6 text-sm leading-6 text-slate-300 md:col-span-2 xl:col-span-3"
+								class="rounded-[1.25rem] border border-white/10 bg-white/[0.035] p-6 text-sm leading-6 text-slate-300 col-span-2 xl:col-span-3"
 							>
 								{i18n.content.ui.projectsPage.emptyState}
 							</p>

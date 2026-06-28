@@ -69,16 +69,16 @@
 	const getCardSizeClass = (id: string, isProminent: boolean) => {
 		if (id === 'custom') {
 			return isProminent
-				? 'min-h-[29rem] w-[82vw] max-w-[27rem] sm:w-[26rem]'
+				? 'min-h-[17.5rem] w-[70vw] max-w-[18rem] md:min-h-[29rem] md:w-[26rem] md:max-w-[27rem]'
 				: 'min-h-[22rem] w-[82vw] max-w-[22rem] sm:w-[21rem]';
 		}
 		if (id === 'gaming-long-form' || id === 'other-format') {
 			return isProminent
-				? 'aspect-video w-[82vw] max-w-[32rem] sm:w-[30rem]'
+				? 'aspect-video w-[70vw] max-w-[18rem] md:w-[30rem] md:max-w-[32rem]'
 				: 'aspect-video w-[82vw] max-w-[28rem] sm:w-[26rem]';
 		}
 		return isProminent
-			? 'aspect-[9/16] w-[52vw] max-w-[18rem] sm:w-[17rem]'
+			? 'aspect-[9/16] w-[40vw] max-w-[10.5rem] md:w-[17rem] md:max-w-[18rem]'
 			: 'aspect-[9/16] w-[46vw] max-w-[15rem] sm:w-[14rem]';
 	};
 
@@ -314,7 +314,8 @@
 		<div
 			bind:this={carousel}
 			class={[
-				'carousel-track scrollbar-hidden -mx-5 flex items-center overflow-x-auto px-5 pb-20 pt-8 -mb-12 sm:mx-0 sm:px-0',
+				'carousel-track scrollbar-hidden -mx-5 flex items-center overflow-x-auto px-5 pb-14 pt-6 -mb-10 sm:mx-0 sm:px-0',
+				prominent ? 'md:pb-20 md:pt-8 md:-mb-12' : 'sm:pb-20 sm:pt-8 sm:-mb-12',
 				locked ? 'snap-x snap-mandatory' : ''
 			]}
 			aria-label={i18n.content.ui.formatCarousel.chooseAriaLabel}
@@ -323,7 +324,7 @@
 			{#each [0, 1, 2] as groupIndex (groupIndex)}
 				<div
 					use:captureMiddleGroup={groupIndex}
-					class={['flex shrink-0 pr-6', prominent ? 'gap-6' : 'gap-4']}
+					class={['flex shrink-0 pr-4 md:pr-6', prominent ? 'gap-4 md:gap-6' : 'gap-4']}
 				>
 					{#each choices as choice (choice.id)}
 						{@const preview =
@@ -342,9 +343,13 @@
 							class={[
 								'group relative shrink-0 snap-center overflow-hidden border text-left transition-[transform,border-color,background-color,box-shadow] duration-500',
 								getCardSizeClass(choice.id, prominent),
-								prominent ? 'rounded-[1.75rem] p-8' : 'rounded-[1.4rem] p-6',
+								prominent
+									? 'rounded-[1.35rem] p-5 md:rounded-[1.75rem] md:p-8'
+									: 'rounded-[1.4rem] p-6',
 								locked && activeGroupIndex === groupIndex && selected === choice.id
-									? 'z-10 scale-[1.05] border-violet-200 bg-violet-300/[0.14] shadow-[0_14px_48px_rgb(81_49_150/0.28)]'
+									? prominent
+										? 'z-10 scale-[1.02] border-violet-200 bg-violet-300/[0.14] shadow-[0_14px_48px_rgb(81_49_150/0.28)] md:scale-[1.05]'
+										: 'z-10 scale-[1.05] border-violet-200 bg-violet-300/[0.14] shadow-[0_14px_48px_rgb(81_49_150/0.28)]'
 									: 'border-white/10 bg-white/[0.035] hover:border-white/25 hover:bg-white/[0.065]'
 							]}
 							type="button"
@@ -384,9 +389,9 @@
 								<PriceBadge
 									price={startingPriceLabel}
 									ariaLabel={startingPriceLabel}
-									size={prominent ? 'md' : 'sm'}
+									size="sm"
 									class={prominent
-										? 'absolute right-3 top-3 z-20'
+										? 'absolute right-2.5 top-2.5 z-20 md:right-3 md:top-3 md:px-3 md:py-1.5 md:text-sm'
 										: 'absolute right-2.5 top-2.5 z-20'}
 								/>
 							{/if}
@@ -407,37 +412,59 @@
 								<span
 									class={[
 										'grid place-items-center rounded-2xl border',
-										prominent ? 'size-16' : 'size-12',
+										prominent ? 'size-11 md:size-16' : 'size-12',
 										locked && activeGroupIndex === groupIndex && selected === choice.id
 											? 'border-violet-200/40 bg-violet-200/15 text-violet-100'
 											: 'border-white/10 bg-black/20 text-slate-200'
 									]}
 								>
 									{#if choice.id === 'gaming-long-form'}
-										<MonitorPlay size={prominent ? 29 : 23} aria-hidden="true" />
+										<MonitorPlay
+											class={prominent ? 'size-5 md:size-7' : undefined}
+											size={prominent ? undefined : 23}
+											aria-hidden="true"
+										/>
 									{:else if choice.id === 'gaming-short-form'}
-										<Gamepad2 size={prominent ? 29 : 23} aria-hidden="true" />
+										<Gamepad2
+											class={prominent ? 'size-5 md:size-7' : undefined}
+											size={prominent ? undefined : 23}
+											aria-hidden="true"
+										/>
 									{:else if choice.id === 'explainer-short-form'}
-										<MessageSquareText size={prominent ? 29 : 23} aria-hidden="true" />
+										<MessageSquareText
+											class={prominent ? 'size-5 md:size-7' : undefined}
+											size={prominent ? undefined : 23}
+											aria-hidden="true"
+										/>
 									{:else if choice.id === 'business-promo'}
-										<Store size={prominent ? 29 : 23} aria-hidden="true" />
+										<Store
+											class={prominent ? 'size-5 md:size-7' : undefined}
+											size={prominent ? undefined : 23}
+											aria-hidden="true"
+										/>
 									{:else}
-										<WandSparkles size={prominent ? 29 : 23} aria-hidden="true" />
+										<WandSparkles
+											class={prominent ? 'size-5 md:size-7' : undefined}
+											size={prominent ? undefined : 23}
+											aria-hidden="true"
+										/>
 									{/if}
 								</span>
 							</span>
 
-							<span class={['relative block', prominent ? 'mt-16' : 'mt-10']}>
+							<span class={['relative block', prominent ? 'mt-8 md:mt-16' : 'mt-10']}>
 								<span
 									class={[
 										'block font-bold text-balance text-white',
-										prominent ? 'text-4xl leading-[1.08]' : 'text-2xl leading-tight'
+										prominent
+											? 'text-2xl leading-tight md:text-4xl md:leading-[1.08]'
+											: 'text-2xl leading-tight'
 									]}>{choice.title}</span
 								>
 								<span
 									class={[
-										'mt-4 block text-slate-300',
-										prominent ? 'text-base leading-7' : 'text-sm leading-6'
+										'mt-3 block text-slate-300 md:mt-4',
+										prominent ? 'text-sm leading-6 md:text-base md:leading-7' : 'text-sm leading-6'
 									]}>{choice.promise}</span
 								>
 							</span>
@@ -445,7 +472,9 @@
 							<span
 								class={[
 									'absolute flex items-center justify-end border-t border-white/10 text-white',
-									prominent ? 'bottom-8 left-8 right-8 pt-7' : 'bottom-6 left-6 right-6 pt-5'
+									prominent
+										? 'bottom-5 left-5 right-5 pt-4 md:bottom-8 md:left-8 md:right-8 md:pt-7'
+										: 'bottom-6 left-6 right-6 pt-5'
 								]}
 							>
 								<ArrowRight
@@ -466,13 +495,19 @@
 
 <style>
 	.carousel-shell {
-		--carousel-fade-width: clamp(3rem, 8vw, 7rem);
+		--carousel-fade-width: clamp(1.75rem, 6vw, 7rem);
+	}
+
+	@media (min-width: 768px) {
+		.carousel-shell {
+			--carousel-fade-width: clamp(3rem, 8vw, 7rem);
+		}
 	}
 
 	.carousel-edge-fade {
 		position: absolute;
-		top: 2rem;
-		bottom: 5rem;
+		top: 1.5rem;
+		bottom: 3.5rem;
 		z-index: 20;
 		width: var(--carousel-fade-width);
 		pointer-events: none;
@@ -486,6 +521,13 @@
 	.carousel-edge-fade-right {
 		right: 0;
 		background: linear-gradient(to left, var(--carousel-fade-from), transparent);
+	}
+
+	@media (min-width: 768px) {
+		.carousel-edge-fade {
+			top: 2rem;
+			bottom: 5rem;
+		}
 	}
 
 	@keyframes preview-media-focus {

@@ -89,7 +89,7 @@ export const uiBundle = {
 		metaDescription:
 			'Présente ton projet de montage vidéo, son format, ses références et les rushs disponibles.',
 		briefEyebrow: 'Préparer la demande',
-		briefTitle: 'Un brief simple suffit',
+		briefTitle: 'Les infos utiles à préparer',
 		briefItems: [
 			{
 				title: 'Le format',

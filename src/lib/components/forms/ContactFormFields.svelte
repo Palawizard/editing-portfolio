@@ -62,7 +62,7 @@
 		{/if}
 	</div>
 
-	<div class="sm:col-span-2">
+	<div>
 		<label class={labelClasses} for="style">
 			{copy.fields.style} <span aria-hidden="true">*</span>
 		</label>
@@ -83,6 +83,152 @@
 		{#if errors.style}
 			<p id="style-error" class="mt-2 text-sm text-rose-200">{errors.style}</p>
 		{/if}
+	</div>
+
+	<div>
+		<label class={labelClasses} for="objective">
+			{copy.fields.objective} <span aria-hidden="true">*</span>
+		</label>
+		<select
+			class={fieldClasses}
+			id="objective"
+			name="objective"
+			required
+			bind:value={values.objective}
+			aria-invalid={errors.objective ? 'true' : undefined}
+			aria-describedby={errors.objective ? 'objective-error' : undefined}
+		>
+			<option value="" disabled>{copy.fields.objectivePlaceholder}</option>
+			{#each copy.options.objective as option (option.value)}
+				<option value={option.value}>{option.label}</option>
+			{/each}
+		</select>
+		{#if errors.objective}
+			<p id="objective-error" class="mt-2 text-sm text-rose-200">{errors.objective}</p>
+		{/if}
+	</div>
+
+	<div>
+		<label class={labelClasses} for="providedFiles">
+			{copy.fields.providedFiles} <span aria-hidden="true">*</span>
+		</label>
+		<select
+			class={fieldClasses}
+			id="providedFiles"
+			name="provided_files"
+			required
+			bind:value={values.providedFiles}
+			aria-invalid={errors.providedFiles ? 'true' : undefined}
+			aria-describedby={errors.providedFiles ? 'providedFiles-error' : undefined}
+		>
+			<option value="" disabled>{copy.fields.providedFilesPlaceholder}</option>
+			{#each copy.options.providedFiles as option (option.value)}
+				<option value={option.value}>{option.label}</option>
+			{/each}
+		</select>
+		{#if errors.providedFiles}
+			<p id="providedFiles-error" class="mt-2 text-sm text-rose-200">
+				{errors.providedFiles}
+			</p>
+		{/if}
+	</div>
+
+	<div>
+		<label class={labelClasses} for="finalDuration">
+			{copy.fields.finalDuration} <span aria-hidden="true">*</span>
+		</label>
+		<select
+			class={fieldClasses}
+			id="finalDuration"
+			name="final_duration"
+			required
+			bind:value={values.finalDuration}
+			aria-invalid={errors.finalDuration ? 'true' : undefined}
+			aria-describedby={errors.finalDuration ? 'finalDuration-error' : undefined}
+		>
+			<option value="" disabled>{copy.fields.finalDurationPlaceholder}</option>
+			{#each copy.options.finalDuration as option (option.value)}
+				<option value={option.value}>{option.label}</option>
+			{/each}
+		</select>
+		{#if errors.finalDuration}
+			<p id="finalDuration-error" class="mt-2 text-sm text-rose-200">
+				{errors.finalDuration}
+			</p>
+		{/if}
+	</div>
+
+	<div>
+		<label class={labelClasses} for="footageDuration">{copy.fields.footageDuration}</label>
+		<select
+			class={fieldClasses}
+			id="footageDuration"
+			name="footage_duration"
+			bind:value={values.footageDuration}
+		>
+			<option value="">{copy.fields.footageDurationPlaceholder}</option>
+			{#each copy.options.footageDuration as option (option.value)}
+				<option value={option.value}>{option.label}</option>
+			{/each}
+		</select>
+	</div>
+
+	<div>
+		<label class={labelClasses} for="editingLevel">
+			{copy.fields.editingLevel} <span aria-hidden="true">*</span>
+		</label>
+		<select
+			class={fieldClasses}
+			id="editingLevel"
+			name="editing_level"
+			required
+			bind:value={values.editingLevel}
+			aria-invalid={errors.editingLevel ? 'true' : undefined}
+			aria-describedby={errors.editingLevel ? 'editingLevel-error' : undefined}
+		>
+			<option value="" disabled>{copy.fields.editingLevelPlaceholder}</option>
+			{#each copy.options.editingLevel as option (option.value)}
+				<option value={option.value}>{option.label}</option>
+			{/each}
+		</select>
+		{#if errors.editingLevel}
+			<p id="editingLevel-error" class="mt-2 text-sm text-rose-200">
+				{errors.editingLevel}
+			</p>
+		{/if}
+	</div>
+
+	<div>
+		<label class={labelClasses} for="deadline">
+			{copy.fields.deadline} <span aria-hidden="true">*</span>
+		</label>
+		<select
+			class={fieldClasses}
+			id="deadline"
+			name="deadline"
+			required
+			bind:value={values.deadline}
+			aria-invalid={errors.deadline ? 'true' : undefined}
+			aria-describedby={errors.deadline ? 'deadline-error' : undefined}
+		>
+			<option value="" disabled>{copy.fields.deadlinePlaceholder}</option>
+			{#each copy.options.deadline as option (option.value)}
+				<option value={option.value}>{option.label}</option>
+			{/each}
+		</select>
+		{#if errors.deadline}
+			<p id="deadline-error" class="mt-2 text-sm text-rose-200">{errors.deadline}</p>
+		{/if}
+	</div>
+
+	<div>
+		<label class={labelClasses} for="subtitles">{copy.fields.subtitles}</label>
+		<select class={fieldClasses} id="subtitles" name="subtitles" bind:value={values.subtitles}>
+			<option value="">{copy.fields.subtitlesPlaceholder}</option>
+			{#each copy.options.subtitles as option (option.value)}
+				<option value={option.value}>{option.label}</option>
+			{/each}
+		</select>
 	</div>
 
 	<div class="sm:col-span-2">
@@ -126,6 +272,42 @@
 			maxlength="600"
 			bind:value={values.footageDetails}
 			aria-describedby="footage-help"></textarea>
+	</div>
+
+	<div class="sm:col-span-2">
+		<label class={labelClasses} for="referenceLink">{copy.fields.referenceLink}</label>
+		<p id="reference-link-help" class="mt-1 text-xs leading-5 text-slate-400">
+			{copy.fields.referenceLinkHelp}
+		</p>
+		<input
+			class={fieldClasses}
+			id="referenceLink"
+			name="reference_link"
+			type="url"
+			maxlength="1200"
+			bind:value={values.referenceLink}
+			aria-describedby="reference-link-help"
+		/>
+	</div>
+
+	<div class="sm:col-span-2">
+		<label class={labelClasses} for="specificRequests">{copy.fields.specificRequests}</label>
+		<textarea
+			class={[fieldClasses, 'min-h-24 resize-y']}
+			id="specificRequests"
+			name="specific_requests"
+			maxlength="1200"
+			bind:value={values.specificRequests}></textarea>
+	</div>
+
+	<div class="sm:col-span-2">
+		<label class={labelClasses} for="constraints">{copy.fields.constraints}</label>
+		<textarea
+			class={[fieldClasses, 'min-h-24 resize-y']}
+			id="constraints"
+			name="constraints"
+			maxlength="1200"
+			bind:value={values.constraints}></textarea>
 	</div>
 
 	<div>

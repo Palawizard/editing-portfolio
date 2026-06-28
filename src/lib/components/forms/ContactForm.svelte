@@ -54,6 +54,10 @@
 
 	const isProjectChoice = (value: string): value is ProjectChoice =>
 		styleOptions.some((option) => option.value === value);
+	const getOptionLabel = (
+		options: Array<{ value: string; label: string }>,
+		value: string
+	): string => options.find((option) => option.value === value)?.label ?? value;
 
 	const setContextFromUrl = () => {
 		const searchParams = new URLSearchParams(window.location.search);
@@ -90,9 +94,28 @@
 				typeof prefill.projectDescription === 'string'
 					? prefill.projectDescription.slice(0, 4000)
 					: '';
+			values.objective =
+				typeof prefill.objective === 'string' ? prefill.objective.slice(0, 80) : '';
+			values.providedFiles =
+				typeof prefill.providedFiles === 'string' ? prefill.providedFiles.slice(0, 80) : '';
+			values.finalDuration =
+				typeof prefill.finalDuration === 'string' ? prefill.finalDuration.slice(0, 80) : '';
+			values.footageDuration =
+				typeof prefill.footageDuration === 'string' ? prefill.footageDuration.slice(0, 80) : '';
+			values.editingLevel =
+				typeof prefill.editingLevel === 'string' ? prefill.editingLevel.slice(0, 80) : '';
+			values.deadline = typeof prefill.deadline === 'string' ? prefill.deadline.slice(0, 80) : '';
+			values.subtitles =
+				typeof prefill.subtitles === 'string' ? prefill.subtitles.slice(0, 80) : '';
 			values.footageDetails =
 				typeof prefill.footageDetails === 'string' ? prefill.footageDetails.slice(0, 600) : '';
 			values.budget = typeof prefill.budget === 'string' ? prefill.budget.slice(0, 80) : '';
+			values.referenceLink =
+				typeof prefill.referenceLink === 'string' ? prefill.referenceLink.slice(0, 1200) : '';
+			values.specificRequests =
+				typeof prefill.specificRequests === 'string' ? prefill.specificRequests.slice(0, 1200) : '';
+			values.constraints =
+				typeof prefill.constraints === 'string' ? prefill.constraints.slice(0, 1200) : '';
 			values.usefulLinks =
 				typeof prefill.usefulLinks === 'string' ? prefill.usefulLinks.slice(0, 1200) : '';
 
@@ -131,6 +154,26 @@
 
 		if (!values.style) {
 			nextErrors.style = copy.validation.style;
+		}
+
+		if (!values.objective) {
+			nextErrors.objective = copy.validation.objective;
+		}
+
+		if (!values.providedFiles) {
+			nextErrors.providedFiles = copy.validation.providedFiles;
+		}
+
+		if (!values.finalDuration) {
+			nextErrors.finalDuration = copy.validation.finalDuration;
+		}
+
+		if (!values.editingLevel) {
+			nextErrors.editingLevel = copy.validation.editingLevel;
+		}
+
+		if (!values.deadline) {
+			nextErrors.deadline = copy.validation.deadline;
 		}
 
 		if (trimmedDescription.length < 20) {
@@ -306,6 +349,19 @@
 			<p class="mt-3 max-w-2xl text-sm leading-6 text-slate-300">{copy.description}</p>
 		</div>
 
+		<div
+			class="mt-7 grid gap-4 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.07] p-4 sm:grid-cols-[1fr_auto] sm:items-center"
+		>
+			<div>
+				<p class="text-sm font-semibold text-cyan-100">{copy.estimateCta.title}</p>
+				<p class="mt-1 text-xs leading-5 text-slate-300">{copy.estimateCta.description}</p>
+			</div>
+			<Button href="/estimation" variant="secondary" class="w-full sm:w-auto">
+				{copy.estimateCta.action}
+				<ArrowRight size={18} aria-hidden="true" />
+			</Button>
+		</div>
+
 		{#if context.style}
 			<div class="mt-7 rounded-xl border border-violet-300/20 bg-violet-300/[0.08] p-4">
 				<p class="text-sm font-semibold text-violet-100">
@@ -337,6 +393,41 @@
 			type="hidden"
 			name="style_label"
 			value={getContactStyleLabel(values.style, i18n.locale)}
+		/>
+		<input
+			type="hidden"
+			name="objective_label"
+			value={getOptionLabel(copy.options.objective, values.objective)}
+		/>
+		<input
+			type="hidden"
+			name="provided_files_label"
+			value={getOptionLabel(copy.options.providedFiles, values.providedFiles)}
+		/>
+		<input
+			type="hidden"
+			name="final_duration_label"
+			value={getOptionLabel(copy.options.finalDuration, values.finalDuration)}
+		/>
+		<input
+			type="hidden"
+			name="footage_duration_label"
+			value={getOptionLabel(copy.options.footageDuration, values.footageDuration)}
+		/>
+		<input
+			type="hidden"
+			name="editing_level_label"
+			value={getOptionLabel(copy.options.editingLevel, values.editingLevel)}
+		/>
+		<input
+			type="hidden"
+			name="deadline_label"
+			value={getOptionLabel(copy.options.deadline, values.deadline)}
+		/>
+		<input
+			type="hidden"
+			name="subtitles_label"
+			value={getOptionLabel(copy.options.subtitles, values.subtitles)}
 		/>
 		<input type="hidden" name="subject" value={copy.subjectTemplate} />
 		<div class="absolute -left-[10000px]" aria-hidden="true">

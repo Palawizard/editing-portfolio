@@ -85,9 +85,19 @@ export type EstimateContactPrefill = {
 	name: string;
 	email: string;
 	style: ProjectChoice | '';
+	objective: string;
+	providedFiles: string;
+	finalDuration: string;
+	footageDuration: string;
+	editingLevel: string;
+	deadline: string;
+	subtitles: string;
 	projectDescription: string;
 	footageDetails: string;
 	budget: string;
+	referenceLink: string;
+	specificRequests: string;
+	constraints: string;
 	usefulLinks: string;
 };
 

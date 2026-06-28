@@ -88,7 +88,7 @@ export const uiBundle = {
 		metaDescription:
 			'Share your video editing project, its format, references and available footage.',
 		briefEyebrow: 'Prepare your request',
-		briefTitle: 'A simple brief is enough',
+		briefTitle: 'Useful details to prepare',
 		briefItems: [
 			{
 				title: 'The format',

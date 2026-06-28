@@ -395,6 +395,11 @@ describe('questionnaire flow and prefill', () => {
 		const prefill = buildContactPrefill(answers, estimate, estimateCopy.questions, 'fr');
 
 		expect(prefill.email).toBe('');
+		expect(prefill.objective).toBe('entertain');
+		expect(prefill.providedFiles).toBe('raw');
+		expect(prefill.finalDuration).toBe('30-60s');
+		expect(prefill.editingLevel).toBe('simple');
+		expect(prefill.deadline).toBe('1-2-weeks');
 		expect(prefill.projectDescription).toContain('Discord : alex-video');
 		expect(prefill.budget).toContain(`${estimate.minimum}–${estimate.maximum} €`);
 	});
@@ -410,6 +415,7 @@ describe('questionnaire flow and prefill', () => {
 		const prefill = buildContactPrefill(answers, estimate, estimateCopy.questions, 'fr');
 
 		expect(prefill.usefulLinks).toBe('');
+		expect(prefill.referenceLink).toBe('');
 		expect(prefill.budget).not.toContain('500 €');
 	});
 
@@ -428,6 +434,9 @@ describe('questionnaire flow and prefill', () => {
 		expect(prefill.projectDescription).toContain('3 à 5 jours');
 		expect(prefill.projectDescription).toContain('4K');
 		expect(prefill.projectDescription).toContain('Fichiers de projet à livrer: Oui');
+		expect(prefill.providedFiles).toBe('raw');
+		expect(prefill.deadline).toBe('3-5-days');
+		expect(prefill.referenceLink).toBe('https://example.com/reference');
 	});
 
 	it('transfers both long-form and short durations for hybrid projects', () => {
@@ -442,5 +451,7 @@ describe('questionnaire flow and prefill', () => {
 
 		expect(prefill.footageDetails).toContain('Durée finale: 8 à 15 minutes');
 		expect(prefill.footageDetails).toContain('Durée moyenne de chaque short: Moins de 30 secondes');
+		expect(prefill.providedFiles).toBe('raw');
+		expect(prefill.finalDuration).toBe('8-15m');
 	});
 });

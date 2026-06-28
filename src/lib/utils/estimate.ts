@@ -520,6 +520,12 @@ export const buildContactPrefill = (
 	const answerLabel = (id: keyof EstimateAnswers, value: string) =>
 		labels.get(id)?.options?.find((option) => option.value === value)?.label ?? value;
 	const line = (label: string, value: string) => `${label}: ${value}`;
+	const primaryProvidedFile =
+		answers.providedFiles.length === 1
+			? answers.providedFiles[0]
+			: answers.providedFiles.length
+				? 'multiple'
+				: '';
 	const localized =
 		locale === 'fr'
 			? {
@@ -630,6 +636,13 @@ export const buildContactPrefill = (
 		name: answers.name.trim(),
 		email: validEmail(answers.contact) ? answers.contact.trim() : '',
 		style: answers.projectType ? projectStyleMap[answers.projectType] : '',
+		objective: answers.objective,
+		providedFiles: primaryProvidedFile,
+		finalDuration: answers.finalDuration,
+		footageDuration: answers.footageDuration,
+		editingLevel: answers.editingLevel,
+		deadline: answers.deadline,
+		subtitles: answers.subtitles,
 		projectDescription: descriptionLines.filter(Boolean).join('\n'),
 		footageDetails: footageLines.join('\n'),
 		budget: [
@@ -640,6 +653,9 @@ export const buildContactPrefill = (
 		]
 			.filter(Boolean)
 			.join(' · '),
-		usefulLinks: answers.styleReference === 'example' ? answers.referenceLink.trim() : ''
+		referenceLink: answers.styleReference === 'example' ? answers.referenceLink.trim() : '',
+		specificRequests: answers.specificRequests.trim(),
+		constraints: answers.constraints.trim(),
+		usefulLinks: ''
 	};
 };

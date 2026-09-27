@@ -5,29 +5,23 @@
 	const i18n = getLocaleContext();
 </script>
 
-<footer class="border-t border-white/10 bg-[#040509]/80">
+<footer class="px-5 pb-8 sm:px-6 lg:px-8">
 	<div
-		class="mx-auto grid max-w-7xl gap-10 px-5 py-12 sm:px-6 md:grid-cols-[1fr_auto] md:items-end lg:px-8"
+		class="panel mx-auto grid max-w-7xl gap-6 p-6 md:grid-cols-[1fr_auto] md:items-center md:p-8"
 	>
 		<div>
-			<p class="font-mono text-xs tracking-[0.2em] text-cyan-200 uppercase">
-				{i18n.content.ui.footer.eyebrow}
-			</p>
-			<p class="display-title mt-4 max-w-xl text-3xl text-white md:text-4xl">
-				{i18n.content.siteMetadata.name}
-			</p>
-			<p class="mt-4 max-w-md text-sm leading-6 text-slate-400">
+			<p class="display-title text-3xl">Palawi <span class="font-sans text-mute">Studio</span></p>
+			<p class="mt-2 max-w-md text-sm leading-6 font-medium text-mute">
 				{i18n.content.ui.footer.description}
 			</p>
 		</div>
-
 		<nav
-			class="flex flex-wrap gap-5 text-sm text-slate-300"
+			class="flex flex-wrap gap-x-5 gap-y-1 text-sm font-bold"
 			aria-label={i18n.content.ui.navigation.secondaryAriaLabel}
 		>
 			{#each i18n.content.navigationLinks as link (link.href)}
 				<a
-					class="inline-flex min-h-11 items-center transition hover:text-white"
+					class="inline-flex min-h-11 items-center hover:underline hover:underline-offset-4"
 					href={resolve(link.href)}
 				>
 					{link.label}

@@ -41,11 +41,7 @@
 </script>
 
 <figure
-	class={[
-		'group relative w-full overflow-hidden rounded-lg border border-white/10 bg-slate-950 shadow-[var(--shadow-premium)]',
-		aspectClasses[aspect],
-		className
-	]}
+	class={['group relative w-full overflow-hidden bg-screen', aspectClasses[aspect], className]}
 >
 	{#if resolvedSrc && loaded}
 		<video
@@ -68,11 +64,9 @@
 			loading="lazy"
 		/>
 	{:else}
-		<div
-			class="absolute inset-0 grid place-items-center bg-[radial-gradient(circle_at_30%_20%,rgb(155_124_255/0.24),transparent_32%),linear-gradient(135deg,#121827,#060913_62%,#101727)]"
-		>
+		<div class="absolute inset-0 grid place-items-center bg-screen">
 			<span
-				class="mx-5 max-w-sm rounded-full border border-white/15 bg-black/25 px-4 py-2 text-center text-sm text-slate-200"
+				class="mx-5 max-w-sm rounded-full bg-white/15 px-4 py-2 text-center text-sm font-bold text-white"
 				>{title}</span
 			>
 		</div>
@@ -80,13 +74,13 @@
 
 	{#if resolvedSrc && !loaded}
 		<button
-			class="absolute inset-0 z-10 grid place-items-center bg-black/10 transition hover:bg-black/25 focus-visible:bg-black/25"
+			class="absolute inset-0 z-10 grid place-items-center"
 			type="button"
 			aria-label={`${i18n.content.ui.media.playLabel} : ${title}`}
 			onclick={loadVideo}
 		>
 			<span
-				class="grid size-14 place-items-center rounded-full border border-white/20 bg-black/55 text-white shadow-xl backdrop-blur transition group-hover:scale-105"
+				class="grid size-14 place-items-center rounded-full bg-white/90 text-paper shadow-xl backdrop-blur transition-transform duration-200 group-active:scale-95"
 			>
 				<Play class="ml-0.5" size={22} fill="currentColor" aria-hidden="true" />
 			</span>

@@ -16,7 +16,7 @@
 	const textValue = $derived(typeof answer === 'string' ? answer : '');
 	const selectedValues = $derived(Array.isArray(answer) ? answer : []);
 	const fieldClasses =
-		'w-full rounded-2xl border border-white/12 bg-black/25 px-5 py-4 text-base text-white outline-none transition placeholder:text-slate-500 hover:border-white/20 focus:border-cyan-200/60 focus:ring-2 focus:ring-cyan-200/15 aria-invalid:border-rose-300/70';
+		'min-h-12 w-full rounded-2xl border-2 border-transparent bg-white px-5 py-4 text-base text-paper caret-live shadow-[inset_0_1px_2px_rgb(42_20_9/0.08)] outline-none transition-colors placeholder:text-mute/80 hover:border-peach focus:border-paper aria-invalid:border-bad';
 
 	$effect(() => {
 		const questionId = question.id;
@@ -54,14 +54,14 @@
 			{#each question.options ?? [] as option (option.value)}
 				<label
 					class={[
-						'group flex min-h-14 cursor-pointer items-center gap-4 rounded-2xl border px-4 py-3.5 transition sm:px-5',
+						'group flex min-h-14 cursor-pointer items-center gap-4 rounded-2xl border-2 px-4 py-3.5 transition-colors sm:px-5',
 						textValue === option.value
-							? 'border-violet-300/60 bg-violet-300/[0.12] text-white'
-							: 'border-white/10 bg-black/20 text-slate-200 hover:border-white/25 hover:bg-white/[0.04]'
+							? 'border-paper bg-paper text-white'
+							: 'border-transparent bg-white text-paper shadow-[var(--shadow)] hover:border-peach'
 					]}
 				>
 					<input
-						class="size-4 accent-violet-300"
+						class="size-4 accent-[#ff5a1f]"
 						type="radio"
 						name={question.id}
 						value={option.value}
@@ -79,18 +79,18 @@
 				<button
 					type="button"
 					class={[
-						'flex min-h-14 items-center gap-4 rounded-2xl border px-4 py-3.5 text-left transition sm:px-5',
+						'flex min-h-14 items-center gap-4 rounded-2xl border-2 px-4 py-3.5 text-left transition-[background-color,border-color,transform] duration-150 active:scale-[0.98] sm:px-5',
 						selected
-							? 'border-violet-300/60 bg-violet-300/[0.12] text-white'
-							: 'border-white/10 bg-black/20 text-slate-200 hover:border-white/25 hover:bg-white/[0.04]'
+							? 'border-paper bg-paper text-white'
+							: 'border-transparent bg-white text-paper shadow-[var(--shadow)] hover:border-peach'
 					]}
 					aria-pressed={selected}
 					onclick={() => toggleOption(option.value)}
 				>
 					<span
 						class={[
-							'grid size-5 shrink-0 place-items-center rounded-md border',
-							selected ? 'border-violet-200 bg-violet-200 text-slate-950' : 'border-white/25'
+							'grid size-5 shrink-0 place-items-center rounded-md border-2',
+							selected ? 'border-live bg-live text-white' : 'border-peach-deep'
 						]}
 					>
 						{#if selected}<Check size={14} strokeWidth={3} aria-hidden="true" />{/if}
@@ -123,6 +123,6 @@
 	{/if}
 
 	{#if error}
-		<p class="mt-4 text-sm font-medium text-rose-200" role="alert">{error}</p>
+		<p class="mt-4 text-sm font-semibold text-bad" role="alert">{error}</p>
 	{/if}
 </div>

@@ -9,13 +9,15 @@
 	let { price, ariaLabel, size = 'sm', class: className = '' }: Props = $props();
 </script>
 
+<!-- A stream alert: the price pops like a donation notification. -->
 <span
 	class={[
-		'inline-flex items-center rounded-full border border-violet-300/35 bg-[linear-gradient(135deg,rgb(76_29_149/0.92),rgb(15_23_42/0.95))] font-mono font-semibold text-violet-50 shadow-[0_8px_28px_rgb(124_58_237/0.28)] ring-1 ring-violet-200/15',
-		size === 'md' ? 'px-3 py-1.5 text-sm' : 'px-3 py-1 text-xs',
+		'inline-flex items-center gap-1.5 rounded-full bg-white font-extrabold text-paper tabular-nums shadow-[0_8px_20px_-8px_rgb(42_20_9/0.6)]',
+		size === 'md' ? 'px-3.5 py-1.5 text-sm' : 'px-2.5 py-1 text-xs',
 		className
 	]}
 	aria-label={ariaLabel}
 >
+	<span class="size-1.5 rounded-full bg-live" aria-hidden="true"></span>
 	{price}
 </span>

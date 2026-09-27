@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { Clapperboard, FileText, Link2, WandSparkles } from '@lucide/svelte';
 	import { env } from '$env/dynamic/public';
 	import ContactForm from '$lib/components/forms/ContactForm.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
@@ -10,14 +9,6 @@
 	const turnstileSiteKey = env.PUBLIC_TURNSTILE_SITE_KEY?.trim() ?? '';
 	const contactEmail = env.PUBLIC_CONTACT_EMAIL?.trim() ?? '';
 	const i18n = getLocaleContext();
-
-	const briefIcons = [FileText, Link2, Clapperboard];
-	const briefItems = $derived(
-		i18n.content.ui.contactPage.briefItems.map((item, index) => ({
-			...item,
-			icon: briefIcons[index]
-		}))
-	);
 </script>
 
 <svelte:head>
@@ -26,70 +17,49 @@
 </svelte:head>
 
 <main id="main-content">
-	<section class="relative overflow-hidden pb-16 pt-16 md:pb-24 md:pt-24">
-		<div
-			class="pointer-events-none absolute left-1/2 top-0 h-72 w-[44rem] -translate-x-1/2 rounded-full bg-violet-500/12 blur-[110px]"
-		></div>
+	<section class="pt-4 pb-8 md:pt-8 md:pb-12">
 		<Container size="wide">
-			<div class="mx-auto max-w-4xl text-center">
-				<div
-					class="mx-auto grid size-14 place-items-center rounded-2xl border border-violet-300/25 bg-violet-300/10 text-violet-100"
-				>
-					<WandSparkles size={25} aria-hidden="true" />
-				</div>
-				<p class="mt-6 text-xs font-semibold uppercase tracking-[0.28em] text-cyan-200">
-					{i18n.content.ui.contactPage.eyebrow}
-				</p>
-				<h1 class="display-title mt-5 text-5xl text-gradient sm:text-6xl md:text-8xl">
-					{i18n.content.contactCopy.title}
-				</h1>
-				<p class="mx-auto mt-7 max-w-2xl text-base leading-7 text-slate-300 md:text-lg">
+			<h1 class="display-title print-in max-w-5xl text-[clamp(2.5rem,7vw,5rem)]">
+				{i18n.content.contactCopy.title}
+			</h1>
+			<div
+				class="rise mt-6 flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
+				style="--i: 1"
+			>
+				<p class="max-w-[58ch] text-base leading-7 font-medium text-mute md:text-lg">
 					{i18n.content.contactCopy.description}
 				</p>
-				<Button href="/estimation" variant="secondary" class="mt-7">
+				<Button href="/estimation" variant="secondary" class="shrink-0">
 					{i18n.content.ui.contactPage.estimateCta}
 				</Button>
 			</div>
 		</Container>
 	</section>
 
-	<section class="border-t border-white/10 pb-24 pt-16 md:pb-28 md:pt-20">
+	<section class="pb-16 md:pb-24">
 		<Container size="wide">
-			<div class="grid gap-8 xl:grid-cols-[0.78fr_1.22fr] xl:items-start">
-				<div class="grid gap-6 xl:sticky xl:top-28">
-					<div
-						class="rounded-[1.5rem] border border-white/10 bg-white/[0.035] p-6 shadow-[var(--shadow-premium)] md:p-9"
-					>
-						<p class="text-xs font-semibold uppercase tracking-[0.24em] text-violet-200">
-							{i18n.content.ui.contactPage.briefEyebrow}
-						</p>
-						<h2 class="mt-4 text-3xl font-bold text-white">
-							{i18n.content.ui.contactPage.briefTitle}
-						</h2>
-						<div class="mt-8 grid gap-4">
-							{#each briefItems as item, index (item.title)}
-								{@const Icon = item.icon}
-								<article
-									class="grid grid-cols-[auto_1fr] gap-4 rounded-2xl border border-white/8 bg-black/20 p-4"
+			<div class="grid gap-10 xl:grid-cols-[0.7fr_1.3fr] xl:items-start">
+				<aside class="panel rise p-5 md:p-7 xl:sticky xl:top-28" style="--i: 2">
+					<h2 class="label text-mute">{i18n.content.ui.contactPage.briefTitle}</h2>
+					<ol class="mt-4 grid gap-3">
+						{#each i18n.content.ui.contactPage.briefItems as item, index (item.title)}
+							<li class="grid grid-cols-[2.5rem_1fr] items-start rounded-2xl bg-white/80 p-3">
+								<span
+									class="grid size-8 place-items-center rounded-full bg-paper text-sm font-extrabold text-white"
+									>{index + 1}</span
 								>
-									<div
-										class="grid size-11 place-items-center rounded-xl bg-white/[0.05] text-cyan-100"
-									>
-										<Icon size={19} aria-hidden="true" />
-									</div>
-									<div>
-										<p class="font-semibold text-white">
-											{String(index + 1).padStart(2, '0')} · {item.title}
-										</p>
-										<p class="mt-1 text-sm leading-6 text-slate-400">{item.description}</p>
-									</div>
-								</article>
-							{/each}
-						</div>
-					</div>
-				</div>
+								<div>
+									<p class="text-base font-extrabold">{item.title}</p>
+									<p class="mt-1 text-sm leading-6 text-mute">{item.description}</p>
+								</div>
+							</li>
+						{/each}
+					</ol>
+				</aside>
 
-				<ContactForm {formId} {turnstileSiteKey} {contactEmail} />
+				<div class="rise" style="--i: 3">
+					<ContactForm {formId} {turnstileSiteKey} {contactEmail} />
+				</div>
 			</div>
 		</Container>
 	</section>

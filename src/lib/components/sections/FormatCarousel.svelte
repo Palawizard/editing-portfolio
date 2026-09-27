@@ -1,48 +1,35 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import {
-		ArrowRight,
-		ChevronLeft,
-		ChevronRight,
-		Gamepad2,
-		MessageSquareText,
-		MonitorPlay,
-		Store,
-		WandSparkles
-	} from '@lucide/svelte';
+	import { WandSparkles } from '@lucide/svelte';
 	import LazyAutoplayVideo from '$lib/components/media/LazyAutoplayVideo.svelte';
-	import PriceBadge from '$lib/components/ui/PriceBadge.svelte';
 	import { categoryStartingPrices } from '$lib/content/project-pricing';
 	import {
 		initialCategoryAutoplayPreviews,
-		selectRandomCategoryAutoplayPreviews
+		selectRandomCategoryAutoplayPreviews,
+		type SelectedCategoryAutoplayPreviews
 	} from '$lib/content/autoplay-previews';
 	import { getLocaleContext } from '$lib/i18n/context';
 	import { formatProjectPrice } from '$lib/utils/pricing';
-	import type { ProjectCategory, ProjectChoice } from '$lib/types/project';
+	import { resolveAssetPath } from '$lib/utils/paths';
+	import type { ProjectChoice } from '$lib/types/project';
+
+	type Scene = ProjectChoice | 'showreel';
 
 	type Props = {
-		selected?: ProjectChoice;
-		onSelect: (choice: ProjectChoice) => void;
-		prominent?: boolean;
-		fadeFrom?: string;
+		selected?: Scene;
+		onSelect: (scene: Scene) => void;
+		showreel?: { label: string; poster: string };
+		previews?: SelectedCategoryAutoplayPreviews;
+		/** bar: scene strip in the studio. large: big picker. dock: OBS-style scene list on /projets. */
+		variant?: 'bar' | 'large' | 'dock';
 	};
 
-	let { selected, onSelect, prominent = false, fadeFrom = 'var(--color-bg)' }: Props = $props();
+	let { selected, onSelect, showreel, previews, variant = 'bar' }: Props = $props();
 	const i18n = getLocaleContext();
-	let carousel: HTMLDivElement;
-	let middleGroup: HTMLDivElement | undefined;
-	let animationFrame = 0;
-	let lastFrame = 0;
-	let pendingDistance = 0;
-	let locked = $state(false);
-	let centering = false;
-	let centeringTimeout: ReturnType<typeof setTimeout> | undefined;
-	let activeGroupIndex = $state<number | undefined>();
-	let activePreviewGroupIndex = $state(1);
-	let activePreviewChoice = $state<ProjectCategory | undefined>('gaming-long-form');
-	let selectedCategoryPreviews = $state(initialCategoryAutoplayPreviews);
-	let previewUpdateFrame = 0;
+	let hovered = $state<Scene | undefined>();
+	let ownPreviews = $state(initialCategoryAutoplayPreviews);
+	const scenePreviews = $derived(previews ?? ownPreviews);
+	const large = $derived(variant === 'large');
 
 	const getChoicePrice = (choice: ProjectChoice) =>
 		choice === 'custom' ? Number.POSITIVE_INFINITY : categoryStartingPrices[choice].minimum;
@@ -64,539 +51,332 @@
 			.map(({ choice }) => choice)
 	);
 
-	const getSegmentWidth = () => middleGroup?.offsetWidth ?? 0;
-
-	const getCardSizeClass = (id: string, isProminent: boolean) => {
-		if (id === 'custom') {
-			return isProminent
-				? 'min-h-[17.5rem] w-[70vw] max-w-[18rem] md:min-h-[29rem] md:w-[26rem] md:max-w-[27rem]'
-				: 'min-h-[17.5rem] w-[70vw] max-w-[18rem] md:min-h-[22rem] md:w-[21rem] md:max-w-[22rem]';
-		}
-		if (id === 'gaming-long-form' || id === 'other-format') {
-			return isProminent
-				? 'aspect-video w-[70vw] max-w-[18rem] md:w-[30rem] md:max-w-[32rem]'
-				: 'aspect-video w-[70vw] max-w-[18rem] md:w-[26rem] md:max-w-[28rem]';
-		}
-		return isProminent
-			? 'aspect-[9/16] w-[40vw] max-w-[10.5rem] md:w-[17rem] md:max-w-[18rem]'
-			: 'aspect-[9/16] w-[40vw] max-w-[10.5rem] md:w-[14rem] md:max-w-[15rem]';
-	};
-
-	const captureMiddleGroup = (node: HTMLDivElement, groupIndex: number) => {
-		if (groupIndex === 1) middleGroup = node;
-
-		return {
-			destroy() {
-				if (middleGroup === node) middleGroup = undefined;
-			}
-		};
-	};
-
-	const keepInLoop = () => {
-		if (centering) return;
-
-		const segmentWidth = getSegmentWidth();
-		if (!segmentWidth) return;
-
-		if (carousel.scrollLeft >= segmentWidth * 2) {
-			carousel.scrollLeft -= segmentWidth;
-			pendingDistance = 0;
-			if (activeGroupIndex !== undefined) activeGroupIndex -= 1;
-			scheduleActivePreviewUpdate();
-		} else if (carousel.scrollLeft < segmentWidth * 0.15) {
-			carousel.scrollLeft += segmentWidth;
-			pendingDistance = 0;
-			if (activeGroupIndex !== undefined) activeGroupIndex += 1;
-			scheduleActivePreviewUpdate();
-		}
-	};
-
-	const normalizeToMiddleSegment = () => {
-		const segmentWidth = getSegmentWidth();
-		if (!segmentWidth) return;
-
-		while (carousel.scrollLeft >= segmentWidth * 2) {
-			carousel.scrollLeft -= segmentWidth;
-			if (activeGroupIndex !== undefined) activeGroupIndex -= 1;
-		}
-
-		while (carousel.scrollLeft < segmentWidth * 0.5) {
-			carousel.scrollLeft += segmentWidth;
-			if (activeGroupIndex !== undefined) activeGroupIndex += 1;
-		}
-	};
-
-	const getCards = () =>
-		Array.from(carousel.querySelectorAll<HTMLElement>('[data-choice][data-group]'));
-
-	const getNearestCardIndex = (cards: HTMLElement[]) => {
-		const carouselCenter = carousel.getBoundingClientRect().left + carousel.clientWidth / 2;
-
-		return cards.reduce(
-			(nearest, card, index) => {
-				const rect = card.getBoundingClientRect();
-				const distance = Math.abs(rect.left + rect.width / 2 - carouselCenter);
-
-				return distance < nearest.distance ? { index, distance } : nearest;
-			},
-			{ index: 0, distance: Number.POSITIVE_INFINITY }
-		).index;
-	};
-
-	const updateActivePreview = () => {
-		const cards = getCards();
-		if (!cards.length) return;
-
-		const activeCard = cards[getNearestCardIndex(cards)];
-		const groupIndex = Number(activeCard.dataset.group);
-		const choice = activeCard.dataset.choice as ProjectChoice | undefined;
-
-		if (!Number.isFinite(groupIndex) || !choice) return;
-
-		activePreviewGroupIndex = groupIndex;
-		activePreviewChoice = choice === 'custom' ? undefined : choice;
-	};
-
-	const scheduleActivePreviewUpdate = (immediate = false) => {
-		cancelAnimationFrame(previewUpdateFrame);
-
-		if (immediate) {
-			updateActivePreview();
-			return;
-		}
-
-		previewUpdateFrame = requestAnimationFrame(updateActivePreview);
-	};
-
-	const handleCarouselScroll = () => {
-		keepInLoop();
-		scheduleActivePreviewUpdate();
-	};
-
-	const rebaseCardToMiddleGroup = (card: HTMLElement) => {
-		const groupIndex = Number(card.dataset.group);
-		if (groupIndex === 1 || !Number.isFinite(groupIndex)) return;
-
-		const segmentWidth = getSegmentWidth();
-		if (!segmentWidth) return;
-
-		const groupShift = 1 - groupIndex;
-		carousel.scrollLeft += segmentWidth * groupShift;
-
-		if (activeGroupIndex !== undefined) {
-			activeGroupIndex += groupShift;
-		}
-	};
-
-	const animate = (time: number) => {
-		if (!lastFrame) lastFrame = time;
-		const delta = Math.min(time - lastFrame, 32);
-		lastFrame = time;
-
-		if (!locked && !centering) {
-			pendingDistance += delta * 0.03;
-			const wholePixels = Math.floor(pendingDistance);
-
-			if (wholePixels > 0) {
-				carousel.scrollLeft += wholePixels;
-				pendingDistance -= wholePixels;
-				keepInLoop();
-				scheduleActivePreviewUpdate();
-			}
-		}
-
-		animationFrame = requestAnimationFrame(animate);
-	};
-
-	const scrollCarousel = (direction: -1 | 1) => {
-		pendingDistance = 0;
-		normalizeToMiddleSegment();
-		const cards = getCards();
-		const nearestIndex = getNearestCardIndex(cards);
-		const target = cards[nearestIndex + direction];
-		if (!target) return;
-
-		centering = true;
-		if (centeringTimeout) clearTimeout(centeringTimeout);
-		centerCard(target);
-
-		centeringTimeout = setTimeout(() => {
-			rebaseCardToMiddleGroup(target);
-			centering = false;
-			scheduleActivePreviewUpdate(true);
-		}, 500);
-	};
-
-	const centerCard = (target: HTMLElement, behavior: ScrollBehavior = 'smooth') => {
-		const carouselRect = carousel.getBoundingClientRect();
-		const targetRect = target.getBoundingClientRect();
-		const distance =
-			targetRect.left + targetRect.width / 2 - (carouselRect.left + carouselRect.width / 2);
-
-		carousel.scrollTo({
-			left: carousel.scrollLeft + distance,
-			behavior
-		});
-	};
-
-	const selectChoice = (choice: ProjectChoice, target: HTMLElement, groupIndex: number) => {
-		locked = true;
-		activeGroupIndex = groupIndex;
-		activePreviewGroupIndex = groupIndex;
-		activePreviewChoice = choice === 'custom' ? undefined : choice;
-		onSelect(choice);
-		centering = true;
-		if (centeringTimeout) clearTimeout(centeringTimeout);
-
-		requestAnimationFrame(() => {
-			requestAnimationFrame(() => centerCard(target));
-		});
-
-		centeringTimeout = setTimeout(() => {
-			centering = false;
-			keepInLoop();
-			scheduleActivePreviewUpdate(true);
-		}, 650);
-	};
-
 	onMount(() => {
-		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		selectedCategoryPreviews = selectRandomCategoryAutoplayPreviews();
-		carousel.scrollLeft = getSegmentWidth();
-		scheduleActivePreviewUpdate(true);
-
-		if (!reduceMotion) {
-			animationFrame = requestAnimationFrame(animate);
-		}
-
-		const handleResize = () => {
-			if (!locked) {
-				carousel.scrollLeft = getSegmentWidth();
-			}
-		};
-
-		window.addEventListener('resize', handleResize);
-
-		return () => {
-			cancelAnimationFrame(animationFrame);
-			cancelAnimationFrame(previewUpdateFrame);
-			if (centeringTimeout) clearTimeout(centeringTimeout);
-			window.removeEventListener('resize', handleResize);
-		};
+		if (!previews) ownPreviews = selectRandomCategoryAutoplayPreviews();
 	});
 </script>
 
-<div
-	class="relative overflow-x-clip"
-	role="region"
-	aria-label={i18n.content.ui.formatCarousel.regionAriaLabel}
+<!-- Every format is a scene; the live one burns hot. All scenes fit, nothing hides off-screen. -->
+<ol
+	class={[
+		'scenes',
+		large ? 'scenes--large' : '',
+		variant === 'dock' ? 'scenes--dock' : '',
+		showreel ? 'scenes--with-reel' : ''
+	]}
+	aria-label={i18n.content.ui.studio.scenesLabel}
+	onmouseleave={() => (hovered = undefined)}
 >
-	<div class="absolute right-4 top-12 z-30 hidden gap-2 sm:flex">
-		<button
-			class="grid size-11 place-items-center rounded-full border border-white/15 bg-slate-950/80 text-white shadow-xl backdrop-blur-md transition hover:border-cyan-200/50 hover:bg-slate-900"
-			type="button"
-			aria-label={i18n.content.ui.formatCarousel.previousAriaLabel}
-			onclick={() => scrollCarousel(-1)}
-		>
-			<ChevronLeft size={19} aria-hidden="true" />
-		</button>
-		<button
-			class="grid size-11 place-items-center rounded-full border border-white/15 bg-slate-950/80 text-white shadow-xl backdrop-blur-md transition hover:border-cyan-200/50 hover:bg-slate-900"
-			type="button"
-			aria-label={i18n.content.ui.formatCarousel.nextAriaLabel}
-			onclick={() => scrollCarousel(1)}
-		>
-			<ChevronRight size={19} aria-hidden="true" />
-		</button>
-	</div>
+	{#if showreel}
+		<li>
+			<button
+				type="button"
+				class={['scene', selected === 'showreel' ? 'is-live' : '']}
+				aria-pressed={selected === 'showreel'}
+				onclick={() => onSelect('showreel')}
+			>
+				<span class="scene__thumb">
+					<img src={resolveAssetPath(showreel.poster)} alt="" class="scene__fill" />
+					<img src={resolveAssetPath(showreel.poster)} alt="" class="scene__img" />
+				</span>
+				<span class="scene__name">
+					{#if selected === 'showreel'}<span class="scene__dot" aria-hidden="true"></span>{/if}
+					{showreel.label}
+				</span>
+			</button>
+		</li>
+	{/if}
 
-	<div class="carousel-shell relative overflow-x-clip" style={`--carousel-fade-from: ${fadeFrom}`}>
-		<div
-			bind:this={carousel}
-			class={[
-				'carousel-track scrollbar-hidden -mx-5 flex items-center overflow-x-auto px-5 pb-14 pt-6 -mb-10 sm:mx-0 sm:px-0 md:pb-20 md:pt-8 md:-mb-12',
-				locked ? 'snap-x snap-mandatory' : ''
-			]}
-			aria-label={i18n.content.ui.formatCarousel.chooseAriaLabel}
-			onscroll={handleCarouselScroll}
-		>
-			{#each [0, 1, 2] as groupIndex (groupIndex)}
-				<div
-					use:captureMiddleGroup={groupIndex}
-					class={['flex shrink-0 pr-4 md:pr-6', prominent ? 'gap-4 md:gap-6' : 'gap-4']}
-				>
-					{#each choices as choice (choice.id)}
-						{@const preview =
-							choice.id === 'custom' ? undefined : selectedCategoryPreviews[choice.id]}
-						{@const previewIsActive = Boolean(
-							preview && activePreviewGroupIndex === groupIndex && activePreviewChoice === choice.id
-						)}
-						{@const startingPrice =
-							choice.id === 'custom' ? undefined : categoryStartingPrices[choice.id]}
-						{@const startingPriceLabel = startingPrice
-							? `${i18n.content.ui.media.startingPriceLabel} ${formatProjectPrice(startingPrice, i18n.locale)}`
-							: undefined}
-						<button
-							data-choice={choice.id}
-							data-group={groupIndex}
+	{#each choices as choice (choice.id)}
+		{@const preview = choice.id === 'custom' ? undefined : scenePreviews[choice.id]}
+		{@const isLive = selected === choice.id}
+		{@const price =
+			choice.id === 'custom'
+				? undefined
+				: `${i18n.content.ui.media.startingPriceLabel} ${formatProjectPrice(categoryStartingPrices[choice.id], i18n.locale)}`}
+		<li>
+			<button
+				type="button"
+				class={['scene', isLive ? 'is-live' : '']}
+				aria-pressed={isLive}
+				onmouseenter={() => (hovered = choice.id)}
+				onfocus={() => (hovered = choice.id)}
+				onblur={() => (hovered = undefined)}
+				onclick={() => onSelect(choice.id)}
+			>
+				<span class="scene__thumb">
+					{#if preview}
+						<img src={resolveAssetPath(preview.poster)} alt="" class="scene__fill" />
+						<!-- Hovering a scene previews what it holds, in its native aspect. -->
+						<LazyAutoplayVideo
 							class={[
-								'group relative shrink-0 snap-center overflow-hidden border text-left transition-[transform,border-color,background-color,box-shadow] duration-500',
-								getCardSizeClass(choice.id, prominent),
-								prominent
-									? 'rounded-[1.35rem] p-5 md:rounded-[1.75rem] md:p-8'
-									: 'rounded-[1.25rem] p-5 md:rounded-[1.4rem] md:p-6',
-								locked && activeGroupIndex === groupIndex && selected === choice.id
-									? 'z-10 scale-[1.02] border-violet-200 bg-violet-300/[0.14] shadow-[0_14px_48px_rgb(81_49_150/0.28)] md:scale-[1.05]'
-									: 'border-white/10 bg-white/[0.035] hover:border-white/25 hover:bg-white/[0.065]'
-							]}
-							type="button"
-							aria-pressed={locked && activeGroupIndex === groupIndex && selected === choice.id}
-							tabindex={groupIndex === 1 ? 0 : -1}
-							onclick={(event) => selectChoice(choice.id, event.currentTarget, groupIndex)}
-						>
-							{#if preview}
-								<span
-									class={[
-										'preview-media pointer-events-none absolute inset-0 block overflow-hidden',
-										previewIsActive ? 'preview-media-active' : ''
-									]}
-								>
-									<LazyAutoplayVideo
-										class={`size-full object-cover saturate-[0.85] ${previewIsActive ? 'opacity-70' : 'opacity-45'}`}
-										src={preview.src}
-										poster={preview.poster}
-										active={previewIsActive}
-									/>
-								</span>
-								<span
-									class="pointer-events-none absolute inset-0 block bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/20 transition-opacity duration-300 group-hover:opacity-80"
-								></span>
-								<span
-									class="pointer-events-none absolute inset-0 block bg-[radial-gradient(circle_at_30%_20%,rgb(155_124_255/0.22),transparent_34%)]"
-								></span>
-								<span
-									class={[
-										'preview-focus-ring pointer-events-none absolute inset-0 block rounded-[inherit] border border-violet-200/45',
-										previewIsActive ? 'preview-focus-ring-active' : ''
-									]}
-								></span>
-							{/if}
-
-							{#if startingPriceLabel}
-								<PriceBadge
-									price={startingPriceLabel}
-									ariaLabel={startingPriceLabel}
-									size="sm"
-									class={prominent
-										? 'absolute right-2.5 top-2.5 z-20 md:right-3 md:top-3 md:px-3 md:py-1.5 md:text-sm'
-										: 'absolute right-2.5 top-2.5 z-20'}
-								/>
-							{/if}
-
-							<span
-								class={[
-									'pointer-events-none absolute -right-8 -top-8 size-40 rounded-full transition-opacity duration-300',
-									choice.id === 'custom'
-										? 'bg-[radial-gradient(circle,rgb(103_232_249/0.16),transparent_70%)]'
-										: 'bg-[radial-gradient(circle,rgb(167_139_250/0.18),transparent_70%)]',
-									locked && activeGroupIndex === groupIndex && selected === choice.id
-										? 'opacity-90'
-										: 'opacity-35 group-hover:opacity-55'
-								]}
-							></span>
-
-							<span class="relative flex items-start">
-								<span
-									class={[
-										'grid place-items-center rounded-2xl border',
-										prominent ? 'size-11 md:size-16' : 'size-11 md:size-12',
-										locked && activeGroupIndex === groupIndex && selected === choice.id
-											? 'border-violet-200/40 bg-violet-200/15 text-violet-100'
-											: 'border-white/10 bg-black/20 text-slate-200'
-									]}
-								>
-									{#if choice.id === 'gaming-long-form'}
-										<MonitorPlay
-											class={prominent ? 'size-5 md:size-7' : 'size-5 md:size-6'}
-											aria-hidden="true"
-										/>
-									{:else if choice.id === 'gaming-short-form'}
-										<Gamepad2
-											class={prominent ? 'size-5 md:size-7' : 'size-5 md:size-6'}
-											aria-hidden="true"
-										/>
-									{:else if choice.id === 'explainer-short-form'}
-										<MessageSquareText
-											class={prominent ? 'size-5 md:size-7' : 'size-5 md:size-6'}
-											aria-hidden="true"
-										/>
-									{:else if choice.id === 'business-promo'}
-										<Store
-											class={prominent ? 'size-5 md:size-7' : 'size-5 md:size-6'}
-											aria-hidden="true"
-										/>
-									{:else}
-										<WandSparkles
-											class={prominent ? 'size-5 md:size-7' : 'size-5 md:size-6'}
-											aria-hidden="true"
-										/>
-									{/if}
-								</span>
-							</span>
-
-							<span class={['relative block', prominent ? 'mt-8 md:mt-16' : 'mt-8 md:mt-10']}>
-								<span
-									class={[
-										'block font-bold text-balance text-white',
-										prominent
-											? 'text-2xl leading-tight md:text-4xl md:leading-[1.08]'
-											: 'text-2xl leading-tight'
-									]}>{choice.title}</span
-								>
-								<span
-									class={[
-										'mt-3 block text-slate-300 md:mt-4',
-										prominent ? 'text-sm leading-6 md:text-base md:leading-7' : 'text-sm leading-6'
-									]}>{choice.promise}</span
-								>
-							</span>
-
-							<span
-								class={[
-									'absolute flex items-center justify-end border-t border-white/10 text-white',
-									prominent
-										? 'bottom-5 left-5 right-5 pt-4 md:bottom-8 md:left-8 md:right-8 md:pt-7'
-										: 'bottom-5 left-5 right-5 pt-4 md:bottom-6 md:left-6 md:right-6 md:pt-5'
-								]}
-							>
-								<ArrowRight
-									class="transition group-hover:translate-x-1"
-									size={18}
-									aria-hidden="true"
-								/>
-							</span>
-						</button>
-					{/each}
-				</div>
-			{/each}
-		</div>
-		<div class="carousel-edge-fade carousel-edge-fade-left" aria-hidden="true"></div>
-		<div class="carousel-edge-fade carousel-edge-fade-right" aria-hidden="true"></div>
-	</div>
-</div>
+								'scene__img',
+								preview.aspect === 'vertical' ? 'scene__img--vertical' : ''
+							].join(' ')}
+							src={preview.src}
+							poster={preview.poster}
+							active={hovered === choice.id && !isLive}
+						/>
+					{:else}
+						<WandSparkles
+							class="scene__custom"
+							size={large ? 48 : 34}
+							strokeWidth={1.8}
+							aria-hidden="true"
+						/>
+					{/if}
+					{#if large && price}
+						<span class="scene__price-tag">
+							<span class="scene__dot" aria-hidden="true"></span>{price}
+						</span>
+					{/if}
+				</span>
+				<span class="scene__name">
+					{#if isLive}<span class="scene__dot" aria-hidden="true"></span>{/if}
+					{choice.title}
+				</span>
+				{#if price && !large}
+					<span class="scene__price">{price}</span>
+				{/if}
+				{#if large || (variant === 'dock' && isLive)}
+					<span class="scene__promise">{choice.promise}</span>
+				{/if}
+			</button>
+		</li>
+	{/each}
+</ol>
 
 <style>
-	.carousel-shell {
-		--carousel-fade-width: clamp(1.75rem, 6vw, 7rem);
+	.scenes {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.5rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
 	}
 
-	@media (min-width: 768px) {
-		.carousel-shell {
-			--carousel-fade-width: clamp(3rem, 8vw, 7rem);
+	@media (min-width: 40rem) {
+		.scenes {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
 		}
 	}
 
-	.carousel-edge-fade {
-		position: absolute;
-		top: 1.5rem;
-		bottom: 3.5rem;
-		z-index: 20;
-		width: var(--carousel-fade-width);
-		pointer-events: none;
-	}
+	@media (min-width: 64rem) {
+		.scenes {
+			grid-template-columns: repeat(6, minmax(0, 1fr));
+		}
 
-	.carousel-edge-fade-left {
-		left: 0;
-		background: linear-gradient(to right, var(--carousel-fade-from), transparent);
-	}
-
-	.carousel-edge-fade-right {
-		right: 0;
-		background: linear-gradient(to left, var(--carousel-fade-from), transparent);
-	}
-
-	@media (min-width: 768px) {
-		.carousel-edge-fade {
-			top: 2rem;
-			bottom: 5rem;
+		.scenes--with-reel {
+			grid-template-columns: repeat(7, minmax(0, 1fr));
 		}
 	}
 
-	@keyframes preview-media-focus {
-		0% {
-			filter: brightness(1);
-			transform: scale(1);
-		}
-		45% {
-			filter: brightness(1.18) saturate(1.08);
-			transform: scale(1.035);
-		}
-		100% {
-			filter: brightness(1.12) saturate(1.06);
-			transform: scale(1.025);
+	.scenes--large {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 0.75rem;
+	}
+
+	@media (min-width: 40rem) {
+		.scenes--large {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
 		}
 	}
 
-	@keyframes preview-ring-focus {
-		0% {
-			opacity: 0;
-			box-shadow: inset 0 0 0 rgb(196 181 253 / 0);
-		}
-		45% {
-			opacity: 1;
-			box-shadow:
-				inset 0 0 18px rgb(196 181 253 / 0.12),
-				0 0 16px rgb(139 92 246 / 0.16);
-		}
-		100% {
-			opacity: 0.62;
-			box-shadow:
-				inset 0 0 14px rgb(196 181 253 / 0.1),
-				0 0 12px rgb(139 92 246 / 0.12);
+	@media (min-width: 64rem) {
+		.scenes--large {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
 		}
 	}
 
-	.preview-media {
+	.scenes > li {
+		display: flex;
+	}
+
+	/* Dock: on desktop the scenes stack like OBS's scene list, thumb beside the name. */
+	@media (min-width: 64rem) {
+		.scenes--dock {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.scenes--dock .scene {
+			display: grid;
+			grid-template-columns: 5.5rem minmax(0, 1fr);
+			grid-template-areas:
+				'thumb name'
+				'thumb price'
+				'promise promise';
+			align-items: center;
+			column-gap: 0.7rem;
+			row-gap: 0.15rem;
+			padding: 0.4rem;
+		}
+
+		.scenes--dock .scene__thumb {
+			grid-area: thumb;
+			border-radius: 11px;
+		}
+
+		.scenes--dock .scene__name {
+			grid-area: name;
+			align-self: end;
+			padding: 0;
+		}
+
+		.scenes--dock .scene__price {
+			grid-area: price;
+			align-self: start;
+			margin: 0;
+			padding: 0;
+		}
+
+		.scenes--dock .scene__promise {
+			grid-area: promise;
+			margin-top: 0.4rem;
+			padding: 0 0.3rem 0.2rem;
+			font-size: 0.8125rem;
+		}
+	}
+
+	.scene {
+		display: flex;
+		width: 100%;
+		flex-direction: column;
+		gap: 0.45rem;
+		border-radius: 20px;
+		background: rgb(255 255 255 / 0.7);
+		padding: 0.45rem 0.45rem 0.65rem;
+		color: var(--color-paper);
+		text-align: left;
+		box-shadow: var(--shadow);
 		transition:
-			filter 240ms ease,
-			transform 240ms ease;
+			transform 200ms var(--ease-out-expo),
+			background-color 200ms ease,
+			color 200ms ease;
 	}
 
-	.carousel-track {
-		-webkit-backface-visibility: hidden;
-		backface-visibility: hidden;
+	.scene:active {
+		transform: scale(0.97);
 	}
 
-	.preview-media-active {
-		filter: brightness(1.12) saturate(1.06);
-		transform: scale(1.025);
-		animation: preview-media-focus 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+	@media (hover: hover) and (pointer: fine) {
+		.scene:hover {
+			transform: translateY(-2px);
+			background: #ffffff;
+		}
 	}
 
-	.preview-focus-ring {
-		opacity: 0;
-	}
-
-	.preview-focus-ring-active {
-		opacity: 0.62;
+	.scene.is-live {
+		background: var(--color-paper);
+		color: #ffffff;
 		box-shadow:
-			inset 0 0 14px rgb(196 181 253 / 0.1),
-			0 0 12px rgb(139 92 246 / 0.12);
-		animation: preview-ring-focus 620ms ease-out both;
+			0 0 0 3px var(--color-live),
+			var(--shadow-lift);
 	}
 
-	@media (prefers-reduced-motion: reduce) {
-		.preview-media,
-		.preview-media-active {
-			animation: none;
-			filter: none;
-			transform: none;
-			transition: none;
-		}
+	.scene__thumb {
+		position: relative;
+		display: grid;
+		overflow: hidden;
+		aspect-ratio: 16 / 10;
+		place-items: center;
+		border-radius: 14px;
+		background: var(--color-screen);
+	}
 
-		.preview-focus-ring-active {
-			animation: none;
-			opacity: 0.62;
-		}
+	/* A blurred copy fills the frame so the real image is never cropped. */
+	:global(.scene__fill) {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		filter: blur(12px) saturate(1.2);
+		opacity: 0.55;
+		transform: scale(1.15);
+	}
+
+	:global(.scene__img) {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+	}
+
+	:global(.scene__img--vertical) {
+		width: auto;
+		aspect-ratio: 9 / 16;
+	}
+
+	:global(.scene__custom) {
+		color: var(--color-peach);
+	}
+
+	.scene__name {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		padding-inline: 0.3rem;
+		font-size: 0.875rem;
+		font-weight: 800;
+		line-height: 1.2;
+	}
+
+	.scene__dot {
+		width: 0.5rem;
+		height: 0.5rem;
+		flex-shrink: 0;
+		border-radius: 50%;
+		background: var(--color-live);
+	}
+
+	.scene__price {
+		margin-top: auto;
+		padding-inline: 0.3rem;
+		font-size: 0.75rem;
+		font-weight: 700;
+		opacity: 0.7;
+	}
+
+	/* Large picker: the format leads, with its promise and a price alert. */
+	.scenes--large .scene {
+		gap: 0.6rem;
+		border-radius: 26px;
+		padding: 0.6rem 0.6rem 1rem;
+	}
+
+	.scenes--large .scene__thumb {
+		border-radius: 18px;
+	}
+
+	.scenes--large .scene__name {
+		padding-inline: 0.5rem;
+		font-family: var(--font-display);
+		font-size: 1.25rem;
+		letter-spacing: -0.02em;
+	}
+
+	.scene__promise {
+		padding-inline: 0.5rem;
+		font-size: 0.9375rem;
+		font-weight: 500;
+		line-height: 1.45;
+		opacity: 0.75;
+	}
+
+	.scene__price-tag {
+		position: absolute;
+		top: 0.6rem;
+		right: 0.6rem;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		border-radius: 999px;
+		background: #ffffff;
+		padding: 0.3rem 0.7rem;
+		color: var(--color-paper);
+		font-size: 0.8125rem;
+		font-weight: 800;
+		box-shadow: 0 8px 20px -8px rgb(42 20 9 / 0.6);
 	}
 </style>

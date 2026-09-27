@@ -120,6 +120,20 @@ export type UiCopy = {
 		description: string;
 		playingLabel: string;
 	};
+	studio: {
+		live: string;
+		scene: string;
+		showreel: string;
+		showreelNote: string;
+		chat: string;
+		method: string;
+		scenesLabel: string;
+		start: string;
+		onAir: string;
+		sources: string;
+		sourcesHint: string;
+		preview: string;
+	};
 	media: {
 		playLabel: string;
 		priceLabel: string;

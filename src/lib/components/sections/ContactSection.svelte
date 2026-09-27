@@ -7,37 +7,28 @@
 	const i18n = getLocaleContext();
 </script>
 
-<section class="pb-16 pt-10 md:pb-20 md:pt-12">
+<section class="pb-12 md:pb-20">
 	<Container size="wide">
 		<div
-			class="relative overflow-hidden rounded-[1.75rem] border border-violet-300/20 bg-[linear-gradient(120deg,rgb(155_124_255/0.16),rgb(101_216_255/0.06)_55%,rgb(255_255_255/0.025))] p-7 shadow-[var(--shadow-premium)] md:p-12"
+			class="grid gap-8 rounded-[32px] bg-[linear-gradient(135deg,#ffd3b8,#ff9a66)] p-7 text-paper shadow-[var(--shadow-lift)] md:p-12 lg:grid-cols-[1fr_auto] lg:items-end"
 		>
-			<div
-				class="pointer-events-none absolute -right-20 -top-28 size-80 rounded-full bg-violet-400/12 blur-3xl"
-			></div>
-			<div class="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
-				<div>
-					<p class="text-sm font-semibold uppercase tracking-[0.2em] text-violet-100">
-						{i18n.content.ui.contactSection.eyebrow}
-					</p>
-					<h2 class="display-title mt-4 max-w-3xl text-4xl text-balance text-white md:text-6xl">
-						{i18n.content.contactCopy.title}
-					</h2>
-					<p class="mt-5 max-w-2xl text-base leading-7 text-slate-200">
-						{i18n.content.contactCopy.description}
-					</p>
-				</div>
-
-				<div class="flex flex-col gap-3 sm:flex-row lg:flex-col">
-					<Button href="/estimation" class="w-full sm:w-auto">
-						<Calculator size={18} aria-hidden="true" />
-						<span>{i18n.content.contactCopy.estimateActionLabel}</span>
-					</Button>
-					<Button href="/contact" variant="secondary" class="w-full sm:w-auto">
-						<Send size={18} aria-hidden="true" />
-						<span>{i18n.content.contactCopy.actionLabel}</span>
-					</Button>
-				</div>
+			<div>
+				<h2 class="display-title max-w-3xl text-[clamp(2.25rem,5vw,4rem)]">
+					{i18n.content.contactCopy.title}
+				</h2>
+				<p class="mt-5 max-w-[56ch] text-base leading-7 font-medium text-paper/80 md:text-lg">
+					{i18n.content.contactCopy.description}
+				</p>
+			</div>
+			<div class="flex flex-col gap-2 sm:flex-row lg:flex-col">
+				<Button href="/estimation" class="w-full sm:w-auto">
+					<Calculator size={18} strokeWidth={2.2} aria-hidden="true" />
+					<span>{i18n.content.contactCopy.estimateActionLabel}</span>
+				</Button>
+				<Button href="/contact" variant="secondary" class="w-full sm:w-auto">
+					<Send size={18} strokeWidth={2.2} aria-hidden="true" />
+					<span>{i18n.content.contactCopy.actionLabel}</span>
+				</Button>
 			</div>
 		</div>
 	</Container>

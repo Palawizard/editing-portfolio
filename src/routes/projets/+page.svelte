@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { ArrowRight, SlidersHorizontal } from '@lucide/svelte';
+	import { ArrowRight } from '@lucide/svelte';
 	import FormatCarousel from '$lib/components/sections/FormatCarousel.svelte';
-	import ProjectCard from '$lib/components/cards/ProjectCard.svelte';
+	import ControlRoom from '$lib/components/sections/ControlRoom.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import Container from '$lib/components/ui/Container.svelte';
 	import { getContactStyleHref } from '$lib/content/contact';
@@ -9,11 +9,12 @@
 	import { sortProjectsByPrice } from '$lib/utils/pricing';
 	import type { ProjectChoice } from '$lib/types/project';
 
-	let selectedChoice = $state<ProjectChoice>();
+	// The cheapest format is live on arrival, so the page never opens empty.
+	let selectedChoice = $state<ProjectChoice>('gaming-short-form');
 	const i18n = getLocaleContext();
 
 	const filteredProjects = $derived(
-		!selectedChoice || selectedChoice === 'custom'
+		selectedChoice === 'custom'
 			? []
 			: sortProjectsByPrice(
 					i18n.content.projects.filter((project) => project.category === selectedChoice)
@@ -23,19 +24,23 @@
 	const selectedLabel = $derived(
 		selectedChoice === 'custom'
 			? i18n.content.customFormatChoice.title
-			: selectedChoice
-				? i18n.content.projectCategoryLabels[selectedChoice]
-				: ''
+			: i18n.content.projectCategoryLabels[selectedChoice]
 	);
 
-	const isVerticalExamplesGrid = $derived(
-		Boolean(
-			selectedChoice &&
-			selectedChoice !== 'custom' &&
-			filteredProjects.length > 0 &&
-			filteredProjects.every((project) => project.format === '9:16')
-		)
-	);
+	let controlRoom = $state<ReturnType<typeof ControlRoom>>();
+
+	// Same scene change as the studio: the P sweeps the program monitor, the format swaps behind it.
+	const selectChoice = (scene: ProjectChoice | 'showreel') => {
+		if (scene === 'showreel' || scene === selectedChoice) return;
+		if (controlRoom && scene !== 'custom') controlRoom.cut(() => (selectedChoice = scene));
+		else selectedChoice = scene;
+		// On phones the program sits below the scenes: bring it into view.
+		if (window.matchMedia('(max-width: 63.99rem)').matches) {
+			requestAnimationFrame(() =>
+				document.getElementById('program')?.scrollIntoView({ behavior: 'smooth' })
+			);
+		}
+	};
 </script>
 
 <svelte:head>
@@ -44,96 +49,70 @@
 </svelte:head>
 
 <main id="main-content">
-	<section class="relative overflow-x-clip pb-10 pt-10 md:pb-14 md:pt-12">
-		<div
-			class="pointer-events-none absolute left-1/2 top-0 h-72 w-[50rem] -translate-x-1/2 rounded-full bg-violet-500/10 blur-[100px]"
-		></div>
+	<section class="pt-4 pb-16 md:pt-8 md:pb-24">
 		<Container size="wide">
-			<div class="mx-auto max-w-4xl text-center">
-				<h1 class="display-title text-5xl text-gradient sm:text-6xl md:text-7xl">
-					{i18n.content.ui.projectsPage.title}
-				</h1>
+			<h1 class="display-title print-in max-w-4xl text-[clamp(2.5rem,6vw,4.5rem)]">
+				{i18n.content.ui.projectsPage.title}
+			</h1>
+
+			<!-- The live format is named first, flush left; below it the dock and the program share one top line. -->
+			<div class="rise mt-8 mb-4 flex flex-wrap items-end justify-between gap-3" style="--i: 1">
+				<h2 class="display-title text-[clamp(1.75rem,3.5vw,2.75rem)]">{selectedLabel}</h2>
+				{#if filteredProjects.length}
+					<p class="max-w-[52ch] text-xs leading-5 font-medium text-mute" role="note">
+						{i18n.content.ui.projectsPage.priceDisclaimer}
+					</p>
+				{/if}
 			</div>
 
-			<div class="mt-1 md:mt-2">
-				<FormatCarousel
-					selected={selectedChoice}
-					onSelect={(choice) => (selectedChoice = choice)}
-					prominent
-				/>
-			</div>
-		</Container>
-	</section>
+			<!-- OBS layout: the scene list docked left, program and sources on the right. -->
+			<div class="grid gap-4 lg:grid-cols-[17rem_minmax(0,1fr)] lg:items-start">
+				<aside
+					class="panel rise p-2.5 lg:sticky lg:top-24"
+					style="--i: 2"
+					aria-label={i18n.content.ui.studio.scenesLabel}
+				>
+					<p class="label px-1.5 pt-1 pb-2.5 text-mute">{i18n.content.ui.studio.scene}s</p>
+					<FormatCarousel selected={selectedChoice} onSelect={selectChoice} variant="dock" />
+				</aside>
 
-	{#if selectedChoice}
-		<section
-			id="project-results"
-			class="scroll-mt-28 border-t border-white/10 py-16 md:py-24"
-			aria-live="polite"
-		>
-			<Container size="wide">
-				{#if selectedChoice === 'custom'}
-					<div
-						class="relative overflow-hidden rounded-[1.75rem] border border-cyan-200/20 bg-[linear-gradient(135deg,rgb(101_216_255/0.1),rgb(155_124_255/0.08)_50%,rgb(255_255_255/0.025))] p-7 shadow-[var(--shadow-premium)] md:p-12"
-					>
+				<div id="program" class="rise min-w-0 scroll-mt-24" style="--i: 3">
+					<p class="sr-only" role="status">{selectedLabel}</p>
+					{#if selectedChoice === 'custom'}
 						<div
-							class="absolute -right-24 -top-24 size-72 rounded-full bg-cyan-300/10 blur-3xl"
-						></div>
-						<div class="relative grid gap-10 lg:grid-cols-[1fr_0.7fr] lg:items-end">
+							class="grid gap-8 rounded-[32px] bg-paper p-7 text-white shadow-[var(--shadow-lift)] md:p-10"
+						>
 							<div>
-								<SlidersHorizontal class="text-cyan-100" size={25} aria-hidden="true" />
-								<h2 class="display-title mt-6 max-w-3xl text-4xl text-white md:text-6xl">
+								<h3 class="display-title max-w-2xl text-[clamp(2rem,4vw,3rem)]">
 									{i18n.content.ui.projectsPage.customTitle}
-								</h2>
-								<p class="mt-6 max-w-2xl text-base leading-7 text-slate-300 md:text-lg">
+								</h3>
+								<p class="mt-4 max-w-[56ch] text-base leading-7 text-white/80">
 									{i18n.content.ui.projectsPage.customDescription}
 								</p>
 							</div>
-							<div class="lg:justify-self-end">
-								<Button href={getContactStyleHref('custom')} class="w-full sm:w-auto">
-									{i18n.content.ui.projectsPage.customCta}
-									<ArrowRight size={18} aria-hidden="true" />
-								</Button>
-							</div>
-						</div>
-					</div>
-				{:else}
-					<div class="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
-						<div>
-							<h2 class="display-title text-4xl text-white md:text-6xl">{selectedLabel}</h2>
-							{#if filteredProjects.length}
-								<p class="mt-4 max-w-2xl text-sm leading-6 text-slate-400" role="note">
-									{i18n.content.ui.projectsPage.priceDisclaimer}
-								</p>
-							{/if}
-						</div>
-						<Button href={getContactStyleHref(selectedChoice)} variant="secondary" class="shrink-0">
-							{i18n.content.ui.projectsPage.orderStyle}
-						</Button>
-					</div>
-
-					<div
-						class={[
-							'mt-10 grid min-w-0',
-							isVerticalExamplesGrid
-								? 'grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 md:gap-6 xl:grid-cols-4'
-								: 'grid-cols-2 gap-4 sm:gap-5 md:gap-6 xl:grid-cols-3'
-						]}
-					>
-						{#if filteredProjects.length}
-							{#each filteredProjects as project, index (project.slug)}
-								<ProjectCard {project} {index} minimal />
-							{/each}
-						{:else}
-							<p
-								class="rounded-[1.25rem] border border-white/10 bg-white/[0.035] p-6 text-sm leading-6 text-slate-300 col-span-2 xl:col-span-3"
+							<Button
+								href={getContactStyleHref('custom')}
+								variant="secondary"
+								class="w-full justify-self-start sm:w-auto"
 							>
-								{i18n.content.ui.projectsPage.emptyState}
-							</p>
-						{/if}
-					</div>
-				{/if}
-			</Container>
-		</section>
-	{/if}
+								{i18n.content.ui.projectsPage.customCta}
+								<ArrowRight size={18} strokeWidth={2.2} aria-hidden="true" />
+							</Button>
+						</div>
+					{:else if filteredProjects.length}
+						<ControlRoom
+							bind:this={controlRoom}
+							format={i18n.content.editingFormats.find((f) => f.id === selectedChoice)}
+							projects={filteredProjects}
+							orderHref={getContactStyleHref(selectedChoice)}
+						/>
+					{:else}
+						<p class="panel p-6 text-sm leading-6 font-medium text-mute">
+							{i18n.content.ui.projectsPage.emptyState}
+						</p>
+					{/if}
+				</div>
+			</div>
+		</Container>
+	</section>
 </main>

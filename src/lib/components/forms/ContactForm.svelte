@@ -280,54 +280,50 @@
 {#if isSuccess && submissionSummary}
 	<div
 		bind:this={statusElement}
-		class="rounded-[1.5rem] border border-emerald-300/25 bg-emerald-300/[0.07] p-6 outline-none md:p-9"
+		class="panel p-6 outline-none md:p-9"
 		tabindex="-1"
 		role="status"
 		aria-live="polite"
 	>
-		<div class="grid size-12 place-items-center rounded-2xl bg-emerald-300/12 text-emerald-200">
-			<CheckCircle2 size={24} aria-hidden="true" />
-		</div>
-		<h2 class="mt-6 text-3xl font-bold text-white">{copy.successTitle}</h2>
-		<p class="mt-3 max-w-2xl leading-7 text-slate-200">{copy.successDescription}</p>
+		<CheckCircle2 class="text-ok" size={28} strokeWidth={1.5} aria-hidden="true" />
+		<h2 class="display-title mt-6 text-4xl text-paper">{copy.successTitle}</h2>
+		<p class="mt-3 max-w-2xl leading-7 text-mute">{copy.successDescription}</p>
 
-		<dl
-			class="mt-7 grid gap-3 rounded-2xl border border-white/10 bg-black/20 p-5 text-sm sm:grid-cols-2"
-		>
+		<dl class="mt-7 grid gap-4 rounded-2xl bg-white/70 p-5 text-sm sm:grid-cols-2">
 			<div>
-				<dt class="text-slate-400">{copy.successFields.contact}</dt>
-				<dd class="mt-1 font-semibold text-white">{submissionSummary.name}</dd>
+				<dt class="text-xs font-bold text-mute">{copy.successFields.contact}</dt>
+				<dd class="mt-1 font-semibold text-paper">{submissionSummary.name}</dd>
 			</div>
 			<div>
-				<dt class="text-slate-400">{copy.successFields.email}</dt>
-				<dd class="mt-1 font-semibold text-white">{submissionSummary.email}</dd>
+				<dt class="text-xs font-bold text-mute">{copy.successFields.email}</dt>
+				<dd class="mt-1 font-semibold text-paper">{submissionSummary.email}</dd>
 			</div>
 			<div>
-				<dt class="text-slate-400">{copy.successFields.style}</dt>
-				<dd class="mt-1 font-semibold text-white">{submissionSummary.style}</dd>
+				<dt class="text-xs font-bold text-mute">{copy.successFields.style}</dt>
+				<dd class="mt-1 font-semibold text-paper">{submissionSummary.style}</dd>
 			</div>
 			{#if submissionSummary.projectTitle}
 				<div>
-					<dt class="text-slate-400">{copy.successFields.referenceProject}</dt>
-					<dd class="mt-1 font-semibold text-white">{submissionSummary.projectTitle}</dd>
+					<dt class="text-xs font-bold text-mute">{copy.successFields.referenceProject}</dt>
+					<dd class="mt-1 font-semibold text-paper">{submissionSummary.projectTitle}</dd>
 				</div>
 			{/if}
 			{#if submissionSummary.budget}
 				<div>
-					<dt class="text-slate-400">{copy.successFields.budget}</dt>
-					<dd class="mt-1 font-semibold text-white">{submissionSummary.budget}</dd>
+					<dt class="text-xs font-bold text-mute">{copy.successFields.budget}</dt>
+					<dd class="mt-1 font-semibold text-paper">{submissionSummary.budget}</dd>
 				</div>
 			{/if}
 		</dl>
 
-		<div class="mt-7 flex flex-col gap-3 sm:flex-row">
+		<div class="mt-7 flex flex-col gap-2 sm:flex-row">
 			<Button href="/projets">
 				{copy.viewProjects}
 				<ArrowRight size={18} aria-hidden="true" />
 			</Button>
 			<button
 				type="button"
-				class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-white transition hover:border-white/35 hover:bg-white/[0.08]"
+				class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-[0.9375rem] font-extrabold text-paper shadow-[var(--shadow)] transition-transform duration-150 active:scale-[0.97]"
 				onclick={resetForm}
 			>
 				<RotateCcw size={17} aria-hidden="true" />
@@ -341,20 +337,19 @@
 		method="POST"
 		novalidate={isEnhanced}
 		onsubmit={handleSubmit}
-		class="rounded-[1.5rem] border border-white/10 bg-white/[0.035] p-6 shadow-[var(--shadow-premium)] md:p-9"
+		class="panel p-6 md:p-9"
 	>
 		<div>
-			<p class="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-200">{copy.eyebrow}</p>
-			<h2 class="mt-4 text-3xl font-bold text-white">{copy.title}</h2>
-			<p class="mt-3 max-w-2xl text-sm leading-6 text-slate-300">{copy.description}</p>
+			<h2 class="display-title text-4xl text-paper">{copy.title}</h2>
+			<p class="mt-3 max-w-2xl text-sm leading-6 text-mute">{copy.description}</p>
 		</div>
 
 		<div
-			class="mt-7 grid gap-4 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.07] p-4 sm:grid-cols-[1fr_auto] sm:items-center"
+			class="mt-7 grid gap-4 rounded-2xl bg-peach/70 p-4 text-paper sm:grid-cols-[1fr_auto] sm:items-center"
 		>
 			<div>
-				<p class="text-sm font-semibold text-cyan-100">{copy.estimateCta.title}</p>
-				<p class="mt-1 text-xs leading-5 text-slate-300">{copy.estimateCta.description}</p>
+				<p class="text-sm font-bold">{copy.estimateCta.title}</p>
+				<p class="mt-1 text-xs leading-5 text-paper/75">{copy.estimateCta.description}</p>
 			</div>
 			<Button href="/estimation" variant="secondary" class="w-full sm:w-auto">
 				{copy.estimateCta.action}
@@ -363,25 +358,25 @@
 		</div>
 
 		{#if context.style}
-			<div class="mt-7 rounded-xl border border-violet-300/20 bg-violet-300/[0.08] p-4">
-				<p class="text-sm font-semibold text-violet-100">
+			<div class="mt-7 rounded-2xl bg-white/70 p-4">
+				<p class="text-sm font-semibold text-paper">
 					{copy.contextPrefix}
 					{getContactStyleLabel(context.style, i18n.locale)}.
 				</p>
 				{#if context.projectTitle}
-					<p class="mt-1 text-sm text-slate-300">
+					<p class="mt-1 text-sm text-mute">
 						{copy.contextReference}
 						{context.projectTitle}
 					</p>
 				{/if}
-				<p class="mt-2 text-xs text-slate-400">{copy.contextHint}</p>
+				<p class="mt-2 text-xs text-mute">{copy.contextHint}</p>
 			</div>
 		{/if}
 
 		{#if hasEstimatePrefill}
-			<div class="mt-7 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.07] p-4">
-				<p class="text-sm font-semibold text-cyan-100">{copy.estimateContextTitle}</p>
-				<p class="mt-1 text-xs leading-5 text-slate-300">{copy.estimateContextHint}</p>
+			<div class="mt-7 rounded-2xl bg-white/70 p-4">
+				<p class="text-sm font-semibold text-paper">{copy.estimateContextTitle}</p>
+				<p class="mt-1 text-xs leading-5 text-mute">{copy.estimateContextHint}</p>
 			</div>
 		{/if}
 
@@ -444,31 +439,27 @@
 		{#if submitError}
 			<div
 				bind:this={statusElement}
-				class="mt-6 rounded-xl border border-rose-300/25 bg-rose-300/[0.08] p-4 outline-none"
+				class="mt-6 rounded-2xl border-2 border-bad bg-white p-4 outline-none"
 				tabindex="-1"
 				role="alert"
 				aria-live="assertive"
 			>
-				<p class="font-semibold text-rose-100">{copy.errorTitle}</p>
-				<p class="mt-1 text-sm leading-6 text-slate-200">{submitError}</p>
+				<p class="font-semibold text-bad">{copy.errorTitle}</p>
+				<p class="mt-1 text-sm leading-6 text-paper">{submitError}</p>
 			</div>
 		{/if}
 
 		{#if !isConfigured}
-			<div
-				class="mt-6 rounded-xl border border-amber-200/20 bg-amber-200/[0.06] p-4 text-sm leading-6 text-slate-200"
-			>
+			<div class="mt-6 rounded-2xl border-2 border-warn bg-white p-4 text-sm leading-6 text-paper">
 				<p>{copy.unavailable}</p>
 			</div>
 		{/if}
 
-		<div
-			class="mt-7 flex flex-col gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between"
-		>
-			<p class="max-w-md text-xs leading-5 text-slate-400">{copy.privacy}</p>
+		<div class="mt-7 flex flex-col gap-4 pt-2 sm:flex-row sm:items-center sm:justify-between">
+			<p class="max-w-md text-xs leading-5 text-mute">{copy.privacy}</p>
 			<button
 				type="submit"
-				class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-violet-300 px-6 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-violet-950/35 transition hover:bg-violet-200 disabled:pointer-events-none disabled:opacity-50"
+				class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-paper px-6 py-3 text-[0.9375rem] font-extrabold text-white shadow-[0_12px_24px_-12px_rgb(42_20_9/0.8)] transition-transform duration-150 active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50"
 				disabled={isSubmitting || !isConfigured}
 			>
 				<Send size={17} aria-hidden="true" />
@@ -477,11 +468,14 @@
 		</div>
 
 		{#if contactEmail}
-			<p class="mt-5 flex flex-wrap items-center gap-2 text-sm text-slate-400">
+			<p class="mt-5 flex flex-wrap items-center gap-2 text-sm text-mute">
 				<Mail size={16} aria-hidden="true" />
 				{copy.emailFallbackLead}
 				<!-- eslint-disable svelte/no-navigation-without-resolve -- Mailto is an external protocol. -->
-				<a class="font-semibold text-cyan-100 hover:text-cyan-50" href={`mailto:${contactEmail}`}>
+				<a
+					class="font-bold text-paper underline underline-offset-4 hover:decoration-live"
+					href={`mailto:${contactEmail}`}
+				>
 					{copy.emailFallbackAction}
 				</a>
 				<!-- eslint-enable svelte/no-navigation-without-resolve -->

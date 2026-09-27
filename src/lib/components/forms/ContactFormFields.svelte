@@ -14,8 +14,8 @@
 	const styleOptions = $derived(i18n.content.contactStyleOptions);
 
 	const fieldClasses =
-		'mt-2 min-h-12 w-full rounded-xl border border-white/12 bg-black/25 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 hover:border-white/20 focus:border-cyan-200/60 focus:ring-2 focus:ring-cyan-200/15 aria-invalid:border-rose-300/70 aria-invalid:ring-2 aria-invalid:ring-rose-300/10';
-	const labelClasses = 'text-sm font-semibold text-slate-100';
+		'mt-2 min-h-12 w-full rounded-2xl border-2 border-transparent bg-white px-4 py-3 text-base text-paper caret-live shadow-[inset_0_1px_2px_rgb(42_20_9/0.08)] outline-none transition-colors placeholder:text-mute/80 hover:border-peach focus:border-paper aria-invalid:border-bad';
+	const labelClasses = 'text-sm font-extrabold text-paper';
 </script>
 
 <div class="mt-8 grid gap-6 sm:grid-cols-2">
@@ -37,7 +37,7 @@
 			aria-describedby={errors.name ? 'name-error' : undefined}
 		/>
 		{#if errors.name}
-			<p id="name-error" class="mt-2 text-sm text-rose-200">{errors.name}</p>
+			<p id="name-error" class="mt-2 text-sm text-bad">{errors.name}</p>
 		{/if}
 	</div>
 
@@ -58,7 +58,7 @@
 			aria-describedby={errors.email ? 'email-error' : undefined}
 		/>
 		{#if errors.email}
-			<p id="email-error" class="mt-2 text-sm text-rose-200">{errors.email}</p>
+			<p id="email-error" class="mt-2 text-sm text-bad">{errors.email}</p>
 		{/if}
 	</div>
 
@@ -81,7 +81,7 @@
 			{/each}
 		</select>
 		{#if errors.style}
-			<p id="style-error" class="mt-2 text-sm text-rose-200">{errors.style}</p>
+			<p id="style-error" class="mt-2 text-sm text-bad">{errors.style}</p>
 		{/if}
 	</div>
 
@@ -104,7 +104,7 @@
 			{/each}
 		</select>
 		{#if errors.objective}
-			<p id="objective-error" class="mt-2 text-sm text-rose-200">{errors.objective}</p>
+			<p id="objective-error" class="mt-2 text-sm text-bad">{errors.objective}</p>
 		{/if}
 	</div>
 
@@ -127,7 +127,7 @@
 			{/each}
 		</select>
 		{#if errors.providedFiles}
-			<p id="providedFiles-error" class="mt-2 text-sm text-rose-200">
+			<p id="providedFiles-error" class="mt-2 text-sm text-bad">
 				{errors.providedFiles}
 			</p>
 		{/if}
@@ -152,7 +152,7 @@
 			{/each}
 		</select>
 		{#if errors.finalDuration}
-			<p id="finalDuration-error" class="mt-2 text-sm text-rose-200">
+			<p id="finalDuration-error" class="mt-2 text-sm text-bad">
 				{errors.finalDuration}
 			</p>
 		{/if}
@@ -192,7 +192,7 @@
 			{/each}
 		</select>
 		{#if errors.editingLevel}
-			<p id="editingLevel-error" class="mt-2 text-sm text-rose-200">
+			<p id="editingLevel-error" class="mt-2 text-sm text-bad">
 				{errors.editingLevel}
 			</p>
 		{/if}
@@ -217,7 +217,7 @@
 			{/each}
 		</select>
 		{#if errors.deadline}
-			<p id="deadline-error" class="mt-2 text-sm text-rose-200">{errors.deadline}</p>
+			<p id="deadline-error" class="mt-2 text-sm text-bad">{errors.deadline}</p>
 		{/if}
 	</div>
 
@@ -235,7 +235,7 @@
 		<label class={labelClasses} for="projectDescription">
 			{copy.fields.projectDescription} <span aria-hidden="true">*</span>
 		</label>
-		<p id="project-description-help" class="mt-1 text-xs leading-5 text-slate-400">
+		<p id="project-description-help" class="mt-1 text-xs leading-5 text-mute">
 			{copy.fields.projectDescriptionHelp}
 		</p>
 		<textarea
@@ -254,7 +254,7 @@
 				.filter(Boolean)
 				.join(' ')}></textarea>
 		{#if errors.projectDescription}
-			<p id="projectDescription-error" class="mt-2 text-sm text-rose-200">
+			<p id="projectDescription-error" class="mt-2 text-sm text-bad">
 				{errors.projectDescription}
 			</p>
 		{/if}
@@ -262,7 +262,7 @@
 
 	<div class="sm:col-span-2">
 		<label class={labelClasses} for="footageDetails">{copy.fields.footageDetails}</label>
-		<p id="footage-help" class="mt-1 text-xs leading-5 text-slate-400">
+		<p id="footage-help" class="mt-1 text-xs leading-5 text-mute">
 			{copy.fields.footageDetailsHelp}
 		</p>
 		<textarea
@@ -276,7 +276,7 @@
 
 	<div class="sm:col-span-2">
 		<label class={labelClasses} for="referenceLink">{copy.fields.referenceLink}</label>
-		<p id="reference-link-help" class="mt-1 text-xs leading-5 text-slate-400">
+		<p id="reference-link-help" class="mt-1 text-xs leading-5 text-mute">
 			{copy.fields.referenceLinkHelp}
 		</p>
 		<input
@@ -338,7 +338,7 @@
 
 	<div class="sm:col-span-2">
 		<label class={labelClasses} for="usefulLinks">{copy.fields.usefulLinks}</label>
-		<p id="links-help" class="mt-1 text-xs leading-5 text-slate-400">{copy.linksHelp}</p>
+		<p id="links-help" class="mt-1 text-xs leading-5 text-mute">{copy.linksHelp}</p>
 		<textarea
 			class={[fieldClasses, 'min-h-24 resize-y']}
 			id="usefulLinks"

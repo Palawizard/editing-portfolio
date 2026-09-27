@@ -126,28 +126,26 @@
 {#if estimate}
 	<EstimateResult {estimate} copy={copy.result} onPrefill={prefillContact} onRestart={restart} />
 {:else if currentQuestion}
-	<div
-		class="rounded-[1.75rem] border border-white/10 bg-white/[0.035] p-5 shadow-[var(--shadow-premium)] sm:p-7 md:p-10"
-	>
+	<div class="panel p-5 sm:p-7 md:p-10">
 		<div
-			class="flex items-center justify-between gap-4 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400"
+			class="flex items-center justify-between gap-4 text-xs font-extrabold tracking-[0.04em] text-mute uppercase"
 		>
 			<span>{copy.progress} {currentIndex + 1} / {visibleQuestions.length}</span>
-			<span class="text-cyan-200">{currentQuestion.section}</span>
+			<span class="text-paper">{currentQuestion.section}</span>
 		</div>
-		<div class="mt-4 h-1.5 overflow-hidden rounded-full bg-white/[0.07]" aria-hidden="true">
+		<div class="relative mt-4 h-2 overflow-hidden rounded-full bg-white" aria-hidden="true">
 			<div
-				class="h-full rounded-full bg-gradient-to-r from-violet-300 to-cyan-300 transition-[width] duration-300"
+				class="absolute inset-y-0 left-0 rounded-full bg-live transition-[width] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)]"
 				style={`width: ${progress}%`}
 			></div>
 		</div>
 
 		<div class="mt-8 md:mt-10">
-			<h2 class="max-w-3xl text-2xl font-bold leading-tight text-white sm:text-3xl md:text-4xl">
+			<h2 class="display-title max-w-3xl text-2xl sm:text-3xl md:text-4xl">
 				{currentQuestion.title}
 			</h2>
 			{#if currentQuestion.help}
-				<p class="mt-3 max-w-2xl text-sm leading-6 text-slate-400">{currentQuestion.help}</p>
+				<p class="mt-3 max-w-2xl text-sm leading-6 text-mute">{currentQuestion.help}</p>
 			{/if}
 			<div class="mt-7">
 				{#key currentQuestion.id}
@@ -162,11 +160,11 @@
 		</div>
 
 		<div
-			class="mt-9 flex flex-col-reverse gap-3 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between"
+			class="mt-9 flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between"
 		>
 			<button
 				type="button"
-				class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-slate-300 transition hover:bg-white/[0.06] hover:text-white disabled:invisible"
+				class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2 text-[0.9375rem] font-extrabold text-paper transition-[background-color,transform] duration-150 hover:bg-white active:scale-[0.97] disabled:invisible"
 				disabled={currentIndex === 0}
 				onclick={previous}
 			>
@@ -175,7 +173,7 @@
 			</button>
 			<button
 				type="button"
-				class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-violet-300 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-violet-200"
+				class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-paper px-6 py-3 text-[0.9375rem] font-extrabold text-white shadow-[0_12px_24px_-12px_rgb(42_20_9/0.8)] transition-transform duration-150 active:scale-[0.97]"
 				onclick={next}
 			>
 				{currentIndex === visibleQuestions.length - 1 ? copy.showEstimate : copy.next}
@@ -183,7 +181,7 @@
 			</button>
 		</div>
 
-		<p class="mt-5 flex items-center justify-center gap-2 text-center text-xs text-slate-400">
+		<p class="mt-5 flex items-center justify-center gap-2 text-center text-xs text-mute">
 			<LockKeyhole size={14} aria-hidden="true" />
 			{copy.privacy}
 		</p>

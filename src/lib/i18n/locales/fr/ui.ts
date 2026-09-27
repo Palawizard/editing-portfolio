@@ -27,6 +27,20 @@ export const uiBundle = {
 			'Portfolio de Palawi, monteur vidéo pour créateurs, streamers et businesses. Du contenu brut à une vidéo claire, rythmée et pensée pour sa plateforme.',
 		playingLabel: 'En lecture'
 	},
+	studio: {
+		live: 'En direct',
+		scene: 'Scène',
+		showreel: 'À la une',
+		showreelNote: 'Un extrait de mes montages. Choisis une scène en bas pour voir chaque format.',
+		chat: 'Chat',
+		method: 'La méthode',
+		scenesLabel: 'Scènes (formats de montage)',
+		start: 'Démarrer mon projet',
+		onAir: 'À l’antenne',
+		sources: 'Sources',
+		sourcesHint: 'Clique une source pour la passer à l’antenne.',
+		preview: 'Aperçu'
+	},
 	media: {
 		playLabel: 'Lire la vidéo',
 		priceLabel: 'Prix indicatif',

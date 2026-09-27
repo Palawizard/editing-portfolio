@@ -27,6 +27,20 @@ export const uiBundle = {
 			"Palawi's video editing portfolio for creators, streamers and businesses. From raw content to a clear, well-paced video built for its platform.",
 		playingLabel: 'Playing'
 	},
+	studio: {
+		live: 'Live',
+		scene: 'Scene',
+		showreel: 'Featured',
+		showreelNote: 'A cut of my edits. Pick a scene below to see each format.',
+		chat: 'Chat',
+		method: 'The method',
+		scenesLabel: 'Scenes (editing formats)',
+		start: 'Start my project',
+		onAir: 'On air',
+		sources: 'Sources',
+		sourcesHint: 'Click a source to put it on air.',
+		preview: 'Preview'
+	},
 	media: {
 		playLabel: 'Play video',
 		priceLabel: 'Indicative price',

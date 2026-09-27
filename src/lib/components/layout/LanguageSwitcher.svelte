@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { Globe } from '@lucide/svelte';
 	import { getLocaleContext } from '$lib/i18n/context';
 	import { locales, type Locale } from '$lib/i18n/types';
 
@@ -13,20 +12,16 @@
 </script>
 
 <div
-	class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] p-1 shadow-[inset_0_1px_0_rgb(255_255_255/0.04)]"
+	class="inline-flex gap-0.5 rounded-full bg-white/65 p-[3px] shadow-[var(--shadow)]"
 	role="group"
 	aria-label={i18n.content.ui.header.languageLabel}
 >
-	<Globe class="ml-2 shrink-0 text-slate-400" size={15} aria-hidden="true" />
-
 	{#each locales as option (option)}
 		<button
 			type="button"
 			class={[
-				'min-w-[2.75rem] rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide uppercase transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300',
-				i18n.locale === option
-					? 'bg-violet-300/15 text-white shadow-[0_0_0_1px_rgb(167_139_250/0.35)]'
-					: 'text-slate-400 hover:bg-white/[0.06] hover:text-slate-200'
+				'min-h-8 min-w-10 rounded-full px-2 text-xs font-extrabold uppercase transition-[background-color,color,transform] duration-150 active:scale-[0.97]',
+				i18n.locale === option ? 'bg-paper text-white' : 'text-paper'
 			]}
 			aria-pressed={i18n.locale === option}
 			onclick={() => selectLocale(option)}

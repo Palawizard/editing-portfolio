@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ArrowRight, Clock3, RotateCcw, Sparkles } from '@lucide/svelte';
+	import { ArrowRight, Clock3, RotateCcw } from '@lucide/svelte';
 	import type { EstimateCopy, PriceEstimate } from '$lib/types/estimate';
 
 	type Props = {
@@ -12,54 +12,48 @@
 	let { estimate, copy, onPrefill, onRestart }: Props = $props();
 </script>
 
-<div
-	class="rounded-[1.75rem] border border-violet-300/25 bg-white/[0.045] p-6 shadow-[var(--shadow-premium)] md:p-10"
->
-	<div class="grid size-13 place-items-center rounded-2xl bg-violet-300/12 text-violet-100">
-		<Sparkles size={24} aria-hidden="true" />
-	</div>
-	<p class="mt-6 text-xs font-semibold uppercase tracking-[0.26em] text-cyan-200">{copy.eyebrow}</p>
-	<h2 class="mt-3 text-3xl font-bold text-white md:text-4xl">{copy.title}</h2>
+<div class="panel p-6 md:p-10">
+	<h2 class="display-title text-4xl text-paper md:text-5xl">{copy.title}</h2>
 
-	<div class="mt-8 rounded-2xl border border-violet-300/20 bg-violet-300/[0.09] p-6 md:p-8">
-		<p class="text-sm font-semibold text-violet-100">{copy.priceLabel}</p>
-		<p class="mt-2 text-4xl font-black tracking-tight text-white sm:text-5xl">
+	<div class="mt-8 rounded-[24px] bg-paper p-6 text-white md:p-8">
+		<p class="label">{copy.priceLabel}</p>
+		<p class="display-title mt-2 text-4xl tabular-nums sm:text-5xl">
 			{estimate.minimum}–{estimate.maximum} €
 		</p>
 	</div>
 
-	<div class="mt-5 grid gap-3 sm:grid-cols-2">
-		<div class="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/20 p-4">
-			<Clock3 class="text-cyan-200" size={20} aria-hidden="true" />
+	<div class="mt-3 grid gap-3 sm:grid-cols-2">
+		<div class="flex items-center gap-3 rounded-2xl bg-white p-4 shadow-[var(--shadow)]">
+			<Clock3 class="text-live" size={20} strokeWidth={1.5} aria-hidden="true" />
 			<div>
-				<p class="text-xs text-slate-400">{copy.hoursLabel}</p>
-				<p class="mt-0.5 font-semibold text-white">≈ {estimate.estimatedHours} h</p>
+				<p class="text-xs font-bold text-mute">{copy.hoursLabel}</p>
+				<p class="mt-1 font-semibold text-paper">≈ {estimate.estimatedHours} h</p>
 			</div>
 		</div>
-		<div class="rounded-2xl border border-white/10 bg-black/20 p-4">
-			<p class="text-xs text-slate-400">{copy.confidenceLabel}</p>
-			<p class="mt-0.5 font-semibold text-white">{copy.confidence[estimate.uncertainty]}</p>
+		<div class="rounded-2xl bg-white p-4 shadow-[var(--shadow)]">
+			<p class="text-xs font-bold text-mute">{copy.confidenceLabel}</p>
+			<p class="mt-1 font-semibold text-paper">{copy.confidence[estimate.uncertainty]}</p>
 		</div>
 	</div>
 
 	<div class="mt-7">
-		<h3 class="font-semibold text-white">{copy.driversTitle}</h3>
-		<ul class="mt-4 grid gap-2 text-sm text-slate-300 sm:grid-cols-2">
+		<h3 class="label text-paper">{copy.driversTitle}</h3>
+		<ul class="mt-4 flex flex-wrap gap-2 text-sm text-paper">
 			{#each estimate.drivers as driver (driver)}
-				<li class="rounded-xl border border-white/8 bg-black/15 px-4 py-3">
+				<li class="rounded-full bg-white px-3.5 py-2 font-bold shadow-[var(--shadow)]">
 					{copy.drivers[driver]}
 				</li>
 			{/each}
 		</ul>
 	</div>
 
-	<p class="mt-7 text-sm leading-6 text-slate-400">{copy.disclaimer}</p>
-	<p class="mt-3 text-sm leading-6 text-slate-300">{copy.answersKept}</p>
+	<p class="mt-7 text-sm leading-6 text-mute">{copy.disclaimer}</p>
+	<p class="mt-3 text-sm leading-6 text-paper">{copy.answersKept}</p>
 
-	<div class="mt-7 flex flex-col gap-3 sm:flex-row">
+	<div class="mt-7 flex flex-col gap-2 sm:flex-row">
 		<button
 			type="button"
-			class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-violet-300 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-violet-200"
+			class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-paper px-6 py-3 text-[0.9375rem] font-extrabold text-white shadow-[0_12px_24px_-12px_rgb(42_20_9/0.8)] transition-transform duration-150 active:scale-[0.97]"
 			onclick={onPrefill}
 		>
 			{copy.prefill}
@@ -67,7 +61,7 @@
 		</button>
 		<button
 			type="button"
-			class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-6 py-3 text-sm font-semibold text-white transition hover:border-white/35 hover:bg-white/[0.08]"
+			class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-[0.9375rem] font-extrabold text-paper shadow-[var(--shadow)] transition-transform duration-150 active:scale-[0.97]"
 			onclick={onRestart}
 		>
 			<RotateCcw size={17} aria-hidden="true" />

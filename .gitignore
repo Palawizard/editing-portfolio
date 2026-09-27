@@ -23,7 +23,7 @@ Thumbs.db
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
-# Local source videos — never commit, host separately in production
+# Local source videos - never commit, host separately in production
 /static/videos/gaming/
 /static/videos/other/
 /static/videos/explainer/

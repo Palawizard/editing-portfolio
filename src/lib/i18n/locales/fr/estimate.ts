@@ -392,7 +392,7 @@ export const estimateCopy: EstimateCopy = {
 		title: 'Fourchette estimée pour ce projet',
 		priceLabel: 'Budget indicatif',
 		disclaimer:
-			'Cette fourchette n’est pas un devis. Le prix final sera confirmé après vérification des fichiers, des demandes précises et du nombre de retours.',
+			'Cette fourchette n’est pas un devis. Le prix final sera confirmé après vérification des fichiers, des demandes précises et du nombre de retours. Rien n’est vendu ni payé sur ce site.',
 		hoursLabel: 'Charge estimée',
 		confidenceLabel: 'Précision',
 		confidence: {

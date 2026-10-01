@@ -19,7 +19,10 @@ export const uiBundle = {
 	},
 	footer: {
 		eyebrow: 'Cut / rythme / export',
-		description: 'Des vidéos pensées pour être regardées, comprises et publiées.'
+		description: 'Des vidéos pensées pour être regardées, comprises et publiées.',
+		legalAriaLabel: 'Informations légales',
+		privacy: 'Confidentialité et mentions légales',
+		cookieSettings: 'Gérer les cookies'
 	},
 	hero: {
 		titleLines: ['Tes rushs.', 'Le bon rythme.', 'Prêt à publier.'],
@@ -44,7 +47,10 @@ export const uiBundle = {
 	media: {
 		playLabel: 'Lire la vidéo',
 		priceLabel: 'Prix indicatif',
-		startingPriceLabel: 'À partir de'
+		startingPriceLabel: 'À partir de',
+		externalNotice: 'Cette vidéo est hébergée par {provider}, qui peut déposer des cookies.',
+		externalLoad: 'Charger la vidéo',
+		externalMore: 'En savoir plus'
 	},
 	formatsSection: {
 		eyebrow: 'Trouve ton format',
@@ -95,7 +101,7 @@ export const uiBundle = {
 		emptyState:
 			'Aucun exemple publié pour ce style pour le moment. Tu peux quand même envoyer une référence pour définir un rendu adapté.',
 		priceDisclaimer:
-			'Les prix affichés sur les exemples sont indicatifs. Ils reprennent le tarif des prestations d’origine ayant permis de réaliser chaque vidéo, et peuvent varier selon ton projet.'
+			'Les prix affichés sur les exemples sont indicatifs. Ils reprennent le tarif des prestations d’origine ayant permis de réaliser chaque vidéo, et peuvent varier selon ton projet. Rien n’est vendu ni payé sur ce site.'
 	},
 	contactPage: {
 		eyebrow: 'Contact',

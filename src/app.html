@@ -47,6 +47,13 @@
 				document.documentElement.setAttribute('data-locale-ready', '');
 			})();
 		</script>
+		<!--
+			Shared palawi.fr consent manager, loaded from the site root on purpose (outside the
+			base path). Every video on this site is self-hosted, so no purpose is declared and no
+			banner shows; the script powers the footer "cookie settings" button and gates any
+			third-party player (VideoPreview) at the moment it is requested.
+		-->
+		<script src="/consent/palawi-consent.js"></script>
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">

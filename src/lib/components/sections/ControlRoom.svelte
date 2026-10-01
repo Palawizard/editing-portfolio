@@ -6,7 +6,7 @@
 	import Button from '$lib/components/ui/Button.svelte';
 	import PriceBadge from '$lib/components/ui/PriceBadge.svelte';
 	import { getLocaleContext } from '$lib/i18n/context';
-	import { getPublishedVideo } from '$lib/utils/media';
+	import { getPublishedVideo, getVideoProviderName } from '$lib/utils/media';
 	import { resolveAssetPath } from '$lib/utils/paths';
 	import { formatProjectPrice } from '$lib/utils/pricing';
 	import type { EditingFormat, Project } from '$lib/types/project';
@@ -41,10 +41,19 @@
 	// A new format brings a new rundown: its first source goes on air.
 	const onAir = $derived(projects.find((p) => p.slug === onAirSlug) ?? projects[0]);
 
-	const posterOf = (project: Project) =>
-		getPublishedVideo(project.externalUrl)?.poster ?? project.poster;
-	const fullVideoOf = (project: Project) =>
-		project.previewVideo ?? getPublishedVideo(project.externalUrl)?.directUrl;
+	// Posters and full edits are self-hosted. A published player (YouTube, Vimeo, Drive) is
+	// only a fallback for a project without a local video, and it goes through consent.
+	const posterOf = (project: Project) => project.poster;
+	const fullVideoOf = (project: Project) => project.previewVideo;
+	const embedOf = (project: Project) => {
+		if (project.previewVideo) return undefined;
+		const published = getPublishedVideo(project.externalUrl);
+		if (!published?.embedUrl) return undefined;
+		return {
+			url: published.embedUrl,
+			provider: getVideoProviderName(published.provider) || new URL(published.embedUrl).hostname
+		};
+	};
 	// Each full edit has an 8-second preview beside it, used for hover monitoring.
 	const monitorOf = (project: Project) =>
 		project.previewVideo?.replace(
@@ -76,6 +85,7 @@
 							title={onAir.title}
 							poster={posterOf(onAir) || undefined}
 							src={fullVideoOf(onAir)}
+							embed={embedOf(onAir)}
 							aspect={isVertical(onAir) ? 'vertical' : 'video'}
 							class={isVertical(onAir)
 								? '!w-auto h-full max-h-full rounded-2xl shadow-2xl'

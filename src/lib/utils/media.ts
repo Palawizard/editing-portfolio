@@ -6,14 +6,26 @@ export type PublishedVideoProvider =
 	| 'youtube'
 	| 'other';
 
+// Players and thumbnails of these providers are third-party content: they are only built
+// as embed URLs and are loaded through the consent gate (VideoPreview), never directly.
+// Posters always come from the local WebP files in static/images/posters/.
 export type PublishedVideo = {
 	id?: string;
 	url: string;
 	provider: PublishedVideoProvider;
-	directUrl?: string;
 	embedUrl?: string;
-	poster?: string;
 };
+
+const providerNames: Record<PublishedVideoProvider, string> = {
+	'google-drive': 'Google Drive',
+	instagram: 'Instagram',
+	tiktok: 'TikTok',
+	vimeo: 'Vimeo',
+	youtube: 'YouTube',
+	other: ''
+};
+
+export const getVideoProviderName = (provider: PublishedVideoProvider) => providerNames[provider];
 
 const hasDomain = (url: URL, domain: string) =>
 	url.hostname === domain || url.hostname.endsWith(`.${domain}`);
@@ -79,9 +91,7 @@ export const getPublishedVideo = (source?: string): PublishedVideo | undefined =
 			id: googleDriveFileId,
 			url: source,
 			provider: 'google-drive',
-			directUrl: `https://drive.usercontent.google.com/uc?id=${googleDriveFileId}&export=download`,
-			embedUrl: `https://drive.google.com/file/d/${googleDriveFileId}/preview?autoplay=1`,
-			poster: `https://drive.google.com/thumbnail?id=${googleDriveFileId}&sz=w1000`
+			embedUrl: `https://drive.google.com/file/d/${googleDriveFileId}/preview?autoplay=1`
 		};
 	}
 
@@ -91,8 +101,7 @@ export const getPublishedVideo = (source?: string): PublishedVideo | undefined =
 			id: youtubeId,
 			url: source,
 			provider: 'youtube',
-			embedUrl: `https://www.youtube-nocookie.com/embed/${youtubeId}`,
-			poster: `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`
+			embedUrl: `https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1`
 		};
 	}
 
@@ -105,7 +114,7 @@ export const getPublishedVideo = (source?: string): PublishedVideo | undefined =
 			return {
 				url: source,
 				provider: 'vimeo',
-				embedUrl: `https://player.vimeo.com/video/${videoId}`
+				embedUrl: `https://player.vimeo.com/video/${videoId}?autoplay=1`
 			};
 		}
 	}

@@ -19,7 +19,10 @@ export const uiBundle = {
 	},
 	footer: {
 		eyebrow: 'Cut / pace / export',
-		description: 'Videos designed to be watched, understood and published.'
+		description: 'Videos designed to be watched, understood and published.',
+		legalAriaLabel: 'Legal information',
+		privacy: 'Privacy & legal notice',
+		cookieSettings: 'Cookie settings'
 	},
 	hero: {
 		titleLines: ['Your footage.', 'The right pace.', 'Ready to publish.'],
@@ -44,7 +47,10 @@ export const uiBundle = {
 	media: {
 		playLabel: 'Play video',
 		priceLabel: 'Indicative price',
-		startingPriceLabel: 'From'
+		startingPriceLabel: 'From',
+		externalNotice: 'This video is hosted by {provider}, which may set cookies.',
+		externalLoad: 'Load the video',
+		externalMore: 'Learn more'
 	},
 	formatsSection: {
 		eyebrow: 'Find your format',
@@ -94,7 +100,7 @@ export const uiBundle = {
 		emptyState:
 			'No published example for this style yet. You can still send a reference to define a suitable result.',
 		priceDisclaimer:
-			'Prices shown on the examples are indicative. They reflect the fee paid for the original commission behind each video and may vary depending on your project.'
+			'Prices shown on the examples are indicative. They reflect the fee paid for the original commission behind each video and may vary depending on your project. Nothing is sold or paid on this site.'
 	},
 	contactPage: {
 		eyebrow: 'Contact',

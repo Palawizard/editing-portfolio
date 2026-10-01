@@ -14,6 +14,7 @@ export type ContactFormCopy = {
 	errorTitle: string;
 	errorDescription: string;
 	privacy: string;
+	privacyLink: string;
 	linksHelp: string;
 	unavailable: string;
 	subjectTemplate: string;
@@ -114,6 +115,9 @@ export type UiCopy = {
 	footer: {
 		eyebrow: string;
 		description: string;
+		legalAriaLabel: string;
+		privacy: string;
+		cookieSettings: string;
 	};
 	hero: {
 		titleLines: string[];
@@ -138,6 +142,9 @@ export type UiCopy = {
 		playLabel: string;
 		priceLabel: string;
 		startingPriceLabel: string;
+		externalNotice: string;
+		externalLoad: string;
+		externalMore: string;
 	};
 	formatsSection: {
 		eyebrow: string;

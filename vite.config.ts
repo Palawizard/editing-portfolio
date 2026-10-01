@@ -14,12 +14,18 @@ if (
 
 const basePath = configuredBasePath as '' | `/${string}`;
 
+// Public origin used while prerendering, so canonical and Open Graph URLs are absolute.
+const siteOrigin = new URL(process.env.APP_PUBLIC_URL?.trim() || 'https://palawi.fr').origin;
+
 export default defineConfig({
 	plugins: [
 		tailwindcss(),
 		sveltekit({
 			paths: {
 				base: basePath
+			},
+			prerender: {
+				origin: siteOrigin
 			},
 			compilerOptions: {
 				// Force runes mode for the project, except for libraries. Can be removed in svelte 6.

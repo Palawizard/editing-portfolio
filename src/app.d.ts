@@ -16,6 +16,19 @@ declare global {
 			reset: (widgetId?: string) => void;
 			remove: (widgetId: string) => void;
 		};
+		/** Shared palawi.fr consent manager (/consent/palawi-consent.js), absent in local dev. */
+		PalawiConsent?: {
+			get: (purpose: string) => boolean | null;
+			set: (choices: Record<string, boolean>) => void;
+			open: () => void;
+			onChange: (listener: (choices: Record<string, boolean>) => void) => () => void;
+			gate: (
+				container: HTMLElement,
+				purpose: string,
+				load: () => void,
+				options?: { provider?: string }
+			) => () => void;
+		};
 	}
 
 	namespace App {

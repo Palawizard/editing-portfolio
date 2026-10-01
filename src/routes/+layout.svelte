@@ -2,6 +2,9 @@
 	import { browser } from '$app/environment';
 	import { page } from '$app/state';
 	import { setContext } from 'svelte';
+	// Self-hosted fonts (SIL OFL, bundled by Vite): no request leaves palawi.fr.
+	import '@fontsource-variable/figtree';
+	import '@fontsource-variable/unbounded';
 	import '../app.css';
 	import PageShell from '$lib/components/layout/PageShell.svelte';
 	import { getContent } from '$lib/i18n/content';

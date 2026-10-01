@@ -5,12 +5,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="text-scale" content="scale" />
 		<meta name="theme-color" content="#ffc9a6" />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Figtree:wght@400..800&family=Unbounded:wght@500..900&display=swap"
-			rel="stylesheet"
-		/>
 		<link rel="icon" href="%sveltekit.assets%/favicon.png" type="image/png" />
 		<link rel="shortcut icon" href="%sveltekit.assets%/favicon.png" />
 		<link rel="apple-touch-icon" href="%sveltekit.assets%/favicon.png" />
@@ -53,6 +47,13 @@
 				document.documentElement.setAttribute('data-locale-ready', '');
 			})();
 		</script>
+		<!--
+			Shared palawi.fr consent manager, loaded from the site root on purpose (outside the
+			base path). Every video on this site is self-hosted, so no purpose is declared and no
+			banner shows; the script powers the footer "cookie settings" button and gates any
+			third-party player (VideoPreview) at the moment it is requested.
+		-->
+		<script src="/consent/palawi-consent.js"></script>
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">

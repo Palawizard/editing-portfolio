@@ -25,7 +25,9 @@ export const contactFormCopy = {
 	successDescription: 'Je vais examiner ton projet et te répondre par email.',
 	errorTitle: "La demande n'a pas pu être envoyée.",
 	errorDescription: 'Vérifie ta connexion puis réessaie. Les informations saisies sont conservées.',
-	privacy: 'Les informations envoyées servent uniquement à répondre à ta demande de montage.',
+	privacy:
+		'Ta demande est envoyée à Palawi via Formspree (Formspree, Inc., États-Unis), avec un contrôle anti-robot Cloudflare Turnstile, uniquement pour y répondre. Gardée le temps de l’échange, supprimée au plus tard 3 ans après le dernier contact. Accès, rectification, suppression : sur simple demande.',
+	privacyLink: 'Politique de confidentialité',
 	linksHelp:
 		'Ajoute des liens Drive, Dropbox, WeTransfer ou des références publiques. Ne joins pas de fichiers privés directement.',
 	unavailable:

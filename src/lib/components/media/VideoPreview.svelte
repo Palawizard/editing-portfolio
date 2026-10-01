@@ -8,16 +8,23 @@
 		title: string;
 		poster?: string;
 		src?: string;
+		/** Third-party player, used only when there is no self-hosted video. */
+		embed?: { url: string; provider: string };
 		aspect?: 'video' | 'vertical';
 		class?: string;
 	};
 
-	let { title, poster, src, aspect = 'video', class: className = '' }: Props = $props();
+	let { title, poster, src, embed, aspect = 'video', class: className = '' }: Props = $props();
 	const i18n = getLocaleContext();
 	let videoElement = $state<HTMLVideoElement>();
+	let gateElement = $state<HTMLDivElement>();
 	let loaded = $state(false);
+	// The third-party iframe only exists once consent (or an explicit click) allows it.
+	let embedAllowed = $state(false);
+	let embedFallback = $state(false);
 	const resolvedPoster = $derived(resolveAssetPath(poster));
 	const resolvedSrc = $derived(resolveAssetPath(src));
+	const playable = $derived(Boolean(resolvedSrc || embed));
 
 	const aspectClasses = {
 		video: 'aspect-video',
@@ -38,6 +45,20 @@
 		await tick();
 		void videoElement?.play().catch(() => undefined);
 	};
+
+	// Third-party players go through the shared palawi.fr consent gate (purpose "video").
+	// Without the consent script, nothing loads until an explicit click on our own fallback.
+	$effect(() => {
+		if (!loaded || resolvedSrc || !embed || embedAllowed || !gateElement) return;
+		const consent = window.PalawiConsent;
+		if (!consent) {
+			embedFallback = true;
+			return;
+		}
+		return consent.gate(gateElement, 'video', () => (embedAllowed = true), {
+			provider: embed.provider
+		});
+	});
 </script>
 
 <figure
@@ -56,6 +77,43 @@
 			aria-label={title}
 			onloadeddata={showFirstFrame}
 		></video>
+	{:else if embed && loaded && embedAllowed}
+		<iframe
+			class="absolute inset-0 size-full border-0"
+			src={embed.url}
+			{title}
+			allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+			allowfullscreen
+			referrerpolicy="strict-origin-when-cross-origin"
+		></iframe>
+	{:else if embed && loaded}
+		<div bind:this={gateElement} class="absolute inset-0 z-10 bg-screen">
+			{#if embedFallback}
+				<div
+					class="flex size-full flex-col items-center justify-center gap-3 p-4 text-center text-sm leading-5 font-medium text-white"
+				>
+					<p class="max-w-[34ch]">
+						{i18n.content.ui.media.externalNotice.replace('{provider}', embed.provider)}
+					</p>
+					<button
+						type="button"
+						class="inline-flex min-h-11 items-center rounded-full bg-white px-5 font-extrabold text-paper transition-transform duration-150 active:scale-[0.97]"
+						onclick={() => (embedAllowed = true)}
+					>
+						{i18n.content.ui.media.externalLoad}
+					</button>
+					<!-- eslint-disable svelte/no-navigation-without-resolve -- Shared palawi.fr policy, outside the base path. -->
+					<a
+						class="text-xs font-bold underline underline-offset-4"
+						href="/confidentialite/#cookies"
+						data-sveltekit-reload
+					>
+						{i18n.content.ui.media.externalMore}
+					</a>
+					<!-- eslint-enable svelte/no-navigation-without-resolve -->
+				</div>
+			{/if}
+		</div>
 	{:else if resolvedPoster}
 		<img
 			class="absolute inset-0 size-full object-cover object-center"
@@ -72,7 +130,7 @@
 		</div>
 	{/if}
 
-	{#if resolvedSrc && !loaded}
+	{#if playable && !loaded}
 		<button
 			class="absolute inset-0 z-10 grid place-items-center"
 			type="button"

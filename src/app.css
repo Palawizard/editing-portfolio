@@ -20,8 +20,8 @@
 	--color-warn: #a86400;
 	--color-bad: #c62a1d;
 
-	--font-sans: 'Figtree', ui-sans-serif, system-ui, sans-serif;
-	--font-display: 'Unbounded', ui-rounded, system-ui, sans-serif;
+	--font-sans: 'Figtree Variable', 'Figtree', ui-sans-serif, system-ui, sans-serif;
+	--font-display: 'Unbounded Variable', 'Unbounded', ui-rounded, system-ui, sans-serif;
 
 	--ease-out-expo: cubic-bezier(0.23, 1, 0.32, 1);
 	--ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);

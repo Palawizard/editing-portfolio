@@ -25,7 +25,9 @@ export const contactFormCopy = {
 	successDescription: 'I will review your project and reply by email.',
 	errorTitle: 'Your request could not be sent.',
 	errorDescription: 'Check your connection and try again. Your entries have been kept.',
-	privacy: 'The information you send is only used to reply to your editing request.',
+	privacy:
+		'Your request goes to Palawi through Formspree (Formspree, Inc., USA), with a Cloudflare Turnstile anti-bot check, only to answer it. Kept for the time of our exchange, deleted at the latest 3 years after the last contact. Access, correction or deletion: just ask.',
+	privacyLink: 'Privacy policy',
 	linksHelp:
 		'Add Drive, Dropbox, WeTransfer links or public references. Do not attach private files directly.',
 	unavailable: 'The form cannot send your request right now. Use the fallback email address.',

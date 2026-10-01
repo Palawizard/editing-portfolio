@@ -2,7 +2,7 @@ import { projectCopyEn } from '$lib/i18n/locales/en/project-copy';
 import { getProjectPricing } from '$lib/content/project-pricing';
 import type { Locale } from '$lib/i18n/types';
 import type { Project, ProjectCategory, ProjectInput } from '$lib/types/project';
-import { getLocalPosterFromPreview, getPublishedVideo } from '$lib/utils/media';
+import { getLocalPosterFromPreview } from '$lib/utils/media';
 
 const noBackgroundMusicDisclaimer = 'Cette vidéo a été demandée sans musique de fond.';
 
@@ -29,21 +29,12 @@ const categoryDefaults: Record<ProjectCategory, Pick<Project, 'format' | 'platfo
 	}
 };
 
-const resolveProjectPoster = (
-	input: ProjectInput,
-	publishedVideo: ReturnType<typeof getPublishedVideo>,
-	localPoster?: string
-): string => {
-	if (input.poster) return input.poster;
-	if (publishedVideo?.provider === 'youtube' && publishedVideo.poster) {
-		return publishedVideo.poster;
-	}
-	if (localPoster) return localPoster;
-	return publishedVideo?.poster ?? '';
-};
+// Posters are always local: a YouTube or Drive thumbnail would be a third-party request
+// made before any consent.
+const resolveProjectPoster = (input: ProjectInput, localPoster?: string): string =>
+	input.poster ?? localPoster ?? '';
 
 const defineProject = (input: ProjectInput): Project => {
-	const publishedVideo = getPublishedVideo(input.externalUrl);
 	const localPoster = getLocalPosterFromPreview(input.previewVideo);
 	const defaults = categoryDefaults[input.category];
 
@@ -52,7 +43,7 @@ const defineProject = (input: ProjectInput): Project => {
 		referenceId: input.referenceId ?? input.slug,
 		format: input.format ?? defaults.format,
 		platform: input.platform ?? defaults.platform,
-		poster: resolveProjectPoster(input, publishedVideo, localPoster),
+		poster: resolveProjectPoster(input, localPoster),
 		pricing: input.pricing ?? getProjectPricing(input.slug),
 		featured: input.featured ?? false
 	};

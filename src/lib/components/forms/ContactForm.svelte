@@ -456,10 +456,21 @@
 		{/if}
 
 		<div class="mt-7 flex flex-col gap-4 pt-2 sm:flex-row sm:items-center sm:justify-between">
-			<p class="max-w-md text-xs leading-5 text-mute">{copy.privacy}</p>
+			<p class="max-w-xl text-xs leading-5 text-mute">
+				{copy.privacy}
+				<!-- eslint-disable svelte/no-navigation-without-resolve -- Shared palawi.fr policy, outside the base path. -->
+				<a
+					class="font-bold whitespace-nowrap text-paper underline underline-offset-4 hover:decoration-live"
+					href="/confidentialite/#formulaires"
+					data-sveltekit-reload
+				>
+					{copy.privacyLink}
+				</a>
+				<!-- eslint-enable svelte/no-navigation-without-resolve -->
+			</p>
 			<button
 				type="submit"
-				class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-paper px-6 py-3 text-[0.9375rem] font-extrabold text-white shadow-[0_12px_24px_-12px_rgb(42_20_9/0.8)] transition-transform duration-150 active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50"
+				class="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-full bg-paper px-6 py-3 text-[0.9375rem] font-extrabold text-white shadow-[0_12px_24px_-12px_rgb(42_20_9/0.8)] transition-transform duration-150 active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50"
 				disabled={isSubmitting || !isConfigured}
 			>
 				<Send size={17} aria-hidden="true" />

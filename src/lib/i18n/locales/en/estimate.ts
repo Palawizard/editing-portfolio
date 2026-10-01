@@ -381,7 +381,7 @@ export const estimateCopy: EstimateCopy = {
 		title: 'Estimated range for this project',
 		priceLabel: 'Indicative budget',
 		disclaimer:
-			'This range is not a quote. The final price will be confirmed after reviewing the files, exact requests and number of revisions.',
+			'This range is not a quote. The final price will be confirmed after reviewing the files, exact requests and number of revisions. Nothing is sold or paid on this site.',
 		hoursLabel: 'Estimated workload',
 		confidenceLabel: 'Accuracy',
 		confidence: {
